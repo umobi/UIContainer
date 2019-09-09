@@ -1,0 +1,6 @@
+use_frameworks!
+target 'UIContainer_Tests' do
+  pod 'UIContainer', :path => '../'
+  
+  
+end
