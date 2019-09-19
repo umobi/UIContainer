@@ -16,7 +16,7 @@ public protocol UIContainerCell: UIContainer where ContainerCell.View == View {
     func addCell(_ containerCell: ContainerCell)
     
     //func containerDidLoad()
-    func spacer<T: UIView>(_ view: T) -> Spacer<T>
+    func spacer<T: UIView>(_ view: T) -> Spacer
 }
 
 public extension UIContainerCell {
