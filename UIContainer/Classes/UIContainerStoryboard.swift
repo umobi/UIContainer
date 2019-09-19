@@ -15,6 +15,8 @@ public protocol UIContainerStoryboard: View, UIContainer where View == Container
     var containerView: Container! { get set }
     
     func addContainer(_ container: Container)
+    
+    var margin: Spacer.Margin { get set }
 }
 
 public extension UIContainerStoryboard {
@@ -61,6 +63,11 @@ public extension UIContainerStoryboard {
         
         self.containerDidLoad()
     }
+    
+    func prepareContainer(inside parentView: ParentView!, margin: Spacer.Margin) {
+        self.margin = margin
+        self.prepareContainer(inside: parentView)
+    }
 }
 
 public extension UIContainerStoryboard where Container: UIView {
@@ -68,5 +75,9 @@ public extension UIContainerStoryboard where Container: UIView {
         let spacer = self.spacer(container)
         self.insertSubview(spacer, at: 0)
         spacer.snp.makeConstraints { $0.edges.equalTo(0) }
+    }
+    
+    func spacer<T>(_ view: T) -> Spacer where T : UIView {
+        return .init(view, margin: self.margin)
     }
 }

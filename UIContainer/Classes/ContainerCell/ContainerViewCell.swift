@@ -14,7 +14,7 @@ open class ContainerViewCell<View: UIView & ContainerViewParent & ContainerCellD
     public weak var containerView: ContainerView<View>!
     public weak var parent: ParentView!
     
-    open func spacer<T>(_ view: T) -> Spacer<T> {
+    open func spacer<T: UIView>(_ view: T) -> Spacer {
         return .init(view, spacing: 0)
     }
     

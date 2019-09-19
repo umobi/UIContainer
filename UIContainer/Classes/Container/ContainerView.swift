@@ -23,7 +23,7 @@ open class ContainerView<View: UIView & ContainerViewParent>: UIStackView, UICon
         self.removeContainer()
     }
     
-    open func spacer<T>(_ view: T) -> Spacer<T> where T : UIView {
+    open func spacer<T: UIView>(_ view: T) -> Spacer {
         return .init(view, spacing: 0)
     }
     

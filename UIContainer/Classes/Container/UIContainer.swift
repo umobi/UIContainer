@@ -26,7 +26,7 @@ public protocol UIContainer: class {
     
     func prepare(parentView: ParentView!)
     
-    func spacer<T: UIView>(_ view: T) -> Spacer<T>
+    func spacer<T: UIView>(_ view: T) -> Spacer
     
     func containerDidLoad()
     
@@ -38,7 +38,7 @@ public extension UIContainer {
         self.parent = parentView
     }
     
-    func spacer<T>(_ view: T) -> Spacer<T> where T : UIView {
+    func spacer<T: UIView>(_ view: T) -> Spacer {
         return .init(view, spacing: 0)
     }
 }

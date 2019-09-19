@@ -23,7 +23,7 @@ open class ContainerCell<View: UIViewController & ContainerCellDelegate>: UITabl
         stackView.snp.makeConstraints { $0.edges.equalTo(0) }
     }
     
-    open func spacer<T>(_ view: T) -> Spacer<T> {
+    open func spacer<T: UIView>(_ view: T) -> Spacer {
         return .init(view, spacing: 0)
     }
     
