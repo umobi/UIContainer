@@ -19,6 +19,7 @@
 		0C3DEC662326B5FE0021B5FD /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC552326B5FE0021B5FD /* Container.swift */; };
 		0C3DEC672326B5FE0021B5FD /* UIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC562326B5FE0021B5FD /* UIContainer.swift */; };
 		0C3DEC682326B5FE0021B5FD /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC572326B5FE0021B5FD /* ContainerView.swift */; };
+		0CE6B7A6233430E900DE9885 /* SpacerMargin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE6B7A5233430E900DE9885 /* SpacerMargin.swift */; };
 		1B3DD28405211D83D6122B3DA7D3FA91 /* Pods-UIContainer_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A69B3632AD24757AC31C1B3E23A6F77 /* Pods-UIContainer_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E8C0BF7B991404ECB0609156DF4EE61 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		75A94EC1AFC4D48DFBC2E89AF394ED4C /* UIContainer-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B403C92EB3B72C1C349987D26C511B8A /* UIContainer-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -50,6 +51,7 @@
 		0C3DEC552326B5FE0021B5FD /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		0C3DEC562326B5FE0021B5FD /* UIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIContainer.swift; sourceTree = "<group>"; };
 		0C3DEC572326B5FE0021B5FD /* ContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
+		0CE6B7A5233430E900DE9885 /* SpacerMargin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacerMargin.swift; sourceTree = "<group>"; };
 		15C9D3E0C4CA70DACA9F88DCF81B2E45 /* Pods-UIContainer_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-UIContainer_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		1642DB28F5740F353BFAAE67B2080A1F /* Pods-UIContainer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UIContainer_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		18024DBF68F03DA3C9E3F50BFD4BA8C5 /* UIContainer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIContainer-prefix.pch"; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		0C3DEC432326B5FE0021B5FD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				0CE6B7A5233430E900DE9885 /* SpacerMargin.swift */,
 				0C3DEC442326B5FE0021B5FD /* Spacer.swift */,
 				0C3DEC452326B5FE0021B5FD /* NibView.swift */,
 				0C3DEC462326B5FE0021B5FD /* UIViewController+UINib.swift */,
@@ -354,6 +357,7 @@
 				952CCABE966699CE4E9627F3A647292E /* UIContainer-dummy.m in Sources */,
 				0C3DEC672326B5FE0021B5FD /* UIContainer.swift in Sources */,
 				0C3DEC582326B5FE0021B5FD /* Spacer.swift in Sources */,
+				0CE6B7A6233430E900DE9885 /* SpacerMargin.swift in Sources */,
 				0C3DEC5B2326B5FE0021B5FD /* View.swift in Sources */,
 				0C3DEC622326B5FE0021B5FD /* ContainerCellDelegate.swift in Sources */,
 				0C3DEC642326B5FE0021B5FD /* ContainerViewCell.swift in Sources */,

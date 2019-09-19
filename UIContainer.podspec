@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.0.0-beta1'
+  s.version          = '1.0.0-beta2'
   s.summary          = 'A ContainerView for any UIView or UIViewController'
 
 # This description is used to generate tags and improve search results.
