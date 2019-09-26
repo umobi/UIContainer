@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 open class Container<View: UIViewController>: UIStackView, UIContainer {
+    
     public weak var view: View!
     public weak var parent: ParentView!
     
@@ -19,12 +20,32 @@ open class Container<View: UIViewController>: UIStackView, UIContainer {
     }
     
     open func containerDidLoad() {}
+    
+    public required init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
+        super.init(frame: .zero)
+        self.prepareContainer(inside: parentView, loadHandler: loadHandler)
+        self.containerDidLoad()
+    }
+    
+    public required init() {
+        super.init(frame: .zero)
+    }
+    
+    required public init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 public extension UIContainer where Self: UIStackView, View: UIViewController {
-    func prepareContainer(inside parentView: ParentView!) {
+    func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         self.prepare(parentView: parentView)
-        self.insertContainer(view: View.fromNib())
+        
+        guard let loader = loadHandler else {
+            self.insertContainer(view: View.fromNib())
+            return
+        }
+        
+        self.insertContainer(view: loader())
     }
     
     func removeContainer() {
@@ -46,12 +67,5 @@ public extension UIContainer where Self: UIStackView, View: UIViewController {
         parent.addChild(view)
         self.addArrangedSubview(self.spacer(view.view))
         view.didMove(toParent: self.parent)
-    }
-    
-    static func load(in parentView: ParentView!) -> Self {
-        let container = self.init()
-        container.prepareContainer(inside: parentView)
-        container.containerDidLoad()
-        return container
     }
 }

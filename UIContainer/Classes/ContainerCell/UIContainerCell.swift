@@ -38,12 +38,6 @@ public extension UIContainerCell {
         fatalError("Don't try to insert in ContainerCell")
     }
     
-    static func load(in parentView: ParentView!) -> Self {
-        let cell = self.init()
-        cell.prepareContainer(inside: parentView)
-        return cell
-    }
-    
     weak var parent: ParentView! {
         get {
             return self.containerView.parent
@@ -72,7 +66,7 @@ public extension UIContainerCell where Self: UITableViewCell, ContainerCell: UIV
 }
 
 public extension UIContainerCell where View: ContainerCellDelegate {
-    func prepareContainer(inside parentView: ParentView!) {
+    func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         if self.containerView != nil {
             return
         }
@@ -89,7 +83,7 @@ public extension UIContainerCell where View: ContainerCellDelegate {
             return delegate
         }()
         
-        let containerView = ContainerCell.load(in: parentView)
+        let containerView = ContainerCell(in: parentView, loadHandler: loadHandler)
         containerView.view.cellDelegate = delegate
         
         self.containerView = containerView

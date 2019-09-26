@@ -16,13 +16,11 @@ public protocol UIContainer: class {
     var view: View! { get set }
     var parent: ParentView! { get set }
     
-    func prepareContainer(inside parentView: ParentView!)
+    func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)?)
     
     func removeContainer()
     
     func insertContainer(view: View!)
-    
-    static func load(in parentView: ParentView!) -> Self
     
     func prepare(parentView: ParentView!)
     
@@ -30,7 +28,7 @@ public protocol UIContainer: class {
     
     func containerDidLoad()
     
-    init()
+    init(in parentView: ParentView!, loadHandler: (() -> View?)?)
 }
 
 public extension UIContainer {
