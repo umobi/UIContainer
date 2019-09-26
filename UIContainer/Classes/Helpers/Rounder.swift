@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 import SnapKit
 
-class Rounder: UIView {
+public class Rounder: UIView {
     let radius: CGFloat
-    init(_ view: UIView, radius: CGFloat) {
+    public init(_ view: UIView, radius: CGFloat) {
         self.radius = radius
         super.init(frame: .zero)
         
@@ -28,42 +28,47 @@ class Rounder: UIView {
         fatalError()
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
         if radius < 1 {
-            self.cornerRadius = self.frame.height * radius
+            self.layer.cornerRadius = self.frame.height * radius
         } else {
-            self.cornerRadius = radius
+            self.layer.cornerRadius = radius
         }
     }
     
-    static func full(_ view: UIView) -> Rounder {
+    public static func full(_ view: UIView) -> Rounder {
         return .init(view, radius: 0.5)
     }
     
-    func border(width: CGFloat, color: UIColor?) {
-        self.borderWidth = width
-        self.borderColor = color
+    public func border(width: CGFloat, color: UIColor?) {
+        self.layer.borderWidth = width
+        self.layer.borderColor = color?.cgColor
     }
 }
 
-extension Rounder {
+public extension Rounder {
     
     @discardableResult
     func border(width: CGFloat) -> Self {
-        self.border(width: width, color: self.borderColor)
+        guard let color = self.layer.borderColor else {
+            self.border(width: width, color: UIColor.clear)
+            return self
+        }
+        
+        self.border(width: width, color: UIColor(cgColor: color))
         return self
     }
     
     @discardableResult
     func border(color: UIColor?) -> Self {
-        self.border(width: self.borderWidth, color: color)
+        self.border(width: self.layer.borderWidth, color: color)
         return self
     }
 }
 
-extension Rounder {
+public extension Rounder {
     
     @discardableResult
     static func outside(_ view: UIView!, radius: CGFloat) -> Rounder {
@@ -79,7 +84,7 @@ extension Rounder {
     }
 }
 
-extension UIImageView {
+public extension UIImageView {
     
     var rounder: Rounder? {
         return self.superview as? Rounder
