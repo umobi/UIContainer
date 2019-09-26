@@ -19,6 +19,8 @@
 		0C3DEC662326B5FE0021B5FD /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC552326B5FE0021B5FD /* Container.swift */; };
 		0C3DEC672326B5FE0021B5FD /* UIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC562326B5FE0021B5FD /* UIContainer.swift */; };
 		0C3DEC682326B5FE0021B5FD /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC572326B5FE0021B5FD /* ContainerView.swift */; };
+		0CB71017233C5A23007B5231 /* ViewSharedContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */; };
+		0CB71019233C5A51007B5231 /* Rounder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71018233C5A51007B5231 /* Rounder.swift */; };
 		0CCEF239233BDF9D009D5DBE /* WindowContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */; };
 		0CCEF23C233BE014009D5DBE /* WindowProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEF23B233BDFCF009D5DBE /* WindowProviderType.swift */; };
 		0CCEF240233BE400009D5DBE /* UIWindow+Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEF23F233BE400009D5DBE /* UIWindow+Container.swift */; };
@@ -54,6 +56,8 @@
 		0C3DEC552326B5FE0021B5FD /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		0C3DEC562326B5FE0021B5FD /* UIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIContainer.swift; sourceTree = "<group>"; };
 		0C3DEC572326B5FE0021B5FD /* ContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
+		0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSharedContext.swift; sourceTree = "<group>"; };
+		0CB71018233C5A51007B5231 /* Rounder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rounder.swift; sourceTree = "<group>"; };
 		0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowContainer.swift; sourceTree = "<group>"; };
 		0CCEF23B233BDFCF009D5DBE /* WindowProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowProviderType.swift; sourceTree = "<group>"; };
 		0CCEF23F233BE400009D5DBE /* UIWindow+Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Container.swift"; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 		0C3DEC432326B5FE0021B5FD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */,
+				0CB71018233C5A51007B5231 /* Rounder.swift */,
 				0CE6B7A5233430E900DE9885 /* SpacerMargin.swift */,
 				0C3DEC442326B5FE0021B5FD /* Spacer.swift */,
 				0C3DEC452326B5FE0021B5FD /* NibView.swift */,
@@ -381,11 +387,13 @@
 				0C3DEC582326B5FE0021B5FD /* Spacer.swift in Sources */,
 				0CE6B7A6233430E900DE9885 /* SpacerMargin.swift in Sources */,
 				0C3DEC5B2326B5FE0021B5FD /* View.swift in Sources */,
+				0CB71019233C5A51007B5231 /* Rounder.swift in Sources */,
 				0CCEF23C233BE014009D5DBE /* WindowProviderType.swift in Sources */,
 				0C3DEC622326B5FE0021B5FD /* ContainerCellDelegate.swift in Sources */,
 				0C3DEC642326B5FE0021B5FD /* ContainerViewCell.swift in Sources */,
 				0C3DEC652326B5FE0021B5FD /* UIContainerStoryboard.swift in Sources */,
 				0CCEF240233BE400009D5DBE /* UIWindow+Container.swift in Sources */,
+				0CB71017233C5A23007B5231 /* ViewSharedContext.swift in Sources */,
 				0C3DEC5A2326B5FE0021B5FD /* UIViewController+UINib.swift in Sources */,
 				0C3DEC592326B5FE0021B5FD /* NibView.swift in Sources */,
 				0C3DEC5C2326B5FE0021B5FD /* UIContainerCell.swift in Sources */,
