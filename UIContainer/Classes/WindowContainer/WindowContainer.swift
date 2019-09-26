@@ -8,11 +8,10 @@
 import Foundation
 import UIKit
 
-public class WindowContainer<Provider: WindowProviderType>: UIViewController {
-    private weak var container: Container<UIViewController>!
-    public weak var rootViewController: UIViewController! {
-        return self.container.view
-    }
+public class WindowContainer<Provider: WindowContainerType>: UIViewController {
+    
+    private weak var stackView: UIStackView!
+    private weak var container: UIView!
     
     weak var window: UIWindow!
     
@@ -23,18 +22,27 @@ public class WindowContainer<Provider: WindowProviderType>: UIViewController {
         }
     }
     
-    override public var preferredStatusBarStyle: UIStatusBarStyle {
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.prepareStack()
+    }
+
+    public override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.statusBarStyle ?? UIApplication.shared.statusBarStyle
     }
     
-    public init(rootViewController: UIViewController, window: UIWindow) {
+    public init(_ window: UIWindow) {
         super.init(nibName: nil, bundle: nil)
         self.view.backgroundColor = .white
         self.window = window
         
-        let container =  Container<UIViewController>(in: self, loadHandler: { rootViewController })
-        self.view.addSubview(container)
-        container.snp.makeConstraints { $0.edges.equalTo(0) }
+        let container: UIView! = Provider.launcher(in: self)
+        if !(container is UIContainer) {
+            fatalError("WindowContainer only accepts classes derivated from UIContainer protocol")
+        }
+        
+        self.stackView.addArrangedSubview(container)
         self.container = container
     }
     
@@ -42,22 +50,23 @@ public class WindowContainer<Provider: WindowProviderType>: UIViewController {
         fatalError()
     }
     
-    public func changeView(_ viewController: UIViewController?, animated: Bool, completion handler: (() -> Void)? = nil) {
-        guard let viewController = viewController else {
-            return
+    private func changeContainer(_ containerView: UIView!, animated: Bool, completion handler: (() -> Void)? = nil) {
+        if !(containerView is UIContainer) {
+            fatalError("WindowContainer only accepts classes derivated from UIContainer protocol")
         }
         
-        // Add and remove Views
-        // Will be remove
+        self.stackView.addArrangedSubview(containerView)
         
         let perform: () -> Void = {
-            self.container.insertContainer(view: viewController)
+            self.container?.removeFromSuperview()
             self.dismiss(animated: false, completion: nil)
         }
         
         let commitChanges: () -> Void = {
             // Commit Changes
+            self.container = containerView
             self.setNeedsStatusBarAppearanceUpdate()
+            handler?()
         }
         
         if animated {
@@ -73,24 +82,48 @@ public class WindowContainer<Provider: WindowProviderType>: UIViewController {
     }
     
     override public func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
-        guard let root = self.rootViewController else {
+        if let container = self.container as? Container {
+            guard let root = container.view else {
+                return
+            }
+            
+            if root.presentedViewController != nil {
+                print("[WindowContainer] WindowContainer will dismiss any present actions")
+                return
+            }
+            
+            root.present(viewControllerToPresent, animated: flag, completion: completion)
             return
         }
         
-        if root.presentedViewController != nil {
+        if self.presentedViewController != nil {
             print("[WindowContainer] WindowContainer will dismiss any present actions")
             return
         }
-        
-        root.present(viewControllerToPresent, animated: flag, completion: completion)
+
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+        return
     }
     
-    public func transition(toView viewController: UIViewController, as providerType: Provider, completion handler: (() -> Void)? = nil) {
+    public func transition(toView viewController: UIViewController!, as providerType: Provider, completion handler: (() -> Void)? = nil) {
         self.baseType = providerType
-        self.changeView(viewController, animated: true, completion: handler)
+        self.changeContainer(Container(in: self) { viewController }, animated: true, completion: handler)
     }
     
     public func transition(to providerType: Provider, completion handler: (() -> Void)? = nil) {
-        self.transition(toView: providerType.viewController, as: providerType, completion: handler)
+        self.baseType = providerType
+        self.changeContainer(providerType.container, animated: true, completion: handler)
+    }
+}
+
+extension WindowContainer {
+    func prepareStack() {
+        let stackView = UIStackView()
+        self.view.addSubview(stackView)
+        self.stackView = stackView
+        
+        self.stackView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalTo(0)
+        }
     }
 }

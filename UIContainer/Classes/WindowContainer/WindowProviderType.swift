@@ -7,8 +7,9 @@
 
 import Foundation
 
-public protocol WindowProviderType {
-    var viewController: UIViewController! { get }
+public protocol WindowContainerType {
+    var container: UIView! { get }
     
-    static var launcher: UIViewController! { get }
+    static func launcher(in windowContainer: WindowContainer<Self>) -> UIView!
+    
 }
