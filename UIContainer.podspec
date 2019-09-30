@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.0.0-beta2'
+  s.version          = '1.0.0-beta3'
   s.summary          = 'A ContainerView for any UIView or UIViewController'
 
 # This description is used to generate tags and improve search results.
@@ -29,7 +29,7 @@ UIContainer creates a containerView for UIViews and UIViewController allowing to
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
-  s.swift_version = '5.0'
+  s.swift_version = '5.1'
 
   s.source_files = 'UIContainer/Classes/**/*'
   
