@@ -28,13 +28,29 @@ open class ContainerView<View: UIView & ContainerViewParent>: UIStackView, UICon
     }
     
     open func containerDidLoad() {}
+    
+    public required init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
+        super.init(frame: .zero)
+        self.prepareContainer(inside: parentView, loadHandler: loadHandler)
+        self.containerDidLoad()
+    }
+    
+    required public init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 public extension UIContainer where Self: UIStackView, View: UIView & ContainerViewParent {
     
-    func prepareContainer(inside parentView: ParentView!) {
+    func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         self.prepare(parentView: parentView)
-        self.insertContainer(view: View())
+        
+        guard let loader = loadHandler else {
+            self.insertContainer(view: View())
+            return
+        }
+        
+        self.insertContainer(view: loader())
     }
     
     func removeContainer() {
@@ -53,12 +69,5 @@ public extension UIContainer where Self: UIStackView, View: UIView & ContainerVi
         self.view = view
         self.view.parent = self.parent
         self.addArrangedSubview(self.spacer(view))
-    }
-    
-    static func load(in parent: UIViewController!) -> Self {
-        let container = self.init()
-        container.prepareContainer(inside: parent)
-        container.containerDidLoad()
-        return container
     }
 }

@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 open class ContainerViewCell<View: UIView & ContainerViewParent & ContainerCellDelegate>: UITableViewCell, UIContainerCell {
+    
     public weak var stackView: UIStackView!
     public weak var containerView: ContainerView<View>!
     public weak var parent: ParentView!
@@ -19,4 +20,17 @@ open class ContainerViewCell<View: UIView & ContainerViewParent & ContainerCellD
     }
     
     open func containerDidLoad() {}
+    
+    required public init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
+        super.init(style: .default, reuseIdentifier: nil)
+        self.prepareContainer(inside: parentView, loadHandler: loadHandler)
+    }
+    
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
 }

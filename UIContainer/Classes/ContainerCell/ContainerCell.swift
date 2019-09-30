@@ -28,4 +28,13 @@ open class ContainerCell<View: UIViewController & ContainerCellDelegate>: UITabl
     }
     
     open func containerDidLoad() {}
+    
+    required public init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
+        super.init(style: .default, reuseIdentifier: nil)
+        self.prepareContainer(inside: parentView, loadHandler: loadHandler)
+    }
+    
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

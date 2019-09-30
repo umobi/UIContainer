@@ -48,16 +48,16 @@ public extension UIContainerStoryboard {
         fatalError("Don't try to insert in ContainerCell")
     }
     
-    static func load(in parentView: ParentView!) -> Self {
-        fatalError("ContainerStoryboard should not be instanciated by code")
-    }
-    
-    func prepareContainer(inside parentView: ParentView!) {
+    func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
+        if loadHandler != nil {
+            fatalError("ContainerStoryboard should not be prepared with loadHandler")
+        }
+        
         if self.containerView != nil {
             return
         }
         
-        let containerView = Container.load(in: parentView)
+        let containerView = Container(in: parentView, loadHandler: loadHandler)
         self.containerView = containerView
         self.addContainer(containerView)
         
@@ -67,6 +67,10 @@ public extension UIContainerStoryboard {
     func prepareContainer(inside parentView: ParentView!, margin: Spacer.Margin) {
         self.margin = margin
         self.prepareContainer(inside: parentView)
+    }
+    
+    public init(in parentView: ParentView!, loadHandler: (() -> View?)?) {
+        fatalError("ContainerStoryboard should not be instanciated by code")
     }
 }
 
