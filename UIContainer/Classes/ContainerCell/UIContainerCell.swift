@@ -77,6 +77,10 @@ public extension UIContainerCell where View: ContainerCellDelegate {
             }
             
             guard let delegate = parentView as? ContainerCell.View.Delegate else {
+                if ContainerCell.View.Delegate.self is OptionalCellDelegate {
+                    return nil
+                }
+                
                 fatalError("ParentViewController should extend protocol \(String(describing: ContainerCell.View.Delegate.self))")
             }
             
