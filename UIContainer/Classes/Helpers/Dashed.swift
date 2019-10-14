@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import UIContainer
 import SnapKit
 
 public class Dashed: UIView {
