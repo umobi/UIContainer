@@ -1,27 +1,19 @@
 //
-//  ContainerCell.swift
+//  ContainerViewCell.swift
 //  mercadoon
 //
-//  Created by brennobemoura on 02/09/19.
+//  Created by brennobemoura on 01/09/19.
 //  Copyright © 2019 brennobemoura. All rights reserved.
 //
 
 import Foundation
 import UIKit
-import SnapKit
 
-open class ContainerCell<View: UIViewController & ContainerCellDelegate>: UITableViewCell, UIContainerCell {
-    public weak var stackView: UIStackView!
-    public weak var containerView: Container<View>!
-    public weak var parent: ParentView!
+open class ContainerCollectionViewCell<View: UIView & ContainerViewParent & ContainerCellDelegate>: UICollectionViewCell, UIContainerCell {
     
-    private func createSV() {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        self.contentView.addSubview(stackView)
-        self.stackView = stackView
-        stackView.snp.makeConstraints { $0.edges.equalTo(0) }
-    }
+    public weak var stackView: UIStackView!
+    public weak var containerView: ContainerView<View>!
+    public weak var parent: ParentView!
     
     open func spacer<T: UIView>(_ view: T) -> Spacer {
         return .init(view, spacing: 0)
@@ -30,7 +22,7 @@ open class ContainerCell<View: UIViewController & ContainerCellDelegate>: UITabl
     open func containerDidLoad() {}
     
     required public init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
-        super.init(style: .default, reuseIdentifier: nil)
+        super.init(frame: .zero)
         self.prepareContainer(inside: parentView, loadHandler: loadHandler)
     }
     
