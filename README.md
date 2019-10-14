@@ -207,6 +207,8 @@ The ContainerCellDelegate has two behaviors and it adds cellDelegate: Delegate a
 
 During cell construction, the UIContainerCell checks the type of your view.cellDelegate, if it is the EmptyCellDelegate UIContainerCell pass without checking if your parent view implements the cell delegate. But, if the cell uses some CellDelegate, UIContainerCell will stop you and ask to implement the delegate for your parent view. This helps a lot when you forgot to implement the delegates, preventing losing coding time.
 
+Added the OptionalCellDelegate if you have views that somethimes will be used as ContainerCellDelegate but the delegate is optional. You only need to extend your cellDelegate protocol with OptionalCellDelegate.
+
 ### 3. UIContainerStoryboard
 
 This is a protocol created for cases when you want to add your view inside the other view using storyboard or .xib. You need to implement its storyboard view and provides some methods to help during initialization. Here some example:
@@ -239,19 +241,80 @@ class ExampleViewController: UIViewController {
 
 ### 4. Helpers
 
-#### 4.a) Spacer
+#### 4. a) Spacer
 
 This is a view that creates padding for any view by calling `Spacer(UIView, spacing: CGFloat)`. Remember to add its as subview not the UIView instance.
 
-#### 4.b) Rounder
+#### 4. b) Rounder
 
 The rounder is a helper for creating rounded views. It works as same as Spacer but with `radius` CGFloat variable. If you put some value betwenn 0 and 1, it will multiply by itself height to round view. But if you put values above 1, it will set `.layer.cornerRadius` with self.radius.
 
-#### 4.c) ViewSharedContext
+#### 4. c) Dashed
+
+The dashed view helps creating views with dashed border.  Here it goes some example:
+
+```swift
+extension ExampleViewController {
+    func prepareViews() {
+        let view = ExampleView.Container(in: self)
+        let dashedView = Dashed(Rounder(view, radius: cornerRadius), dash: pattern)
+        self.contentView.insertSubview(dashedView, at: 0)
+        dashedView.snp.makeConstraints { $0.edges.equalTo(0) }
+    }
+}
+```
+
+We have already implemented for UIImageViews:
+
+```swift
+extension ExampleViewController {
+    func prepareLayout() {
+        self.imageView.dashed(with: [2,3], cornerRadius: 15)
+            .apply(lineWidth: 1)
+            .apply(strokeColor: .fkDarkBlue)
+            .refresh()
+    }
+}
+```
+
+#### 4. d) Content
+
+Content is a view to follow the contentMode. Sometimes we want to center the view or stick the view to the bottom of the superview. To make this it is simple, you only have to put your view inside Content like that:
+
+```swift
+    extension TestView {
+        class Container {
+            override func spacer<T>(_ view: T) -> Spacer where T : UIView {
+            return .init({
+                let contentView = UIView()
+
+                contentView.addSubview(Content.Center(
+                    Rounder(view, radius: view.layer.cornerRadius)
+                )) { maker, _ in
+                    maker.edges.equalTo(0)
+                }
+                
+                return contentView
+            }(), spacing: 0)
+        }
+    }
+```
+
+#### 4. e) Blur
+
+The blur view helps by creating the blur effect view on .init(blur: blur: UIBlurEffect.Style). You only need to add the view in your superview desired. We implement the .apply(blurEffect: UIBlurEffect.Style) if you want to update the blur effect in running time.
+
+#### 4. f) ViewSharedContext
 
 This is a helper for views inside UIWindow. We know some views are unique and keeps on memory for a long time. Sometimes we are at ViewControllerB and want to access ViewControllerA. So, to do that in specific cases, generally, for after transition cases, the ViewSharedContext will be good enough. You can access your view controller by using the shared static variable like `ViewControllerA.shared.doSomething()`. The shared variable will be free that the time when your view controller instance doesn't exist anymore.
 
-### 5. WindowContainer<Provider: WindowContainerType>
+### 5. ContainerController
+
+ContainerController helps by creating conforming views as UIViewController. You only need to conform your view with the ViewControllerType protocol and implement the content: ViewControllerMaker { get } using the ViewControllerMaker.dynamic(_: (UIViewController) -> Void).
+
+After that, you should create the UIViewController instance using the ContainerController.init(_: View) where View conforms with ViewControllerType.
+
+### 6. WindowContainer<Provider: WindowContainerType>
 
 The WindowContainer is our latest new feature that may change over some updates. It only works with the fade effect developed with no classes or special methods.
 
