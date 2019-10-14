@@ -94,7 +94,8 @@ public class Content: UIView {
         case .scaleAspectFill: fallthrough
         case .scaleToFill: fallthrough
         case .redraw: fallthrough
-        case .scaleAspectFit:
+        case .scaleAspectFit: fallthrough
+        @unknown default:
             view.snp.makeConstraints { $0.edges.equalTo(0) }
         }
     }

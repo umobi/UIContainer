@@ -69,7 +69,7 @@ public extension UIContainerStoryboard {
         self.prepareContainer(inside: parentView)
     }
     
-    public init(in parentView: ParentView!, loadHandler: (() -> View?)?) {
+    init(in parentView: ParentView!, loadHandler: (() -> View?)?) {
         fatalError("ContainerStoryboard should not be instanciated by code")
     }
 }

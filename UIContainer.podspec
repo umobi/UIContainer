@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.0.0'
+  s.version          = '1.0.1'
   s.summary          = 'A ContainerView for any UIView or UIViewController'
 
 # This description is used to generate tags and improve search results.
@@ -37,7 +37,7 @@ UIContainer creates a containerView for UIViews and UIViewController allowing to
   #   'UIContainer' => ['UIContainer/Assets/*.png']
   # }
   
-  s.dependency 'SnapKit'
+  s.dependency 'SnapKit', '~> 5.0.1'
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
