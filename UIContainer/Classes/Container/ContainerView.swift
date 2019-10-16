@@ -13,14 +13,14 @@ public  protocol ContainerViewParent {
     var parent: UIViewController! { get set }
 }
 
-open class ContainerView<View: UIView & ContainerViewParent>: UIStackView, UIContainer {
+open class ContainerView<View: UIView & ContainerViewParent>: ContainerBox, UIContainer {
     
     public final weak var view: View!
     public weak var parent: ParentView!
     
     open override func removeFromSuperview() {
-        super.removeFromSuperview()
         self.removeContainer()
+        super.removeFromSuperview()
     }
     
     open func spacer<T: UIView>(_ view: T) -> Spacer {
@@ -40,7 +40,7 @@ open class ContainerView<View: UIView & ContainerViewParent>: UIStackView, UICon
     }
 }
 
-public extension UIContainer where Self: UIStackView, View: UIView & ContainerViewParent {
+public extension UIContainer where Self: ContainerBox, View: UIView & ContainerViewParent {
     
     func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         self.prepare(parentView: parentView)
@@ -68,6 +68,6 @@ public extension UIContainer where Self: UIStackView, View: UIView & ContainerVi
         
         self.view = view
         self.view.parent = self.parent
-        self.addArrangedSubview(self.spacer(view))
+        self.addSubview(self.spacer(view))
     }
 }

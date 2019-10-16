@@ -11,7 +11,7 @@ import UIKit
 
 open class ContainerCollectionViewCell<View: UIView & ContainerViewParent & ContainerCellDelegate>: UICollectionViewCell, UIContainerCell {
     
-    public weak var stackView: UIStackView!
+    public weak var containerBox: ContainerBox!
     public weak var containerView: ContainerView<View>!
     public weak var parent: ParentView!
     

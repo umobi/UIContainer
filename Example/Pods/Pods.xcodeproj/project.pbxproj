@@ -23,6 +23,8 @@
 		0C3DEC662326B5FE0021B5FD /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC552326B5FE0021B5FD /* Container.swift */; };
 		0C3DEC672326B5FE0021B5FD /* UIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC562326B5FE0021B5FD /* UIContainer.swift */; };
 		0C3DEC682326B5FE0021B5FD /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC572326B5FE0021B5FD /* ContainerView.swift */; };
+		0C5D924723579CCA007D0257 /* ContainerBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5D924623579CCA007D0257 /* ContainerBox.swift */; };
+		0C5D924823579CCA007D0257 /* ContainerBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5D924623579CCA007D0257 /* ContainerBox.swift */; };
 		0CB71017233C5A23007B5231 /* ViewSharedContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */; };
 		0CB71019233C5A51007B5231 /* Rounder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71018233C5A51007B5231 /* Rounder.swift */; };
 		0CCEF239233BDF9D009D5DBE /* WindowContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */; };
@@ -66,6 +68,7 @@
 		0C3DEC552326B5FE0021B5FD /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		0C3DEC562326B5FE0021B5FD /* UIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIContainer.swift; sourceTree = "<group>"; };
 		0C3DEC572326B5FE0021B5FD /* ContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
+		0C5D924623579CCA007D0257 /* ContainerBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBox.swift; sourceTree = "<group>"; };
 		0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSharedContext.swift; sourceTree = "<group>"; };
 		0CB71018233C5A51007B5231 /* Rounder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rounder.swift; sourceTree = "<group>"; };
 		0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowContainer.swift; sourceTree = "<group>"; };
@@ -156,6 +159,7 @@
 				0C00DBD32353F46E001E19C1 /* ContainerController.swift */,
 				0C3DEC552326B5FE0021B5FD /* Container.swift */,
 				0C3DEC562326B5FE0021B5FD /* UIContainer.swift */,
+				0C5D924623579CCA007D0257 /* ContainerBox.swift */,
 				0C3DEC572326B5FE0021B5FD /* ContainerView.swift */,
 			);
 			name = Container;
@@ -350,7 +354,7 @@
 				LastUpgradeCheck = 1100;
 				TargetAttributes = {
 					A4D25B51CDB601F8C225DE8D1A183796 = {
-						LastSwiftMigration = 1100;
+						LastSwiftMigration = 1110;
 					};
 					EC38436251BC77CAF5D38DD54CBB2FCE = {
 						LastSwiftMigration = 1030;
@@ -398,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C3DEC632326B5FE0021B5FD /* ContainerTableCell.swift in Sources */,
+				0C5D924823579CCA007D0257 /* ContainerBox.swift in Sources */,
 				0C3DEC682326B5FE0021B5FD /* ContainerView.swift in Sources */,
 				0C00DBCE2353CB25001E19C1 /* Dashed.swift in Sources */,
 				952CCABE966699CE4E9627F3A647292E /* UIContainer-dummy.m in Sources */,
@@ -430,6 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA1A044A770C4AFE6D1C0F76D26B214C /* Pods-UIContainer_Tests-dummy.m in Sources */,
+				0C5D924723579CCA007D0257 /* ContainerBox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

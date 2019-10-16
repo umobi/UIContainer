@@ -11,16 +11,15 @@ import UIKit
 import SnapKit
 
 open class ContainerTableCell<View: UIViewController & ContainerCellDelegate>: UITableViewCell, UIContainerCell {
-    public weak var stackView: UIStackView!
+    public weak var containerBox: ContainerBox!
     public weak var containerView: Container<View>!
     public weak var parent: ParentView!
     
     private func createSV() {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        self.contentView.addSubview(stackView)
-        self.stackView = stackView
-        stackView.snp.makeConstraints { $0.edges.equalTo(0) }
+        let containerBox = ContainerBox()
+        self.contentView.addSubview(containerBox)
+        self.containerBox = containerBox
+        containerBox.snp.makeConstraints { $0.edges.equalTo(0) }
     }
     
     open func spacer<T: UIView>(_ view: T) -> Spacer {
