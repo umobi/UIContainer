@@ -27,5 +27,3 @@ public extension ContainerCellDelegate where Delegate == EmptyCellDelegate {
 }
 
 public protocol EmptyCellDelegate {}
-
-public protocol OptionalCellDelegate {}

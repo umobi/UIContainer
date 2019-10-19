@@ -71,24 +71,8 @@ public extension UIContainerCell where View: ContainerCellDelegate {
             return
         }
         
-        let delegate: View.Delegate? = {
-            if View.Delegate.self == EmptyCellDelegate.self {
-                return nil
-            }
-            
-            guard let delegate = parentView as? ContainerCell.View.Delegate else {
-                if ContainerCell.View.Delegate.self is OptionalCellDelegate {
-                    return nil
-                }
-                
-                fatalError("ParentViewController should extend protocol \(String(describing: ContainerCell.View.Delegate.self))")
-            }
-            
-            return delegate
-        }()
-        
         let containerView = ContainerCell(in: parentView, loadHandler: loadHandler)
-        containerView.view.cellDelegate = delegate
+        containerView.view.cellDelegate = parentView as? ContainerCell.View.Delegate
         
         self.containerView = containerView
         self.addCell(containerView)

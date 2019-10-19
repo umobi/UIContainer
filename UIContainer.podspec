@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.0.1'
-  s.summary          = 'A ContainerView for any UIView or UIViewController'
+  s.version          = '1.0.2'
+  s.summary          = 'Creating containers for UIViewController, UIView, UITableViewCell and UICollectionViewCell'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-UIContainer creates a containerView for UIViews and UIViewController allowing to insert in any view more easily
+UIContainer helps by allowing you to keep the code more specific. You can write code for view controllers like AddressesViewController and for view AddressView that can be used in ProfileViewController and in the AddressesViewController using the ContainerTableViewCell<AddressView> wrapper. This should decrease the excess of code for the same data but in different view controllers.
                        DESC
 
   s.homepage         = 'https://github.com/umobi/UIContainer'
