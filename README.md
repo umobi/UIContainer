@@ -18,7 +18,13 @@ pod 'UIContainer'
 ----
 
 #### 1. UIContainer
-The UIContainer protocol is the main core of each container created. Every UIView can hold another UIView or UIViewController. Using containers, you won't be worried if you are doing the right thing to show any content on screen. So, UIContainer is a protocol that defines the methods and life cycle.
+The UIContainer protocol is the main core of each container created. Every UIView can hold another UIView or UIViewController. Using containers, you won't be worried if you are doing the right thing to show any content on screen. UIContainer is a generic protocol that can be extended to allow other views to be some container for something. Each container should be from type ContainerBox, but you can create your container and your container box, there is no rule for that.
+
+We developed containers for UIViewController and UIView. This will help you create more than one context on the user screen. UIViewController can hold only the essential part and you write UIView from .xib or with code that refresh with data provided by the view controller. Using containers can decrease the code complexity by understanding that you have the view controller, that updates views and has all data, and you have the views that display according to the data. 
+
+One example that is commonly used is the AddressesViewController and the AddressTableViewCell. Let's break the cell into some view like AddressView that is held, starting now, by some cell, this means Cell<AddressView> where Cell contains the view variable that refers to address view instance. Now, on your view controller, on dequeue reusable cell you can update the address view content by calling cell.view.configView(addresses[indexPath.row]).
+
+Nothing has changed yet, we just add some generic type Cell and now, besides updating the cell directly, we have to access the view variable and call the right methods. But, did you have to implement the Cell class? You just implemented the AddressViewController and the AddressView. Now, we have the ProfileViewController and you have to display the same view as AddressView. In old ways, you will have to implement this view inside the ProfileViewControllers manipulating the labels and buttons from the address context. You may add some @IBOutlet for address name, address description that is already implemented in AddressTableViewCell. So, generalizing the cell as Cell<AddressView>, you can now at ProfileViewController do some self.contentStackView.addArrangedSubview(AddressView()) and update the address view the same way that you updated in dequeue reusable cell like addressView.configView(user.address). At the end of your project, you have ProfileViewController with less code just keeping the load methods to get the user data and correctly mounting the views to display and the specialized views to update their self contents.
 
 The methods developed for any UIContainer are:
 
@@ -38,7 +44,7 @@ With this in mind, you can start creating your container classes and using them.
 
 This protocol is important because all containers need to know the parent view controller that is the root of the leaf in the call stack.
 
-Let's start with to top viewController. The first view controller that should exist in any app is the `UIWindow.rootViewController`, this is the only one obligated by UIKit. So, pretend that the root class is WindowViewController, now all UIView inside the container presented inside WindowViewController will hold the WindowViewController as parent. 
+Let's start with the top viewController. The first view controller that should exist in any app is the `UIWindow.rootViewController`, this is the only one obligated by UIKit. So, pretend that the root class is WindowViewController, now all UIView inside the container presented inside WindowViewController will hold the WindowViewController as parent. 
 
 If you have windowViewController with `containerA<UIView>` with `containerB<UIViewController>` with `containerC<UIView>`, this means that containerA and containerB will have the parent view controller as WindowViewController and containerC will have the containerB.UIViewController as its parent.
 
@@ -141,13 +147,13 @@ Remember that Container and ContainerView have the same methods and life cycle. 
 
 ### 2. UIContainerCell
 
-This protocol is a wrapper over UIContainer that helps creating cells for your tables. It is not totally implemented because we have other cases like UICollectionViewCell that are not adapted with any class developed in this project yet.
+This protocol is a wrapper over UIContainer that helps creating cells for your tables. It is not totally implemented because we have other cases like UICollectionViewCell that aren't tested, but you can try it using ContainerCollectionViewCell.
 
 The magic here is that UIContainerCell already implements the obligated methods for classes that implement this protocol. When you are at **tableView.dequeueReusableCell** you should call **cell.prepareContainer(inside: self)**, remember that your cell should be UIContainerCell derivated.
 
 The prepareContainer prevents that your view will be recreated and keeps safe as reusable cell. This is important if you use the reactive library and have **DisposeBag** inside your view. 
 
-There are two classes, one is for UIView and the other is for UIViewController. The first one is ContainerViewCell and the second one is ContainerCell. They have the same methods and call stack.
+There are two classes, one is for UIView and the other is for UIViewController. The first one is ContainerTableViewCell and the second one is ContainerTableCell. They have the same methods and call stack.
 
 So, your view that was used as UITableViewCell is now only UIView, how can you do that? Here goes one example:
 
@@ -182,14 +188,14 @@ class CartsViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.register(ContainerViewCell<CartView>.self, forCellReuseIdentifier: "CartViewCellIdentifier")
+        self.tableView.register(ContainerTableViewCell<CartView>.self, forCellReuseIdentifier: "CartViewCellIdentifier")
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CartViewCellIdentifier", for: indexPath) as! ContainerViewCell<CartView>
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CartViewCellIdentifier", for: indexPath) as! ContainerTableViewCell<CartView>
         
         cell.prepareContainer(in: self)
         cell.view.reloadView(carts[indexPath.row])
@@ -201,13 +207,9 @@ class CartsViewController: UIViewController, UITableViewDataSource, UITableViewD
 
 #### 2.a) ContainerCellDelegate
 
-Notice the ContainerCellDelegate conformance in CartView superclass types. The ContainerCellDelegate is a helper for us because the UIView can be used as a cell or not if you are creating it as the ContainerView example. Our first option was casting the parent as some cell delegate, but this was not safe since we can have the tableView inside another view and the parent will be some common ancestor between then.
+Notice the ContainerCellDelegate conformance in CartView superclass types. The ContainerCellDelegate is a helper for us because the UIView can be used as a cell or not if you are creating it as the ContainerView example.
 
 The ContainerCellDelegate has two behaviors and it adds cellDelegate: Delegate associated type to the views. The first behavior is if you don't specify adding the line `var cellDelegate: Delegate?` inside your view class. What happens? The ContainerCellDelegate understands that you didn't specify the cell delegate and associate the EmptyCellDelegate to your class. Notice if you type "self.cellDelegate" the type would be EmptyCellDelegate?.
-
-During cell construction, the UIContainerCell checks the type of your view.cellDelegate, if it is the EmptyCellDelegate UIContainerCell pass without checking if your parent view implements the cell delegate. But, if the cell uses some CellDelegate, UIContainerCell will stop you and ask to implement the delegate for your parent view. This helps a lot when you forgot to implement the delegates, preventing losing coding time.
-
-Added the OptionalCellDelegate if you have views that somethimes will be used as ContainerCellDelegate but the delegate is optional. You only need to extend your cellDelegate protocol with OptionalCellDelegate.
 
 ### 3. UIContainerStoryboard
 
@@ -247,7 +249,7 @@ This is a view that creates padding for any view by calling `Spacer(UIView, spac
 
 #### 4. b) Rounder
 
-The rounder is a helper for creating rounded views. It works as same as Spacer but with `radius` CGFloat variable. If you put some value betwenn 0 and 1, it will multiply by itself height to round view. But if you put values above 1, it will set `.layer.cornerRadius` with self.radius.
+The rounder is a helper for creating rounded views. It works as same as Spacer but with `radius` CGFloat variable. If you put some value between 0 and 1, it will multiply by itself height to round view. But if you put values above 1, it will set `.layer.cornerRadius` with self.radius.
 
 #### 4. c) Dashed
 
@@ -304,7 +306,11 @@ Content is a view to follow the contentMode. Sometimes we want to center the vie
 
 The blur view helps by creating the blur effect view on .init(blur: blur: UIBlurEffect.Style). You only need to add the view in your superview desired. We implement the .apply(blurEffect: UIBlurEffect.Style) if you want to update the blur effect in running time.
 
-#### 4. f) ViewSharedContext
+#### 4. f) Gradient
+
+The gradient view helps creating gradient backgrounds and it only asks for colors: [UIColor] and direction that can be .other(CGPoint, CGPoint). We add the .animates(animator: (CAGradientLayer) -> Void) so you can animate the background as you like.
+
+#### 4. g) ViewSharedContext
 
 This is a helper for views inside UIWindow. We know some views are unique and keeps on memory for a long time. Sometimes we are at ViewControllerB and want to access ViewControllerA. So, to do that in specific cases, generally, for after transition cases, the ViewSharedContext will be good enough. You can access your view controller by using the shared static variable like `ViewControllerA.shared.doSomething()`. The shared variable will be free that the time when your view controller instance doesn't exist anymore.
 
