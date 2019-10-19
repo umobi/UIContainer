@@ -11,6 +11,7 @@
 		0C00DBD02353D84A001E19C1 /* Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBCF2353D849001E19C1 /* Blur.swift */; };
 		0C00DBD22353EF21001E19C1 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBD12353EF21001E19C1 /* Content.swift */; };
 		0C00DBD42353F46E001E19C1 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBD32353F46E001E19C1 /* ContainerController.swift */; };
+		0C2AFFB0235BAC9D000369AA /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2AFFAE235BAC9D000369AA /* Gradient.swift */; };
 		0C3DEC582326B5FE0021B5FD /* Spacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC442326B5FE0021B5FD /* Spacer.swift */; };
 		0C3DEC592326B5FE0021B5FD /* NibView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC452326B5FE0021B5FD /* NibView.swift */; };
 		0C3DEC5A2326B5FE0021B5FD /* UIViewController+UINib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC462326B5FE0021B5FD /* UIViewController+UINib.swift */; };
@@ -56,6 +57,7 @@
 		0C00DBCF2353D849001E19C1 /* Blur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blur.swift; sourceTree = "<group>"; };
 		0C00DBD12353EF21001E19C1 /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		0C00DBD32353F46E001E19C1 /* ContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
+		0C2AFFAE235BAC9D000369AA /* Gradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
 		0C3DEC442326B5FE0021B5FD /* Spacer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spacer.swift; sourceTree = "<group>"; };
 		0C3DEC452326B5FE0021B5FD /* NibView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
 		0C3DEC462326B5FE0021B5FD /* UIViewController+UINib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+UINib.swift"; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */,
+				0C2AFFAE235BAC9D000369AA /* Gradient.swift */,
 				0CB71018233C5A51007B5231 /* Rounder.swift */,
 				0C00DBCD2353CB25001E19C1 /* Dashed.swift */,
 				0C00DBD12353EF21001E19C1 /* Content.swift */,
@@ -404,6 +407,7 @@
 				0C3DEC632326B5FE0021B5FD /* ContainerTableCell.swift in Sources */,
 				0C5D924823579CCA007D0257 /* ContainerBox.swift in Sources */,
 				0C3DEC682326B5FE0021B5FD /* ContainerView.swift in Sources */,
+				0C2AFFB0235BAC9D000369AA /* Gradient.swift in Sources */,
 				0C00DBCE2353CB25001E19C1 /* Dashed.swift in Sources */,
 				952CCABE966699CE4E9627F3A647292E /* UIContainer-dummy.m in Sources */,
 				0C3DEC672326B5FE0021B5FD /* UIContainer.swift in Sources */,
