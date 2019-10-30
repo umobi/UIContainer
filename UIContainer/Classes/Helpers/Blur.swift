@@ -12,13 +12,17 @@ import SnapKit
 
 public class Blur: UIView {
     
-    private(set) var blurEffect: UIBlurEffect.Style
+    private(set) var blurEffect: TraitObject<UIBlurEffect.Style>
     weak var blurView: UIVisualEffectView!
     
-    public init(blur: UIBlurEffect.Style) {
-        self.blurEffect = blur
+    public convenience init(blur: UIBlurEffect.Style) {
+        self.init(dynamicBlur: .init(dynamic: { _ in blur }))
+    }
+
+    public init(dynamicBlur: TraitObject<UIBlurEffect.Style>) {
+        self.blurEffect = dynamicBlur
         super.init(frame: .zero)
-        
+
         self.blurView = self.createEffect()
     }
     
@@ -27,7 +31,7 @@ public class Blur: UIView {
     }
     
     private func createEffect() -> UIVisualEffectView {
-        let blurEffect = UIBlurEffect(style: self.blurEffect)
+        let blurEffect = UIBlurEffect(style: self.blurEffect.onTrait(self.traitCollection))
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
 
         let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
@@ -44,25 +48,33 @@ public class Blur: UIView {
         
         return blurEffectView
     }
-    
-    private func reload(_ blurEffect: UIBlurEffect.Style) {
-        guard self.blurEffect != blurEffect else {
-            return
-        }
-        
-        self.blurView?.removeFromSuperview()
-        guard let view = self.subviews.first else {
-            return
-        }
-        
-        view.removeFromSuperview()
-        self.blurEffect = blurEffect
+
+    private func reload() {
+        self.subviews.forEach { $0.removeFromSuperview() }
         self.blurView = self.createEffect()
+    }
+
+    private func reload(_ blurEffect: UIBlurEffect.Style) {
+        self.reload(.init(dynamic: {_ in blurEffect }))
+    }
+
+    private func reload(_ dynamicBlur: TraitObject<UIBlurEffect.Style>) {
+        self.blurEffect = dynamicBlur
+        self.reload()
+    }
+
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.reload()
     }
 }
 
 public extension Blur {
     func apply(blurEffect: UIBlurEffect.Style) {
         self.reload(blurEffect)
+    }
+
+    func apply(dynamicBlur: TraitObject<UIBlurEffect.Style>) {
+        self.reload(dynamicBlur)
     }
 }

@@ -26,6 +26,7 @@
 		0C3DEC682326B5FE0021B5FD /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC572326B5FE0021B5FD /* ContainerView.swift */; };
 		0C5D924723579CCA007D0257 /* ContainerBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5D924623579CCA007D0257 /* ContainerBox.swift */; };
 		0C5D924823579CCA007D0257 /* ContainerBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5D924623579CCA007D0257 /* ContainerBox.swift */; };
+		0C6CCF12236A0264008521BD /* TraitObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6CCF11236A0264008521BD /* TraitObject.swift */; };
 		0CB71017233C5A23007B5231 /* ViewSharedContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */; };
 		0CB71019233C5A51007B5231 /* Rounder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71018233C5A51007B5231 /* Rounder.swift */; };
 		0CCEF239233BDF9D009D5DBE /* WindowContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */; };
@@ -71,6 +72,7 @@
 		0C3DEC562326B5FE0021B5FD /* UIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIContainer.swift; sourceTree = "<group>"; };
 		0C3DEC572326B5FE0021B5FD /* ContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
 		0C5D924623579CCA007D0257 /* ContainerBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBox.swift; sourceTree = "<group>"; };
+		0C6CCF11236A0264008521BD /* TraitObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraitObject.swift; sourceTree = "<group>"; };
 		0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSharedContext.swift; sourceTree = "<group>"; };
 		0CB71018233C5A51007B5231 /* Rounder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rounder.swift; sourceTree = "<group>"; };
 		0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowContainer.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 		0C3DEC432326B5FE0021B5FD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				0C6CCF11236A0264008521BD /* TraitObject.swift */,
 				0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */,
 				0C2AFFAE235BAC9D000369AA /* Gradient.swift */,
 				0CB71018233C5A51007B5231 /* Rounder.swift */,
@@ -423,6 +426,7 @@
 				0CCEF23C233BE014009D5DBE /* WindowProviderType.swift in Sources */,
 				0C3DEC622326B5FE0021B5FD /* ContainerCellDelegate.swift in Sources */,
 				0C3DEC642326B5FE0021B5FD /* ContainerTableViewCell.swift in Sources */,
+				0C6CCF12236A0264008521BD /* TraitObject.swift in Sources */,
 				0C3DEC652326B5FE0021B5FD /* UIContainerStoryboard.swift in Sources */,
 				0CCEF240233BE400009D5DBE /* UIWindow+Container.swift in Sources */,
 				0CB71017233C5A23007B5231 /* ViewSharedContext.swift in Sources */,
