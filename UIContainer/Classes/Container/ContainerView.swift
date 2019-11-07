@@ -9,10 +9,6 @@
 import Foundation
 import UIKit
 
-public  protocol ContainerViewParent {
-    var parent: UIViewController! { get set }
-}
-
 open class ContainerView<View: UIView & ContainerViewParent>: ContainerBox, UIContainer {
     
     public final weak var view: View!
