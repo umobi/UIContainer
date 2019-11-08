@@ -11,14 +11,3 @@ import UIKit
 public protocol ContainerViewParent {
     var parent: UIViewController! { get set }
 }
-
-extension UIViewController: ContainerViewParent {
-    public var parent: UIViewController! {
-        get {
-            return self.parent!
-        }
-        set {
-            self.parent = self.parent as UIViewController?
-        }
-    }
-}
