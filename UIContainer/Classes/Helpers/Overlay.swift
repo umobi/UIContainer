@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import UIContainer
 
 fileprivate extension Overlay {
     class Settings {

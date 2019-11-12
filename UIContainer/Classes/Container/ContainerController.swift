@@ -27,7 +27,8 @@ public class ViewControllerMaker {
 
 public protocol ViewControllerType: UIView {
     var content: ViewControllerMaker { get }
-    
+
+    func viewDidLoad()
     func viewWillAppear(_ animated: Bool)
     func viewDidAppear(_ animated: Bool)
     func viewWillDisappear(_ animated: Bool)
@@ -35,6 +36,7 @@ public protocol ViewControllerType: UIView {
 }
 
 public extension ViewControllerType {
+    func viewDidLoad() {}
     func viewWillAppear(_ animated: Bool) {}
     func viewDidAppear(_ animated: Bool) {}
     func viewWillDisappear(_ animated: Bool) {}
@@ -63,6 +65,8 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
         self.contentView = contentView
         super.viewDidLoad()
         content.make(inside: self)
+
+        self.contentView.viewDidLoad()
     }
     
     override public func viewWillAppear(_ animated: Bool) {

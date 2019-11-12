@@ -152,7 +152,7 @@ public extension UIColor {
         self.init(red: components.red, green: components.green, blue: components.blue, alpha: alpha)
     }
 
-    public var components: ColorComponents {
+    var components: ColorComponents {
         return .init(self)
     }
 }
