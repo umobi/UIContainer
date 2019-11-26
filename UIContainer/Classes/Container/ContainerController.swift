@@ -25,7 +25,7 @@ public class ViewControllerMaker {
     }
 }
 
-public protocol ViewControllerType: UIView {
+public protocol ViewControllerType: UIView & ContainerViewParent {
     var content: ViewControllerMaker { get }
 
     func viewDidLoad()
@@ -43,27 +43,58 @@ public extension ViewControllerType {
     func viewDidDisappear(_ animated: Bool) {}
 }
 
+private var navigationKey: UInt = 0
+
+public extension ViewControllerType {
+    public var navigationItem: UINavigationItem {
+        guard let nav = objc_getAssociatedObject(self, &navigationKey) as? UINavigationItem else {
+            let nav: UINavigationItem = .init()
+            objc_setAssociatedObject(self, &navigationKey, nav, .OBJC_ASSOCIATION_RETAIN)
+            return nav
+        }
+
+        return nav
+    }
+}
+
 public class ContainerController<View: ViewControllerType>: UIViewController {
-    weak var contentView: View!
+    private var appendView: View? = nil
+
+    weak var contentView: View! {
+        willSet {
+            self.appendView = nil
+        }
+    }
+
+    override public var navigationItem: UINavigationItem {
+        return (self.appendView ?? self.contentView).navigationItem
+    }
     
     public init() {
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     public init(_ view: View) {
-        self.contentView = view
+        self.appendView = view
         super.init(nibName: nil, bundle: nil)
+        self.appendView?.parent = self
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override public func viewDidLoad() {
-        let contentView = self.contentView ?? View.init()
+        super.viewDidLoad()
+
+        let contentView = self.appendView ?? { [weak self] in
+            var view = View.init()
+            view.parent = self
+            return view
+        }()
+
         let content = contentView.content
         self.contentView = contentView
-        super.viewDidLoad()
         content.make(inside: self)
 
         self.contentView.viewDidLoad()
@@ -87,5 +118,5 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
     override public func viewDidDisappear(_ animated: Bool) {
        super.viewDidDisappear(animated)
        self.contentView.viewDidDisappear(animated)
-   }
+    }
 }
