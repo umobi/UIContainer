@@ -30,6 +30,7 @@
 		0C4A97712374CD3D0082477E /* ColorComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4A976E2374CD3D0082477E /* ColorComponents.swift */; };
 		0C4A97732374CD860082477E /* ContainerViewParent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4A97722374CD860082477E /* ContainerViewParent.swift */; };
 		0C4F558723A2C428008DE5AC /* DynamicTextSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4F558623A2C428008DE5AC /* DynamicTextSize.swift */; };
+		0C573BD023A41AE0007C69EC /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C573BCF23A41AE0007C69EC /* Table.swift */; };
 		0C5D924723579CCA007D0257 /* ContainerBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5D924623579CCA007D0257 /* ContainerBox.swift */; };
 		0C5D924823579CCA007D0257 /* ContainerBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5D924623579CCA007D0257 /* ContainerBox.swift */; };
 		0C6CCF12236A0264008521BD /* TraitObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6CCF11236A0264008521BD /* TraitObject.swift */; };
@@ -84,6 +85,7 @@
 		0C4A976E2374CD3D0082477E /* ColorComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorComponents.swift; sourceTree = "<group>"; };
 		0C4A97722374CD860082477E /* ContainerViewParent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewParent.swift; sourceTree = "<group>"; };
 		0C4F558623A2C428008DE5AC /* DynamicTextSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicTextSize.swift; sourceTree = "<group>"; };
+		0C573BCF23A41AE0007C69EC /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
 		0C5D924623579CCA007D0257 /* ContainerBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBox.swift; sourceTree = "<group>"; };
 		0C6CCF11236A0264008521BD /* TraitObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraitObject.swift; sourceTree = "<group>"; };
 		0C7587CF23787A38009DAF77 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
@@ -201,6 +203,15 @@
 			path = UIContainer/Classes/Color;
 			sourceTree = "<group>";
 		};
+		0C573BCE23A41AC9007C69EC /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				0C573BCF23A41AE0007C69EC /* Table.swift */,
+			);
+			name = UIKit;
+			path = UIContainer/Classes/UIKit;
+			sourceTree = "<group>";
+		};
 		0CCEF23A233BDFA1009D5DBE /* WindowContainer */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +296,7 @@
 				0C3DEC482326B5FE0021B5FD /* ContainerCell */,
 				0C3DEC432326B5FE0021B5FD /* Helpers */,
 				0C3DEC532326B5FE0021B5FD /* UIContainerStoryboard.swift */,
+				0C573BCE23A41AC9007C69EC /* UIKit */,
 				0CCEF23A233BDFA1009D5DBE /* WindowContainer */,
 				0C4A976B2374CD3D0082477E /* Color */,
 				611529F3176E75C80BF450E305D0BC63 /* Pod */,
@@ -467,6 +479,7 @@
 				0CCEF240233BE400009D5DBE /* UIWindow+Container.swift in Sources */,
 				0C4A97712374CD3D0082477E /* ColorComponents.swift in Sources */,
 				0CB71017233C5A23007B5231 /* ViewSharedContext.swift in Sources */,
+				0C573BD023A41AE0007C69EC /* Table.swift in Sources */,
 				0C00DBD02353D84A001E19C1 /* Blur.swift in Sources */,
 				0C3DEC5A2326B5FE0021B5FD /* UIViewController+UINib.swift in Sources */,
 				0C3DEC592326B5FE0021B5FD /* NibView.swift in Sources */,

@@ -26,6 +26,12 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
         super.viewDidLoad()
         
         self.prepareStack()
+
+        #if DEBUG
+        if Provider.showDebugView {
+            self.prepareDebugView()
+        }
+        #endif
     }
 
     public override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -124,6 +130,14 @@ extension WindowContainer {
         
         self.stackView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(0)
+        }
+    }
+
+    func prepareDebugView() {
+        let debugView = DebugView()
+        self.view.addSubview(debugView)
+        debugView.snp.makeConstraints {
+            $0.edges.equalTo(0)
         }
     }
 }

@@ -28,6 +28,7 @@ public class DynamicTextSize: UIView {
         super.init(frame: .zero)
 
         self.label = label
+        self.label.adjustsFontForContentSizeCategory = true
         label.addSubview(self)
         self.snp.makeConstraints {
             $0.edges.equalTo(0)
@@ -106,6 +107,11 @@ public class DynamicTextSize: UIView {
     fileprivate static func orCreate(in label: UILabel) -> DynamicTextSize {
         return self.orEmpty(in: label) ?? DynamicTextSize(label)
     }
+
+    override public func removeFromSuperview() {
+        super.removeFromSuperview()
+        self.label?.adjustsFontForContentSizeCategory = false
+    }
 }
 
 public extension UILabel {
@@ -154,6 +160,7 @@ public extension UILabel {
             self.isDynamicTextSize = true
             self.numberOfLines = 1
             self.minimumScaleFactor = 0
+            self.adjustsFontSizeToFitWidth = true
         }
     }
 }
