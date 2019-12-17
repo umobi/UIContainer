@@ -15,6 +15,9 @@ open class Activity: View {
 
     private weak var stackView: UIStackView!
     weak var activityView: UIActivityIndicatorView!
+    public private(set) weak var titleView: UILabel?
+    private weak var contentTitleView: UIView?
+
     public private(set) var mode: Mode = .forever
 
     public weak var blur: Blur!
@@ -102,9 +105,10 @@ open class Activity: View {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 0
+        let scroll = Scroll(stackView, axis: .vertical)
 
-        self.contentView.addSubview(stackView)
-        stackView.snp.makeConstraints { $0.edges.equalTo(0)}
+        self.contentView.addSubview(scroll)
+        scroll.snp.makeConstraints { $0.edges.equalTo(0)}
         self.stackView = stackView
     }
 
@@ -117,17 +121,54 @@ open class Activity: View {
 
     open func defaultContentViews() -> [UIView] {
         let activity = UIActivityIndicatorView(style: .gray)
-        activity.transform = .init(scaleX: self.size.factor, y: self.size.factor)
+        let titleLabel = UILabel()
 
-        activity.setContentHuggingPriority(.required, for: .horizontal)
-        activity.setContentHuggingPriority(.required, for: .vertical)
-        activity.setContentCompressionResistancePriority(.required, for: .vertical)
-        activity.setContentCompressionResistancePriority(.required, for: .horizontal)
+        activity.transform = .init(scaleX: self.size.factor, y: self.size.factor)
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
+
+        [activity, titleLabel].forEach {
+            $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+            $0.setContentHuggingPriority(.required, for: .vertical)
+            $0.setContentCompressionResistancePriority(.required, for: .vertical)
+            $0.setContentCompressionResistancePriority(.required, for: .horizontal)
+        }
 
         self.activityView = activity
-        return [Spacer(activity, spacing: 30)]
+        self.titleView = titleLabel
+
+        return [Spacer({
+            let content = Content.Center(activity)
+            activity.snp.makeConstraints {
+                $0.leading.trailing.equalTo(0).priority(.high)
+                $0.top.equalTo(0).priority(.high)
+            }
+            return content
+        }(), spacing: 30), {
+            let spacer = Spacer({
+                let content = Content.Center(titleLabel)
+                titleLabel.snp.makeConstraints {
+                    $0.leading.trailing.equalTo(0).priority(.high)
+                    $0.width.lessThanOrEqualTo(200)
+                }
+                return content
+            }(), top: 0, bottom: 15, leading: 15, trailing: 15)
+            spacer.isHidden = true
+            self.contentTitleView = spacer
+            return spacer
+        }()]
     }
 
+    public func setText(_ text: String?) {
+        guard let text = text, !text.isEmpty else {
+            self.contentTitleView?.isHidden = true
+            return
+        }
+
+        self.titleView?.text = text
+        self.contentTitleView?.isHidden = false
+    }
+    
     open func start() {
         self.activityView.startAnimating()
 
