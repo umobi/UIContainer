@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-open class Container<View: UIViewController>: ContainerBox, UIContainer {
+open class Container<View: UIViewController>: ContainerBox, ContainerRepresentable {
     
     public weak var view: View!
     public weak var parent: ParentView!
@@ -36,7 +36,7 @@ open class Container<View: UIViewController>: ContainerBox, UIContainer {
     }
 }
 
-public extension UIContainer where Self: ContainerBox, View: UIViewController {
+public extension ContainerRepresentable where Self: ContainerBox, View: UIViewController {
     func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         self.prepare(parentView: parentView)
         
@@ -64,7 +64,7 @@ public extension UIContainer where Self: ContainerBox, View: UIViewController {
         self.removeContainer()
         
         self.view = view
-        parent.addChild(view)
+        parent?.addChild(view)
         self.addSubview(self.spacer(view.view))
         view.didMove(toParent: self.parent)
     }

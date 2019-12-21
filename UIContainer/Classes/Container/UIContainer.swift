@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public protocol UIContainer: class {
+public protocol ContainerRepresentable: class {
     typealias ParentView = UIViewController
     associatedtype View: AnyObject
     
@@ -31,7 +31,7 @@ public protocol UIContainer: class {
     init(in parentView: ParentView!, loadHandler: (() -> View?)?)
 }
 
-public extension UIContainer {
+public extension ContainerRepresentable {
     func prepare(parentView: ParentView!) {
         self.parent = parentView
     }

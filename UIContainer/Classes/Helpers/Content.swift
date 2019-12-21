@@ -12,18 +12,18 @@ import SnapKit
 
 public class Content: UIView {
     
-    public init(_ view: UIView!, contentMode: UIView.ContentMode) {
+    public init(_ view: UIView!, contentMode: UIView.ContentMode, priority: ConstraintPriority = .required) {
         super.init(frame: .zero)
         self.addSubview(view)
-        view.snp.makeConstraints { $0.edges.equalTo(0) }
-        self.reload(contentMode: contentMode)
+        view.snp.makeConstraints { $0.edges.equalTo(0).priority(priority) }
+        self.reload(contentMode: contentMode, priority: priority)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func reload(contentMode: UIView.ContentMode) {
+    private func reload(contentMode: UIView.ContentMode, priority: ConstraintPriority) {
         let view = self.subviews.first!
         view.removeFromSuperview()
         self.addSubview(view)
@@ -31,79 +31,83 @@ public class Content: UIView {
         switch contentMode {
         case .bottom:
             view.snp.makeConstraints {
-                $0.bottom.equalTo(0)
-                $0.centerX.equalTo(self.snp.centerX)
-                $0.top.leading.greaterThanOrEqualTo(0)
-                $0.trailing.lessThanOrEqualTo(0)
+                $0.bottom.equalTo(0).priority(priority)
+                $0.centerX.equalTo(self.snp.centerX).priority(priority)
+                $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
+                $0.trailing.lessThanOrEqualTo(0).priority(priority)
             }
         case .bottomLeft:
             view.snp.makeConstraints {
-                $0.bottom.leading.equalTo(0)
-                $0.top.greaterThanOrEqualTo(0)
-                $0.trailing.lessThanOrEqualTo(0)
+                $0.bottom.leading.equalTo(0).priority(priority)
+                $0.top.greaterThanOrEqualTo(0).priority(priority)
+                $0.trailing.lessThanOrEqualTo(0).priority(priority)
             }
             
         case .bottomRight:
             view.snp.makeConstraints {
-                $0.bottom.trailing.equalTo(0)
-                $0.top.leading.greaterThanOrEqualTo(0)
+                $0.bottom.trailing.equalTo(0).priority(priority)
+                $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
             }
         case .center:
             view.snp.makeConstraints {
-                $0.top.leading.greaterThanOrEqualTo(0)
-                $0.bottom.trailing.lessThanOrEqualTo(0)
-                $0.center.equalTo(self.snp.center)
+                $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
+                $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
+                $0.center.equalTo(self.snp.center).priority(priority)
             }
             
         case .left:
             view.snp.makeConstraints {
-                $0.top.greaterThanOrEqualTo(0)
-                $0.bottom.trailing.lessThanOrEqualTo(0)
-                $0.leading.equalTo(0)
-                $0.centerY.equalTo(self.snp.centerY)
+                $0.top.greaterThanOrEqualTo(0).priority(priority)
+                $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
+                $0.leading.equalTo(0).priority(priority)
+                $0.centerY.equalTo(self.snp.centerY).priority(priority)
             }
             
         case .right:
             view.snp.makeConstraints {
-                $0.top.leading.greaterThanOrEqualTo(0)
-                $0.bottom.lessThanOrEqualTo(0)
-                $0.trailing.equalTo(0)
-                $0.centerY.equalTo(self.snp.centerY)
+                $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
+                $0.bottom.lessThanOrEqualTo(0).priority(priority)
+                $0.trailing.equalTo(0).priority(priority)
+                $0.centerY.equalTo(self.snp.centerY).priority(priority)
             }
             
         case .top:
             view.snp.makeConstraints {
-                $0.top.equalTo(0)
-                $0.trailing.bottom.lessThanOrEqualTo(0)
-                $0.leading.greaterThanOrEqualTo(0)
-                $0.centerX.equalTo(self.snp.centerX)
+                $0.top.equalTo(0).priority(priority)
+                $0.trailing.bottom.lessThanOrEqualTo(0).priority(priority)
+                $0.leading.greaterThanOrEqualTo(0).priority(priority)
+                $0.centerX.equalTo(self.snp.centerX).priority(priority)
             }
             
         case .topLeft:
             view.snp.makeConstraints {
-                $0.top.leading.equalTo(0)
-                $0.bottom.trailing.lessThanOrEqualTo(0)
+                $0.top.leading.equalTo(0).priority(priority)
+                $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
             }
                 
         case .topRight:
             view.snp.makeConstraints {
-                $0.top.trailing.equalTo(0)
-                $0.bottom.lessThanOrEqualTo(0)
-                $0.leading.greaterThanOrEqualTo(0)
+                $0.top.trailing.equalTo(0).priority(priority)
+                $0.bottom.lessThanOrEqualTo(0).priority(priority)
+                $0.leading.greaterThanOrEqualTo(0).priority(priority)
             }
         case .scaleAspectFill: fallthrough
         case .scaleToFill: fallthrough
         case .redraw: fallthrough
         case .scaleAspectFit: fallthrough
         @unknown default:
-            view.snp.makeConstraints { $0.edges.equalTo(0) }
+            view.snp.makeConstraints { $0.edges.equalTo(0).priority(priority) }
         }
     }
 }
 
 public extension Content {
     func apply(contentMode: UIView.ContentMode) {
-        self.reload(contentMode: contentMode)
+        self.reload(contentMode: contentMode, priority: .high)
+    }
+
+    func apply(priority: ConstraintPriority) {
+        self.reload(contentMode: contentMode, priority: priority)
     }
 }
 

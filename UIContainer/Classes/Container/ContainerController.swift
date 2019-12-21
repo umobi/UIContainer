@@ -25,18 +25,26 @@ public class ViewControllerMaker {
     }
 }
 
-public protocol ViewControllerType: UIView & ContainerViewParent {
-    var content: ViewControllerMaker { get }
-
+public protocol ViewControllerLoadStates {
     func viewDidLoad()
+}
+
+public protocol ViewControllerAppearStates {
     func viewWillAppear(_ animated: Bool)
     func viewDidAppear(_ animated: Bool)
     func viewWillDisappear(_ animated: Bool)
     func viewDidDisappear(_ animated: Bool)
 }
 
-public extension ViewControllerType {
+public protocol ViewControllerType: UIView & ContainerViewParent {
+    var content: ViewControllerMaker { get }
+}
+
+public extension ViewControllerLoadStates {
     func viewDidLoad() {}
+}
+
+public extension ViewControllerAppearStates {
     func viewWillAppear(_ animated: Bool) {}
     func viewDidAppear(_ animated: Bool) {}
     func viewWillDisappear(_ animated: Bool) {}
@@ -46,7 +54,7 @@ public extension ViewControllerType {
 private var navigationKey: UInt = 0
 
 public extension ViewControllerType {
-    public var navigationItem: UINavigationItem {
+    var navigationItem: UINavigationItem {
         guard let nav = objc_getAssociatedObject(self, &navigationKey) as? UINavigationItem else {
             let nav: UINavigationItem = .init()
             objc_setAssociatedObject(self, &navigationKey, nav, .OBJC_ASSOCIATION_RETAIN)
@@ -60,7 +68,7 @@ public extension ViewControllerType {
 public class ContainerController<View: ViewControllerType>: UIViewController {
     private var appendView: View? = nil
 
-    weak var contentView: View! {
+    public private(set) weak var contentView: View! {
         willSet {
             self.appendView = nil
         }
@@ -80,7 +88,13 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
         self.appendView?.parent = self
     }
 
-    required init?(coder: NSCoder) {
+    public init(content: () -> View) {
+        self.appendView = content()
+        super.init(nibName: nil, bundle: nil)
+        self.appendView?.parent = self
+    }
+
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -97,26 +111,26 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
         self.contentView = contentView
         content.make(inside: self)
 
-        self.contentView.viewDidLoad()
+        (self.contentView as? ViewControllerLoadStates)?.viewDidLoad()
     }
     
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.contentView.viewWillAppear(animated)
+        (self.contentView as? ViewControllerAppearStates)?.viewWillAppear(animated)
     }
     
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.contentView.viewDidAppear(animated)
+        (self.contentView as? ViewControllerAppearStates)?.viewDidAppear(animated)
     }
     
     override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.contentView.viewWillDisappear(animated)
+        (self.contentView as? ViewControllerAppearStates)?.viewWillDisappear(animated)
     }
     
     override public func viewDidDisappear(_ animated: Bool) {
        super.viewDidDisappear(animated)
-       self.contentView.viewDidDisappear(animated)
+       (self.contentView as? ViewControllerAppearStates)?.viewDidDisappear(animated)
     }
 }

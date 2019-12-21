@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-public protocol UIContainerCell: UIContainer where ContainerCell.View == View {
-    associatedtype ContainerCell: UIContainer
+public protocol UIContainerCell: ContainerRepresentable where ContainerCell.View == View {
+    associatedtype ContainerCell: ContainerRepresentable
     var containerView: ContainerCell! { get set }
     
     func addCell(_ containerCell: ContainerCell)
