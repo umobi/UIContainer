@@ -44,8 +44,8 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
         self.window = window
         
         let container: UIView! = Provider.launcher(in: self)
-        if !(container is UIContainer) {
-            fatalError("WindowContainer only accepts classes derivated from UIContainer protocol")
+        if !(container is ContainerRepresentable) {
+            fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
         
         self.stackView.addArrangedSubview(container)
@@ -57,8 +57,8 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
     }
     
     private func changeContainer(_ containerView: UIView!, animated: Bool, completion handler: (() -> Void)? = nil) {
-        if !(containerView is UIContainer) {
-            fatalError("WindowContainer only accepts classes derivated from UIContainer protocol")
+        if !(containerView is ContainerRepresentable) {
+            fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
         
         self.stackView.addArrangedSubview(containerView)
