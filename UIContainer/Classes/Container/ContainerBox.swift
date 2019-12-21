@@ -36,7 +36,7 @@ open class ContainerBox: UIView {
 
     override open func insertSubview(_ view: UIView, at index: Int) {
         self.cannotAddViews ?  {
-               self.view.addSubview(view)
+               self.view.insertSubview(view, at: index)
            }() : {
             super.insertSubview(view, at: index)
 
