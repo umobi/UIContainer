@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.0.2'
+  s.version          = '1.1.0'
   s.summary          = 'Creating containers for UIViewController, UIView, UITableViewCell and UICollectionViewCell'
 
 # This description is used to generate tags and improve search results.
