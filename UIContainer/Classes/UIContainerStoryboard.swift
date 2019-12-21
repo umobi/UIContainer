@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 import SnapKit
 
-public protocol UIContainerStoryboard: View, UIContainer where View == Container.View {
-    associatedtype Container: UIContainer
+public protocol UIContainerStoryboard: View, ContainerRepresentable where View == Container.View {
+    associatedtype Container: ContainerRepresentable
     var containerView: Container! { get set }
     
     func addContainer(_ container: Container)

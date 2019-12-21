@@ -21,7 +21,7 @@ public class Scroll: UIScrollView {
         view.snp.makeConstraints {
             $0.edges.equalTo(0)
         }
-
+        
         self.setAxis(axis)
     }
 
