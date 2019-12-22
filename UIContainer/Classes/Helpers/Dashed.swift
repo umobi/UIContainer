@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Dashed: UIView {
+public class Dashed: View {
     
     private(set) var strokeColor: UIColor = .clear
     private(set) var lineWidth: CGFloat = 1

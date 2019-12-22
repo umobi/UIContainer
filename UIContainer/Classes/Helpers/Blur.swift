@@ -20,7 +20,7 @@ public extension Blur {
     }
 }
 
-public class Blur: UIView {
+public class Blur: View {
     
     private(set) var blurEffect: TraitObject<UIBlurEffect.Style>
 
