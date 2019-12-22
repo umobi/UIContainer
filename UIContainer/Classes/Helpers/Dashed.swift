@@ -69,6 +69,11 @@ public class Dashed: UIView {
         self.shape.frame = self.bounds
         self.shape.cornerRadius = self.subviews.first!.layer.cornerRadius
     }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.reloadShape()
+    }
 }
 
 public extension Dashed {
