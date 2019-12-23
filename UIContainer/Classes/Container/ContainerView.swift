@@ -30,6 +30,10 @@ open class ContainerView<View: UIView & ContainerViewParent>: ContainerBox, Cont
         self.prepareContainer(inside: parentView, loadHandler: loadHandler)
         self.containerDidLoad()
     }
+
+    public required init() {
+        super.init(frame: .zero)
+    }
     
     required public init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
