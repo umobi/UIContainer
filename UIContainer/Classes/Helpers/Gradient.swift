@@ -87,6 +87,12 @@ public class Gradient: View {
         gradientLayer.startPoint = self.direction.points.0
         gradientLayer.endPoint = self.direction.points.1
     }
+
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        self.setupGradientLayer()
+    }
 }
 
 public extension Gradient {

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Rounder: UIView {
+public class Rounder: View {
     let radius: CGFloat
     public init(_ view: UIView, radius: CGFloat) {
         self.radius = radius

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Spacer: UIView {
+public class Spacer: View {
     private weak var view: UIView!
     let margin: Spacer.Margin
     
