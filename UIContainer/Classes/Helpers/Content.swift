@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Content: UIView {
+public class Content: View {
     
     public init(_ view: UIView!, contentMode: UIView.ContentMode, priority: ConstraintPriority = .required) {
         super.init(frame: .zero)

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Dashed: UIView {
+public class Dashed: View {
     
     private(set) var strokeColor: UIColor = .clear
     private(set) var lineWidth: CGFloat = 1
@@ -68,6 +68,11 @@ public class Dashed: UIView {
         self.shape.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.subviews.first!.layer.cornerRadius).cgPath
         self.shape.frame = self.bounds
         self.shape.cornerRadius = self.subviews.first!.layer.cornerRadius
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.reloadShape()
     }
 }
 
