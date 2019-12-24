@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-open class ContainerCollectionCell<View: UIViewController & ContainerCellDelegate>: UICollectionViewCell, UIContainerCell {
+open class ContainerCollectionCell<View: UIViewController & ContainerCellDelegate>: UICollectionViewCell, ContainerCellRepresentable {
     public weak var containerBox: ContainerBox!
     public weak var containerView: Container<View>!
     public weak var parent: ParentView!
@@ -22,7 +22,7 @@ open class ContainerCollectionCell<View: UIViewController & ContainerCellDelegat
         containerBox.snp.makeConstraints { $0.edges.equalTo(0) }
     }
     
-    open func spacer<T: UIView>(_ view: T) -> Spacer {
+    open func spacer<T: UIView>(_ view: T) -> SpacerView {
         return .init(view, spacing: 0)
     }
     

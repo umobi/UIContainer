@@ -24,7 +24,7 @@ public protocol ContainerRepresentable: class {
     
     func prepare(parentView: ParentView!)
     
-    func spacer<T: UIView>(_ view: T) -> Spacer
+    func spacer<T: UIView>(_ view: T) -> SpacerView
     
     func containerDidLoad()
     
@@ -36,7 +36,7 @@ public extension ContainerRepresentable {
         self.parent = parentView
     }
     
-    func spacer<T: UIView>(_ view: T) -> Spacer {
+    func spacer<T: UIView>(_ view: T) -> SpacerView {
         return .init(view, spacing: 0)
     }
 }

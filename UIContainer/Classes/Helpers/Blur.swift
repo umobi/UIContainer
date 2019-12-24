@@ -13,14 +13,14 @@ import SnapKit
 private var kVibrancyEffectStyle: UInt = 0
 
 @available(iOS 13, *)
-public extension Blur {
+public extension BlurView {
     fileprivate(set) var vibrancyEffect: TraitObject<UIVibrancyEffectStyle> {
         get { return objc_getAssociatedObject(self, &kVibrancyEffectStyle) as! TraitObject<UIVibrancyEffectStyle> }
         set { objc_setAssociatedObject(self, &kVibrancyEffectStyle, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
 }
 
-public class Blur: View {
+open class BlurView: View {
     
     private(set) var blurEffect: TraitObject<UIBlurEffect.Style>
 
@@ -59,7 +59,7 @@ public class Blur: View {
         self.blurView = self.createEffect()
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -119,7 +119,7 @@ public class Blur: View {
     }
 }
 
-public extension Blur {
+public extension BlurView {
     func apply(blurEffect: UIBlurEffect.Style) {
         self.reload(blurEffect)
     }
@@ -130,7 +130,7 @@ public extension Blur {
 }
 
 @available(iOS 13, *)
-public extension Blur {
+public extension BlurView {
     func apply(vibrancyEffect: UIVibrancyEffectStyle) {
         self.reload(vibrancyEffect)
     }

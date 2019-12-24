@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class Gradient: View {
+open class GradientView: View {
 
     fileprivate let gradientLayer = CAGradientLayer()
 
@@ -48,14 +48,14 @@ public class Gradient: View {
     }
 
     // MARK: - Initializers
-    public override func prepare() {
+    open override func prepare() {
         super.prepare()
 
         self.layer.addSublayer(gradientLayer)
         setupGradientLayer()
     }
 
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer.frame = self.bounds
     }
@@ -88,16 +88,16 @@ public class Gradient: View {
         gradientLayer.endPoint = self.direction.points.1
     }
 
-    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
         self.setupGradientLayer()
     }
 }
 
-public extension Gradient {
-    class func Linear(colors: [UIColor], direction: Direction) -> Gradient {
-        let gradient = Gradient()
+public extension GradientView {
+    class func Linear(colors: [UIColor], direction: Direction) -> GradientView {
+        let gradient = GradientView()
         gradient.colors = colors
         gradient.direction = direction
         return gradient
@@ -114,9 +114,9 @@ extension CGPoint {
     }
 }
 
-extension Gradient {
-    class var Skeleton: Gradient {
-        let gradient = Gradient()
+extension GradientView {
+    class var Skeleton: GradientView {
+        let gradient = GradientView()
 
         gradient.colors = (0..<4).reduce([UIColor]()) { sum, _ in
             return sum + [#colorLiteral(red: 0.8980392157, green: 0.8980392157, blue: 0.8980392157, alpha: 1), #colorLiteral(red: 0.968627451, green: 0.968627451, blue: 0.968627451, alpha: 1)]

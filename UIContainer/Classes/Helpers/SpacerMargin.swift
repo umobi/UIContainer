@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public extension Spacer {
+public extension SpacerView {
     class Margin {
         let top, bottom, leading, trailing: CGFloat
         
