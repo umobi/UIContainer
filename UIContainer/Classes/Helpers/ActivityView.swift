@@ -120,7 +120,15 @@ open class ActivityView: View {
     }
 
     open func defaultContentViews() -> [UIView] {
-        let activity = UIActivityIndicatorView(style: .gray)
+        let activity = UIActivityIndicatorView(style: {
+            #if os(iOS)
+            return .gray
+            #endif
+
+            #if os(tvOS)
+            return .white
+            #endif
+        }())
         let titleLabel = UILabel()
 
         activity.transform = .init(scaleX: self.size.factor, y: self.size.factor)
@@ -189,7 +197,14 @@ open class ActivityView: View {
     public func show(inViewController view: UIViewController!) {
         let controller = ContainerController(self)
         controller.modalPresentationStyle = .overFullScreen
-        controller.modalTransitionStyle = .partialCurl
+        controller.modalTransitionStyle = {
+            #if os(iOS)
+            return .partialCurl
+            #endif
+            #if os(tvOS)
+            return .coverVertical
+            #endif
+        }()
         view.present(controller, animated: true, completion: {
             self.start()
         })
