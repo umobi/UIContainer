@@ -36,7 +36,7 @@ public protocol ViewControllerAppearStates {
     func viewDidDisappear(_ animated: Bool)
 }
 
-public protocol ViewControllerType: UIView & ContainerViewParent {
+public protocol ViewControllerType {
     var content: ViewControllerMaker { get }
 }
 
@@ -68,7 +68,7 @@ public extension ViewControllerType {
 public class ContainerController<View: ViewControllerType>: UIViewController {
     private var appendView: View? = nil
 
-    public private(set) weak var contentView: View! {
+    public private(set) var contentView: View! {
         willSet {
             self.appendView = nil
         }
@@ -85,13 +85,11 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
     public init(_ view: View) {
         self.appendView = view
         super.init(nibName: nil, bundle: nil)
-        self.appendView?.parent = self
     }
 
     public init(content: () -> View) {
         self.appendView = content()
         super.init(nibName: nil, bundle: nil)
-        self.appendView?.parent = self
     }
 
     required public init?(coder: NSCoder) {
@@ -101,11 +99,9 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        let contentView = self.appendView ?? { [weak self] in
-            var view = View.init()
-            view.parent = self
-            return view
-        }()
+        guard let contentView = self.appendView else {
+            fatalError()
+        }
 
         let content = contentView.content
         self.contentView = contentView

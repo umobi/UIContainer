@@ -78,17 +78,17 @@ open class DashedView: View {
 
 public extension DashedView {
     
-    func apply(strokeColor: UIColor) -> DashedView {
+    func apply(strokeColor: UIColor) -> Self {
         self.strokeColor = strokeColor
         return self
     }
     
-    func apply(lineWidth: CGFloat) -> DashedView {
+    func apply(lineWidth: CGFloat) -> Self {
         self.lineWidth = lineWidth
         return self
     }
     
-    func apply(dashPattern: [NSNumber]) -> DashedView {
+    func apply(dashPattern: [NSNumber]) -> Self {
         self.dashPattern = dashPattern
         return self
     }
