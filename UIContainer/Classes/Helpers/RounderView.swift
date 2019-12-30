@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Rounder: View {
+open class RounderView: View {
     let radius: CGFloat
-    public init(_ view: UIView, radius: CGFloat) {
+    public required init(_ view: UIView, radius: CGFloat) {
         self.radius = radius
         super.init(frame: .zero)
         
@@ -24,11 +24,11 @@ public class Rounder: View {
         fatalError()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError()
     }
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         
         if radius < 1 {
@@ -38,7 +38,7 @@ public class Rounder: View {
         }
     }
     
-    public static func full(_ view: UIView) -> Rounder {
+    public static func full(_ view: UIView) -> RounderView {
         return .init(view, radius: 0.5)
     }
     
@@ -48,7 +48,7 @@ public class Rounder: View {
     }
 }
 
-public extension Rounder {
+public extension RounderView {
     
     @discardableResult
     func border(width: CGFloat) -> Self {
@@ -68,15 +68,15 @@ public extension Rounder {
     }
 }
 
-public extension Rounder {
+public extension RounderView {
     
     @discardableResult
-    static func outside(_ view: UIView!, radius: CGFloat) -> Rounder {
+    static func outside(_ view: UIView!, radius: CGFloat) -> RounderView {
         let view = view!
         let superview = view.superview!
         view.removeFromSuperview()
         
-        let rounder = Rounder(view, radius: radius)
+        let rounder = RounderView(view, radius: radius)
         superview.addSubview(rounder)
         
         rounder.snp.makeConstraints { $0.edges.equalTo(0) }
@@ -86,8 +86,8 @@ public extension Rounder {
 
 public extension UIImageView {
     
-    var rounder: Rounder? {
-        return self.superview as? Rounder
+    var rounder: RounderView? {
+        return self.superview as? RounderView
     }
     
     @IBInspectable
@@ -112,7 +112,7 @@ public extension UIImageView {
                 }
             }
             
-            Rounder.outside(self, radius: newValue)
+            RounderView.outside(self, radius: newValue)
         }
     }
 }

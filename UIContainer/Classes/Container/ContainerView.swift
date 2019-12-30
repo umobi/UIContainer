@@ -19,7 +19,7 @@ open class ContainerView<View: UIView & ContainerViewParent>: ContainerBox, Cont
         super.removeFromSuperview()
     }
     
-    open func spacer<T: UIView>(_ view: T) -> Spacer {
+    open func spacer<T: UIView>(_ view: T) -> SpacerView {
         return .init(view, spacing: 0)
     }
     

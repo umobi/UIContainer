@@ -10,16 +10,16 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Content: View {
+open class ContentView: View {
     
-    public init(_ view: UIView!, contentMode: UIView.ContentMode, priority: ConstraintPriority = .required) {
+    public required init(_ view: UIView!, contentMode: UIView.ContentMode, priority: ConstraintPriority = .required) {
         super.init(frame: .zero)
         self.addSubview(view)
         view.snp.makeConstraints { $0.edges.equalTo(0).priority(priority) }
         self.reload(contentMode: contentMode, priority: priority)
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -101,7 +101,7 @@ public class Content: View {
     }
 }
 
-public extension Content {
+public extension ContentView {
     func apply(contentMode: UIView.ContentMode) {
         self.reload(contentMode: contentMode, priority: .high)
     }
@@ -111,40 +111,40 @@ public extension Content {
     }
 }
 
-public extension Content {
-    class func Center(_ view: UIView) -> Content {
+public extension ContentView {
+    class func Center(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .center)
     }
     
-    class func TopLeft(_ view: UIView) -> Content {
+    class func TopLeft(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .topLeft)
     }
     
-    class func Top(_ view: UIView) -> Content {
+    class func Top(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .top)
     }
     
-    class func TopRight(_ view: UIView) -> Content {
+    class func TopRight(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .topRight)
     }
     
-    class func Left(_ view: UIView) -> Content {
+    class func Left(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .left)
     }
     
-    class func Right(_ view: UIView) -> Content {
+    class func Right(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .right)
     }
     
-    class func BottomLeft(_ view: UIView) -> Content {
+    class func BottomLeft(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .bottomLeft)
     }
     
-    class func Bottom(_ view: UIView) -> Content {
+    class func Bottom(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .bottom)
     }
     
-    class func BottomRight(_ view: UIView) -> Content {
+    class func BottomRight(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .bottomRight)
     }
 }

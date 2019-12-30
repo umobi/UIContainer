@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 
-open class ContainerCollectionViewCell<View: UIView & ContainerViewParent & ContainerCellDelegate>: UICollectionViewCell, UIContainerCell {
+open class ContainerCollectionViewCell<View: UIView & ContainerViewParent & ContainerCellDelegate>: UICollectionViewCell, ContainerCellRepresentable {
     
     public weak var containerBox: ContainerBox!
     public weak var containerView: ContainerView<View>!
     public weak var parent: ParentView!
     
-    open func spacer<T: UIView>(_ view: T) -> Spacer {
+    open func spacer<T: UIView>(_ view: T) -> SpacerView {
         return .init(view, spacing: 0)
     }
     

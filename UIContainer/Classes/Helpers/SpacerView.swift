@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Spacer: View {
+open class SpacerView: View {
     private weak var view: UIView!
-    let margin: Spacer.Margin
+    let margin: SpacerView.Margin
     
-    internal init(_ view: UIView!, margin: Margin) {
+    public required init(_ view: UIView!, margin: Margin) {
         self.margin = margin
         super.init(frame: .zero)
         
