@@ -12,44 +12,54 @@ import SnapKit
 
 private var kVibrancyEffectStyle: UInt = 0
 
+#if os(iOS)
 @available(iOS 13, *)
-public extension Blur {
+public extension BlurView {
     fileprivate(set) var vibrancyEffect: TraitObject<UIVibrancyEffectStyle> {
         get { return objc_getAssociatedObject(self, &kVibrancyEffectStyle) as! TraitObject<UIVibrancyEffectStyle> }
         set { objc_setAssociatedObject(self, &kVibrancyEffectStyle, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
 }
+#endif
 
-public class Blur: View {
+open class BlurView: View {
     
     private(set) var blurEffect: TraitObject<UIBlurEffect.Style>
 
     weak var blurView: UIVisualEffectView!
     
     public convenience init(blur: UIBlurEffect.Style) {
+        #if os(iOS)
         if #available(iOS 13, *) {
             self.init(dynamicBlur: .init(dynamic: { _ in blur }), dynamicVibrancy: .init(dynamic: { _ in .fill }))
-        } else {
-            self.init(dynamicBlur: .init(dynamic: { _ in blur }))
+            return
         }
+        #endif
+
+        self.init(dynamicBlur: .init(dynamic: { _ in blur }))
     }
 
+    #if os(iOS)
     @available(iOS 13, *)
     public convenience init(blur: UIBlurEffect.Style, vibrancy: UIVibrancyEffectStyle) {
         self.init(dynamicBlur: .init(dynamic: { _ in blur }), dynamicVibrancy: .init(dynamic: { _ in vibrancy }))
     }
+    #endif
 
     public init(dynamicBlur: TraitObject<UIBlurEffect.Style>) {
         self.blurEffect = dynamicBlur
         super.init(frame: .zero)
 
+        #if os(iOS)
         if #available(iOS 13, *) {
             self.vibrancyEffect = .init(dynamic: { _ in .fill })
         }
+        #endif
 
         self.blurView = self.createEffect()
     }
 
+    #if os(iOS)
     @available(iOS 13, *)
     public init(dynamicBlur: TraitObject<UIBlurEffect.Style>, dynamicVibrancy: TraitObject<UIVibrancyEffectStyle>) {
         self.blurEffect = dynamicBlur
@@ -58,8 +68,9 @@ public class Blur: View {
 
         self.blurView = self.createEffect()
     }
-    
-    required init?(coder: NSCoder) {
+    #endif
+
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -68,11 +79,15 @@ public class Blur: View {
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
 
         let vibrancyEffect: UIVibrancyEffect = {
+            #if os(iOS)
             guard #available(iOS 13, *) else {
                 return UIVibrancyEffect(blurEffect: blurEffect)
             }
 
             return .init(blurEffect: blurEffect, style: self.vibrancyEffect.onTrait(self.traitCollection))
+            #endif
+
+            return UIVibrancyEffect(blurEffect: blurEffect)
         }()
         let vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
 
@@ -97,19 +112,21 @@ public class Blur: View {
         self.reload(.init(dynamic: {_ in blurEffect }))
     }
 
+    #if os(iOS)
     @available(iOS 13, *)
     private func reload(_ vibrancyEffect: UIVibrancyEffectStyle) {
         self.reload(.init(dynamic: { _ in vibrancyEffect }))
     }
 
-    private func reload(_ dynamicBlur: TraitObject<UIBlurEffect.Style>) {
-        self.blurEffect = dynamicBlur
-        self.reload()
-    }
-
     @available(iOS 13, *)
     private func reload(_ dynamicVibrancy: TraitObject<UIVibrancyEffectStyle>) {
         self.vibrancyEffect = dynamicVibrancy
+        self.reload()
+    }
+    #endif
+
+    private func reload(_ dynamicBlur: TraitObject<UIBlurEffect.Style>) {
+        self.blurEffect = dynamicBlur
         self.reload()
     }
 
@@ -119,7 +136,7 @@ public class Blur: View {
     }
 }
 
-public extension Blur {
+public extension BlurView {
     func apply(blurEffect: UIBlurEffect.Style) {
         self.reload(blurEffect)
     }
@@ -129,8 +146,9 @@ public extension Blur {
     }
 }
 
+#if os(iOS)
 @available(iOS 13, *)
-public extension Blur {
+public extension BlurView {
     func apply(vibrancyEffect: UIVibrancyEffectStyle) {
         self.reload(vibrancyEffect)
     }
@@ -139,3 +157,4 @@ public extension Blur {
         self.reload(dynamicVibrancy)
     }
 }
+#endif

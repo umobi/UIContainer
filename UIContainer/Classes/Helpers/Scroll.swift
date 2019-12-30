@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-public class Scroll: UIScrollView {
+open class ScrollView: UIScrollView {
     public enum Axis {
         case vertical
         case horizontal
         case auto(vertical: UILayoutPriority, horizontal: UILayoutPriority)
     }
 
-    public init(_ view: UIView, axis: Axis = .vertical) {
+    public required init(_ view: UIView, axis: Axis = .vertical) {
         super.init(frame: .zero)
         self.addSubview(view)
         view.snp.makeConstraints {
@@ -42,7 +42,7 @@ public class Scroll: UIScrollView {
         }
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

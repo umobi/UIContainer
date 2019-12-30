@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.2.0-beta.2'
+  s.version          = '1.2.0-beta.3'
   s.summary          = 'Creating containers for UIViewController, UIView, UITableViewCell and UICollectionViewCell'
 
 # This description is used to generate tags and improve search results.
@@ -29,6 +29,7 @@ UIContainer helps by allowing you to keep the code more specific. You can write 
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
+  s.tvos.deployment_target = '10.0'
   s.swift_version = '5.1'
 
   s.source_files = 'UIContainer/Classes/**/*'

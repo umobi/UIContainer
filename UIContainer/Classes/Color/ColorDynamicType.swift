@@ -41,16 +41,16 @@ public extension ColorDynamicProvider {
 }
 
 public extension UIColor {
-    static func dynamic(onLight whiteColor: UIColor, onDark darkColor: UIColor) -> UIColor {
-        guard #available(iOS 13.0, *) else {
-            return whiteColor
+    static func dynamic(onLight lightColor: UIColor, onDark darkColor: UIColor) -> UIColor {
+        if #available(iOS 13, tvOS 13, *) {
+            return UIColor { (traits) -> UIColor in
+                return traits.userInterfaceStyle == .dark ?
+                    darkColor :
+                    lightColor
+            }
         }
 
-        return UIColor { (traits) -> UIColor in
-            return traits.userInterfaceStyle == .dark ?
-                darkColor :
-                whiteColor
-        }
+        return lightColor
     }
 }
 
@@ -101,12 +101,12 @@ private extension ColorDynamicType {
 
 public extension TraitObject where T: UIColor {
     var asColor: UIColor {
-        if #available(iOS 13.0, *) {
+        if #available(iOS 13.0, tvOS 13.0, *) {
             return .init(dynamicProvider: { trait in
                 return self.onTrait(trait)
             })
-        } else {
-            return self.onTrait(.init())
         }
+
+        return self.onTrait(.init())
     }
 }

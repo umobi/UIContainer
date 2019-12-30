@@ -36,7 +36,7 @@ class DebugView: View {
         label.setContentHuggingPriority(.required, for: .vertical)
         label.setContentHuggingPriority(.required, for: .horizontal)
 
-        let content = Content.Right(label)
+        let content = ContentView.Right(label)
         label.snp.makeConstraints {
             $0.leading.equalTo(0)
         }

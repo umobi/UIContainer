@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-open class Activity: View {
+open class ActivityView: View {
 
     private weak var contentView: UIView!
     public private(set) var size: Size = .medium
@@ -20,7 +20,7 @@ open class Activity: View {
 
     public private(set) var mode: Mode = .forever
 
-    public weak var blur: Blur!
+    public weak var blur: BlurView!
     public override var backgroundColor: UIColor? {
         get { self.contentView.backgroundColor }
         set { self.contentView.backgroundColor = newValue }
@@ -61,7 +61,7 @@ open class Activity: View {
 
     func prepareContent() {
         let contentView = UIView()
-        let rounder = Rounder(contentView, radius: 5)
+        let rounder = RounderView(contentView, radius: 5)
         self.addSubview(rounder)
         rounder.snp.makeConstraints {
             $0.edges.equalTo(0)
@@ -89,7 +89,7 @@ open class Activity: View {
     }
 
     func prepareActivity() {
-        let blur = Blur(dynamicBlur: .init(dynamic: {
+        let blur = BlurView(dynamicBlur: .init(dynamic: {
             guard #available(iOS 13, *) else {
                 return .light
             }
@@ -105,7 +105,7 @@ open class Activity: View {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 0
-        let scroll = Scroll(stackView, axis: .vertical)
+        let scroll = ScrollView(stackView, axis: .vertical)
 
         self.contentView.addSubview(scroll)
         scroll.snp.makeConstraints { $0.edges.equalTo(0)}
@@ -120,7 +120,15 @@ open class Activity: View {
     }
 
     open func defaultContentViews() -> [UIView] {
-        let activity = UIActivityIndicatorView(style: .gray)
+        let activity = UIActivityIndicatorView(style: {
+            #if os(iOS)
+            return .gray
+            #endif
+
+            #if os(tvOS)
+            return .white
+            #endif
+        }())
         let titleLabel = UILabel()
 
         activity.transform = .init(scaleX: self.size.factor, y: self.size.factor)
@@ -137,16 +145,16 @@ open class Activity: View {
         self.activityView = activity
         self.titleView = titleLabel
 
-        return [Spacer({
-            let content = Content.Center(activity)
+        return [SpacerView({
+            let content = ContentView.Center(activity)
             activity.snp.makeConstraints {
                 $0.leading.trailing.equalTo(0).priority(.high)
                 $0.top.equalTo(0).priority(.high)
             }
             return content
         }(), spacing: 30), {
-            let spacer = Spacer({
-                let content = Content.Center(titleLabel)
+            let spacer = SpacerView({
+                let content = ContentView.Center(titleLabel)
                 titleLabel.snp.makeConstraints {
                     $0.leading.trailing.equalTo(0).priority(.high)
                     $0.width.lessThanOrEqualTo(200)
@@ -189,7 +197,14 @@ open class Activity: View {
     public func show(inViewController view: UIViewController!) {
         let controller = ContainerController(self)
         controller.modalPresentationStyle = .overFullScreen
-        controller.modalTransitionStyle = .partialCurl
+        controller.modalTransitionStyle = {
+            #if os(iOS)
+            return .partialCurl
+            #endif
+            #if os(tvOS)
+            return .coverVertical
+            #endif
+        }()
         view.present(controller, animated: true, completion: {
             self.start()
         })
@@ -211,7 +226,7 @@ open class Activity: View {
             return
         }
 
-        guard let container = self.parent as? ContainerController<Activity> else {
+        guard let container = self.parent as? ContainerController<ActivityView> else {
             self.stop()
             return
         }
@@ -222,9 +237,9 @@ open class Activity: View {
     }
 }
 
-extension Activity {
-    class Container: ContainerView<Activity> {
-        override func spacer<T>(_ view: T) -> Spacer where T : UIView {
+extension ActivityView {
+    class Container: ContainerView<ActivityView> {
+        override func spacer<T>(_ view: T) -> SpacerView where T : UIView {
             let contentView = UIView()
 
 //            let fadeView = UIView()
@@ -232,7 +247,7 @@ extension Activity {
 //            contentView.addSubview(fadeView)
 //            fadeView.snp.makeConstraints { $0.edges.equalTo(0) }
 
-            let center = Content.Center(view)
+            let center = ContentView.Center(view)
             contentView.addSubview(center)
             center.snp.makeConstraints { $0.edges.equalTo(0) }
 
@@ -246,7 +261,7 @@ extension Activity {
 }
 
 
-public extension Activity {
+public extension ActivityView {
     enum Size {
         case small
         case medium
@@ -265,14 +280,14 @@ public extension Activity {
     }
 }
 
-public extension Activity {
+public extension ActivityView {
     enum Mode {
         case forever
         case until(TimeInterval)
     }
 }
 
-extension Activity: ViewControllerType {
+extension ActivityView: ViewControllerType {
     public var content: ViewControllerMaker {
         return .dynamic { [weak self] in
             let container = Container(in: $0, loadHandler: { self })

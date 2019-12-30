@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C00DBCE2353CB25001E19C1 /* Dashed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBCD2353CB25001E19C1 /* Dashed.swift */; };
-		0C00DBD02353D84A001E19C1 /* Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBCF2353D849001E19C1 /* Blur.swift */; };
-		0C00DBD22353EF21001E19C1 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBD12353EF21001E19C1 /* Content.swift */; };
+		0C00DBCE2353CB25001E19C1 /* DashedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBCD2353CB25001E19C1 /* DashedView.swift */; };
+		0C00DBD02353D84A001E19C1 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBCF2353D849001E19C1 /* BlurView.swift */; };
+		0C00DBD22353EF21001E19C1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBD12353EF21001E19C1 /* ContentView.swift */; };
 		0C00DBD42353F46E001E19C1 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBD32353F46E001E19C1 /* ContainerController.swift */; };
 		0C15FA9B2374D5260098A463 /* Overlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C15FA992374D5230098A463 /* Overlay.swift */; };
-		0C2AFFB0235BAC9D000369AA /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2AFFAE235BAC9D000369AA /* Gradient.swift */; };
-		0C3DEC582326B5FE0021B5FD /* Spacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC442326B5FE0021B5FD /* Spacer.swift */; };
+		0C2AFFB0235BAC9D000369AA /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2AFFAE235BAC9D000369AA /* GradientView.swift */; };
+		0C3DEC582326B5FE0021B5FD /* SpacerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC442326B5FE0021B5FD /* SpacerView.swift */; };
 		0C3DEC592326B5FE0021B5FD /* NibView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC452326B5FE0021B5FD /* NibView.swift */; };
 		0C3DEC5A2326B5FE0021B5FD /* UIViewController+UINib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC462326B5FE0021B5FD /* UIViewController+UINib.swift */; };
 		0C3DEC5B2326B5FE0021B5FD /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC472326B5FE0021B5FD /* View.swift */; };
@@ -33,9 +33,9 @@
 		0C5D924723579CCA007D0257 /* ContainerBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5D924623579CCA007D0257 /* ContainerBox.swift */; };
 		0C5D924823579CCA007D0257 /* ContainerBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5D924623579CCA007D0257 /* ContainerBox.swift */; };
 		0C6CCF12236A0264008521BD /* TraitObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6CCF11236A0264008521BD /* TraitObject.swift */; };
-		0C7587D023787A38009DAF77 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7587CF23787A38009DAF77 /* Activity.swift */; };
+		0C7587D023787A38009DAF77 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7587CF23787A38009DAF77 /* ActivityView.swift */; };
 		0CB71017233C5A23007B5231 /* ViewSharedContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */; };
-		0CB71019233C5A51007B5231 /* Rounder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71018233C5A51007B5231 /* Rounder.swift */; };
+		0CB71019233C5A51007B5231 /* RounderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB71018233C5A51007B5231 /* RounderView.swift */; };
 		0CCEF239233BDF9D009D5DBE /* WindowContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */; };
 		0CCEF23C233BE014009D5DBE /* WindowProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEF23B233BDFCF009D5DBE /* WindowProviderType.swift */; };
 		0CCEF240233BE400009D5DBE /* UIWindow+Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEF23F233BE400009D5DBE /* UIWindow+Container.swift */; };
@@ -61,13 +61,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C00DBCD2353CB25001E19C1 /* Dashed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dashed.swift; sourceTree = "<group>"; };
-		0C00DBCF2353D849001E19C1 /* Blur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blur.swift; sourceTree = "<group>"; };
-		0C00DBD12353EF21001E19C1 /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		0C00DBCD2353CB25001E19C1 /* DashedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashedView.swift; sourceTree = "<group>"; };
+		0C00DBCF2353D849001E19C1 /* BlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		0C00DBD12353EF21001E19C1 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0C00DBD32353F46E001E19C1 /* ContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
 		0C15FA992374D5230098A463 /* Overlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Overlay.swift; sourceTree = "<group>"; };
-		0C2AFFAE235BAC9D000369AA /* Gradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
-		0C3DEC442326B5FE0021B5FD /* Spacer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spacer.swift; sourceTree = "<group>"; };
+		0C2AFFAE235BAC9D000369AA /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		0C3DEC442326B5FE0021B5FD /* SpacerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpacerView.swift; sourceTree = "<group>"; };
 		0C3DEC452326B5FE0021B5FD /* NibView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
 		0C3DEC462326B5FE0021B5FD /* UIViewController+UINib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+UINib.swift"; sourceTree = "<group>"; };
 		0C3DEC472326B5FE0021B5FD /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -86,9 +86,9 @@
 		0C4F558623A2C428008DE5AC /* DynamicTextSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicTextSize.swift; sourceTree = "<group>"; };
 		0C5D924623579CCA007D0257 /* ContainerBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBox.swift; sourceTree = "<group>"; };
 		0C6CCF11236A0264008521BD /* TraitObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraitObject.swift; sourceTree = "<group>"; };
-		0C7587CF23787A38009DAF77 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		0C7587CF23787A38009DAF77 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSharedContext.swift; sourceTree = "<group>"; };
-		0CB71018233C5A51007B5231 /* Rounder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rounder.swift; sourceTree = "<group>"; };
+		0CB71018233C5A51007B5231 /* RounderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RounderView.swift; sourceTree = "<group>"; };
 		0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowContainer.swift; sourceTree = "<group>"; };
 		0CCEF23B233BDFCF009D5DBE /* WindowProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowProviderType.swift; sourceTree = "<group>"; };
 		0CCEF23F233BE400009D5DBE /* UIWindow+Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Container.swift"; sourceTree = "<group>"; };
@@ -144,15 +144,15 @@
 			children = (
 				0C4F558623A2C428008DE5AC /* DynamicTextSize.swift */,
 				0C6CCF11236A0264008521BD /* TraitObject.swift */,
-				0C7587CF23787A38009DAF77 /* Activity.swift */,
+				0C7587CF23787A38009DAF77 /* ActivityView.swift */,
 				0CB71015233C5A1F007B5231 /* ViewSharedContext.swift */,
 				0C15FA992374D5230098A463 /* Overlay.swift */,
-				0C2AFFAE235BAC9D000369AA /* Gradient.swift */,
-				0CB71018233C5A51007B5231 /* Rounder.swift */,
-				0C00DBCD2353CB25001E19C1 /* Dashed.swift */,
-				0C00DBD12353EF21001E19C1 /* Content.swift */,
-				0C00DBCF2353D849001E19C1 /* Blur.swift */,
-				0C3DEC442326B5FE0021B5FD /* Spacer.swift */,
+				0C2AFFAE235BAC9D000369AA /* GradientView.swift */,
+				0CB71018233C5A51007B5231 /* RounderView.swift */,
+				0C00DBCD2353CB25001E19C1 /* DashedView.swift */,
+				0C00DBD12353EF21001E19C1 /* ContentView.swift */,
+				0C00DBCF2353D849001E19C1 /* BlurView.swift */,
+				0C3DEC442326B5FE0021B5FD /* SpacerView.swift */,
 				0CE6B7A5233430E900DE9885 /* SpacerMargin.swift */,
 				0C3DEC452326B5FE0021B5FD /* NibView.swift */,
 				0C3DEC462326B5FE0021B5FD /* UIViewController+UINib.swift */,
@@ -437,12 +437,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C7587D023787A38009DAF77 /* Activity.swift in Sources */,
+				0C7587D023787A38009DAF77 /* ActivityView.swift in Sources */,
 				0C3DEC632326B5FE0021B5FD /* ContainerTableCell.swift in Sources */,
 				0C5D924823579CCA007D0257 /* ContainerBox.swift in Sources */,
 				0C3DEC682326B5FE0021B5FD /* ContainerView.swift in Sources */,
-				0C2AFFB0235BAC9D000369AA /* Gradient.swift in Sources */,
-				0C00DBCE2353CB25001E19C1 /* Dashed.swift in Sources */,
+				0C2AFFB0235BAC9D000369AA /* GradientView.swift in Sources */,
+				0C00DBCE2353CB25001E19C1 /* DashedView.swift in Sources */,
 				952CCABE966699CE4E9627F3A647292E /* UIContainer-dummy.m in Sources */,
 				0C3DEC672326B5FE0021B5FD /* UIContainer.swift in Sources */,
 				0C15FA9B2374D5260098A463 /* Overlay.swift in Sources */,
@@ -450,14 +450,14 @@
 				0CD0038B234E39B900FA3289 /* ContainerCollectionCell.swift in Sources */,
 				0CCEF239233BDF9D009D5DBE /* WindowContainer.swift in Sources */,
 				0C4A97702374CD3D0082477E /* ColorType.swift in Sources */,
-				0C3DEC582326B5FE0021B5FD /* Spacer.swift in Sources */,
+				0C3DEC582326B5FE0021B5FD /* SpacerView.swift in Sources */,
 				0CD0038A234E39B900FA3289 /* ContainerCollectionViewCell.swift in Sources */,
 				0CE6B7A6233430E900DE9885 /* SpacerMargin.swift in Sources */,
 				0C3DEC5B2326B5FE0021B5FD /* View.swift in Sources */,
 				0C00DBD42353F46E001E19C1 /* ContainerController.swift in Sources */,
-				0C00DBD22353EF21001E19C1 /* Content.swift in Sources */,
+				0C00DBD22353EF21001E19C1 /* ContentView.swift in Sources */,
 				0C4A97732374CD860082477E /* ContainerViewParent.swift in Sources */,
-				0CB71019233C5A51007B5231 /* Rounder.swift in Sources */,
+				0CB71019233C5A51007B5231 /* RounderView.swift in Sources */,
 				0CCEF23C233BE014009D5DBE /* WindowProviderType.swift in Sources */,
 				0C4A976F2374CD3D0082477E /* ColorDynamicType.swift in Sources */,
 				0C3DEC622326B5FE0021B5FD /* ContainerCellDelegate.swift in Sources */,
@@ -467,7 +467,7 @@
 				0CCEF240233BE400009D5DBE /* UIWindow+Container.swift in Sources */,
 				0C4A97712374CD3D0082477E /* ColorComponents.swift in Sources */,
 				0CB71017233C5A23007B5231 /* ViewSharedContext.swift in Sources */,
-				0C00DBD02353D84A001E19C1 /* Blur.swift in Sources */,
+				0C00DBD02353D84A001E19C1 /* BlurView.swift in Sources */,
 				0C3DEC5A2326B5FE0021B5FD /* UIViewController+UINib.swift in Sources */,
 				0C3DEC592326B5FE0021B5FD /* NibView.swift in Sources */,
 				0C3DEC5C2326B5FE0021B5FD /* UIContainerCell.swift in Sources */,

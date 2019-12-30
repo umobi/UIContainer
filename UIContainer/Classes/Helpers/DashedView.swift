@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-public class Dashed: View {
+open class DashedView: View {
     
     private(set) var strokeColor: UIColor = .clear
     private(set) var lineWidth: CGFloat = 1
@@ -18,7 +18,7 @@ public class Dashed: View {
     
     private var shape: CAShapeLayer!
     
-    public init(_ view: UIView, dash pattern: [NSNumber]) {
+    public required init(_ view: UIView, dash pattern: [NSNumber]) {
         self.dashPattern = pattern
         super.init(frame: .zero)
         
@@ -28,7 +28,7 @@ public class Dashed: View {
         self.reloadShape()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -59,7 +59,7 @@ public class Dashed: View {
         return shapeLayer
     }
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         
         self.subviews.first?.setNeedsLayout()
@@ -76,19 +76,19 @@ public class Dashed: View {
     }
 }
 
-public extension Dashed {
+public extension DashedView {
     
-    func apply(strokeColor: UIColor) -> Dashed {
+    func apply(strokeColor: UIColor) -> Self {
         self.strokeColor = strokeColor
         return self
     }
     
-    func apply(lineWidth: CGFloat) -> Dashed {
+    func apply(lineWidth: CGFloat) -> Self {
         self.lineWidth = lineWidth
         return self
     }
     
-    func apply(dashPattern: [NSNumber]) -> Dashed {
+    func apply(dashPattern: [NSNumber]) -> Self {
         self.dashPattern = dashPattern
         return self
     }
@@ -99,10 +99,10 @@ public extension Dashed {
 }
 
 public extension UIImageView {
-    func dashed(with pattern: [NSNumber], cornerRadius: CGFloat = 0.0) -> Dashed {
+    func dashed(with pattern: [NSNumber], cornerRadius: CGFloat = 0.0) -> DashedView {
         let superview = self.superview!
         self.removeFromSuperview()
-        let dash = Dashed(Rounder(self, radius: cornerRadius), dash: pattern)
+        let dash = DashedView(RounderView(self, radius: cornerRadius), dash: pattern)
         superview.insertSubview(dash, at: 0)
         dash.snp.makeConstraints { $0.edges.equalTo(0) }
         

@@ -9,17 +9,17 @@
 import Foundation
 import UIKit
 
-public protocol UIContainerCell: ContainerRepresentable where ContainerCell.View == View {
+public protocol ContainerCellRepresentable: ContainerRepresentable where ContainerCell.View == View {
     associatedtype ContainerCell: ContainerRepresentable
     var containerView: ContainerCell! { get set }
     
     func addCell(_ containerCell: ContainerCell)
     
     //func containerDidLoad()
-    func spacer<T: UIView>(_ view: T) -> Spacer
+    func spacer<T: UIView>(_ view: T) -> SpacerView
 }
 
-public extension UIContainerCell {
+public extension ContainerCellRepresentable {
     weak var view: ContainerCell.View! {
         get {
             return self.containerView.view
@@ -49,7 +49,7 @@ public extension UIContainerCell {
     }
 }
 
-public extension UIContainerCell where Self: UICollectionViewCell, ContainerCell: UIView {
+public extension ContainerCellRepresentable where Self: UICollectionViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
         let spacer = self.spacer(containerCell)
         self.contentView.addSubview(spacer)
@@ -57,7 +57,7 @@ public extension UIContainerCell where Self: UICollectionViewCell, ContainerCell
     }
 }
 
-public extension UIContainerCell where Self: UITableViewCell, ContainerCell: UIView {
+public extension ContainerCellRepresentable where Self: UITableViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
         let spacer = self.spacer(containerCell)
         self.contentView.addSubview(spacer)
@@ -65,7 +65,7 @@ public extension UIContainerCell where Self: UITableViewCell, ContainerCell: UIV
     }
 }
 
-public extension UIContainerCell where View: ContainerCellDelegate {
+public extension ContainerCellRepresentable where View: ContainerCellDelegate {
     func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         if self.containerView != nil {
             return
