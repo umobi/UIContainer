@@ -11,8 +11,8 @@ import UIKit
 
 public class DynamicTextSize: UIView {
     private weak var label: UILabel!
-    private var textValueObserver: NSKeyValueObservation!
-    private var numberOfLinesObserver: NSKeyValueObservation!
+    fileprivate var textValueObserver: NSKeyValueObservation!
+    fileprivate var numberOfLinesObserver: NSKeyValueObservation!
     fileprivate var hyphenFactor: CGFloat = 0
 
     private var limitContentSize: UIContentSizeCategory?
@@ -114,6 +114,26 @@ public class DynamicTextSize: UIView {
     }
 }
 
+public class Label: UILabel {
+    deinit {
+        if #available(iOS 11, *) {
+            return
+        }
+
+        guard let textObserver = self.dynamicText?.textValueObserver else {
+            return
+        }
+
+        self.removeObserver(textObserver, forKeyPath: "text")
+
+        guard let numberOfLinesObserver = self.dynamicText?.numberOfLinesObserver else {
+            return
+        }
+
+        self.removeObserver(numberOfLinesObserver, forKeyPath: "numberOfLines")
+    }
+}
+
 public extension UILabel {
     @IBInspectable var isDynamicTextSize: Bool {
         get { return DynamicTextSize.orEmpty(in: self) != nil }
@@ -140,7 +160,7 @@ public extension UILabel {
 }
 
 public extension UILabel {
-    public class OneLine: UILabel {
+    public class OneLine: Label {
         override init(frame: CGRect) {
             super.init(frame: frame)
             self.prepare()
@@ -166,7 +186,7 @@ public extension UILabel {
 }
 
 public extension UILabel {
-    public class Multiline: UILabel {
+    public class Multiline: Label {
         override init(frame: CGRect) {
             super.init(frame: frame)
             self.prepare()
