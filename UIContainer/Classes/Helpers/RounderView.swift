@@ -10,7 +10,12 @@ import UIKit
 import SnapKit
 
 open class RounderView: View {
-    let radius: CGFloat
+    public var radius: CGFloat {
+        willSet {
+            self.update(radius: newValue)
+        }
+    }
+
     public required init(_ view: UIView, radius: CGFloat) {
         self.radius = radius
         super.init(frame: .zero)
@@ -31,13 +36,17 @@ open class RounderView: View {
     open override func layoutSubviews() {
         super.layoutSubviews()
         
+        self.update(radius: self.radius)
+    }
+
+    private func update(radius: CGFloat) {
         if radius < 1 {
             self.layer.cornerRadius = self.frame.height * radius
         } else {
             self.layer.cornerRadius = radius
         }
     }
-    
+
     public static func full(_ view: UIView) -> RounderView {
         return .init(view, radius: 0.5)
     }
