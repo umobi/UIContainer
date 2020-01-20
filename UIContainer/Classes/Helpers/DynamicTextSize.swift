@@ -160,7 +160,7 @@ public extension UILabel {
 }
 
 public extension UILabel {
-    public class OneLine: Label {
+    class OneLine: Label {
         override init(frame: CGRect) {
             super.init(frame: frame)
             self.prepare()
@@ -186,7 +186,7 @@ public extension UILabel {
 }
 
 public extension UILabel {
-    public class Multiline: Label {
+    class Multiline: Label {
         override init(frame: CGRect) {
             super.init(frame: frame)
             self.prepare()
