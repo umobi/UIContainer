@@ -85,9 +85,9 @@ open class BlurView: View {
             }
 
             return .init(blurEffect: blurEffect, style: self.vibrancyEffect.onTrait(self.traitCollection))
-            #endif
-
+            #else
             return UIVibrancyEffect(blurEffect: blurEffect)
+            #endif
         }()
         let vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
 
