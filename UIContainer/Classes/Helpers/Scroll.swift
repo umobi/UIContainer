@@ -48,10 +48,10 @@ open class ScrollView: UIScrollView {
             switch axis {
             case .vertical:
                 $0.width.equalTo(superview.snp.width).priority(.required)
-                $0.height.equalTo(superview.snp.height).priority(.low)
+                $0.height.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
             case .horizontal:
                 $0.height.equalTo(superview.snp.width).priority(.required)
-                $0.width.equalTo(superview.snp.height).priority(.low)
+                $0.width.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
             case .auto(let vertical, let horizontal):
                 $0.height.equalTo(superview.snp.width).priority(vertical)
                 $0.width.equalTo(superview.snp.height).priority(horizontal)
