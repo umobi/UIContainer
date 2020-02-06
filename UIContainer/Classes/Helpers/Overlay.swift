@@ -43,7 +43,7 @@ open class Overlay: UIView {
         overlay.isExclusiveTouch = false
         #endif
         overlay.layer.zPosition = -1
-        view.insertSubview(overlay, at: 0)
+        AddSubview(view).insertSubview(overlay, at: 0)
         overlay.snp.makeConstraints {
             $0.edges.equalTo(0)
         }

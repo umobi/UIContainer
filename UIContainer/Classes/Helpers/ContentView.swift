@@ -14,7 +14,7 @@ open class ContentView: View {
     
     public required init(_ view: UIView!, contentMode: UIView.ContentMode, priority: ConstraintPriority = .required) {
         super.init(frame: .zero)
-        self.addSubview(view)
+        AddSubview(self).addSubview(view)
         view.snp.makeConstraints { $0.edges.equalTo(0).priority(priority) }
         self.reload(contentMode: contentMode, priority: priority)
     }
@@ -26,7 +26,7 @@ open class ContentView: View {
     private func reload(contentMode: UIView.ContentMode, priority: ConstraintPriority) {
         let view = self.subviews.first!
         view.removeFromSuperview()
-        self.addSubview(view)
+        AddSubview(self).addSubview(view)
         
         switch contentMode {
         case .bottom:

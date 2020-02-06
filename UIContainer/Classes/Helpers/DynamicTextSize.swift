@@ -29,7 +29,7 @@ public class DynamicTextSize: UIView {
 
         self.label = label
         self.label.adjustsFontForContentSizeCategory = true
-        label.addSubview(self)
+        AddSubview(label).addSubview(self)
         self.snp.makeConstraints {
             $0.edges.equalTo(0)
         }

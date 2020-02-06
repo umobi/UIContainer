@@ -52,8 +52,8 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
         if !(container is ContainerRepresentable) {
             fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
-        
-        self.stackView.addArrangedSubview(container)
+
+        AddSubview(self.stackView).addArrangedSubview(container)
         self.container = container
     }
     
@@ -65,8 +65,8 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
         if !(containerView is ContainerRepresentable) {
             fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
-        
-        self.stackView.addArrangedSubview(containerView)
+
+        AddSubview(self.stackView).addArrangedSubview(containerView)
         
         let perform: () -> Void = {
             self.container?.removeFromSuperview()
@@ -142,7 +142,7 @@ extension WindowContainer {
 
     func prepareDebugView() {
         let debugView = DebugView()
-        self.view.addSubview(debugView)
+        AddSubview(self.view).addSubview(debugView)
         debugView.snp.makeConstraints {
             $0.edges.equalTo(0)
         }

@@ -91,13 +91,13 @@ open class BlurView: View {
         }()
         let vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
 
-        blurEffectView.contentView.addSubview(vibrancyEffectView)
+        AddSubview(blurEffectView.contentView).addSubview(vibrancyEffectView)
 
         vibrancyEffectView.snp.makeConstraints { make in
             make.top.bottom.trailing.leading.equalTo(0)
         }
 
-        self.addSubview(blurEffectView)
+        AddSubview(self).addSubview(blurEffectView)
         blurEffectView.snp.makeConstraints { $0.edges.equalTo(0) }
         
         return blurEffectView

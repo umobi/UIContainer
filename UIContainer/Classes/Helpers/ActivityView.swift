@@ -62,7 +62,7 @@ open class ActivityView: View {
     func prepareContent() {
         let contentView = UIView()
         let rounder = RounderView(contentView, radius: 5)
-        self.addSubview(rounder)
+        AddSubview(self).addSubview(rounder)
         rounder.snp.makeConstraints {
             $0.edges.equalTo(0)
         }
@@ -99,7 +99,7 @@ open class ActivityView: View {
 
         self.blur = blur
 
-        self.contentView.addSubview(blur)
+        AddSubview(self.contentView).addSubview(blur)
         blur.snp.makeConstraints { $0.edges.equalTo(0) }
 
         let stackView = UIStackView()
@@ -107,7 +107,7 @@ open class ActivityView: View {
         stackView.spacing = 0
         let scroll = ScrollView(stackView, axis: .vertical)
 
-        self.contentView.addSubview(scroll)
+        AddSubview(self.contentView).addSubview(scroll)
         scroll.snp.makeConstraints { $0.edges.equalTo(0)}
         self.stackView = stackView
     }
@@ -115,7 +115,7 @@ open class ActivityView: View {
     public func setContentViews(_ views: [UIView]) {
         self.stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         views.forEach {
-            self.stackView.addArrangedSubview($0)
+            AddSubview(self.stackView)?.addArrangedSubview($0)
         }
     }
 
@@ -213,7 +213,7 @@ open class ActivityView: View {
     weak var container: Container? = nil
     public func show(inView view: UIView!) {
         let container = Container(in: nil, loadHandler: { self })
-        view.addSubview(container)
+        AddSubview(view).addSubview(container)
         container.snp.makeConstraints { $0.edges.equalTo(0) }
         self.start()
         self.container = container
@@ -248,7 +248,7 @@ extension ActivityView {
 //            fadeView.snp.makeConstraints { $0.edges.equalTo(0) }
 
             let center = ContentView.Center(view)
-            contentView.addSubview(center)
+            AddSubview(contentView).addSubview(center)
             center.snp.makeConstraints { $0.edges.equalTo(0) }
 
             center.layer.shadowOffset = .init(width: 1, height: 2)
@@ -291,7 +291,7 @@ extension ActivityView: ViewControllerType {
     public var content: ViewControllerMaker {
         return .dynamic { [weak self] in
             let container = Container(in: $0, loadHandler: { self })
-            $0.view.addSubview(container)
+            AddSubview($0.view).addSubview(container)
             container.snp.makeConstraints { $0.edges.equalTo(0) }
         }
     }

@@ -19,8 +19,9 @@ open class RounderView: View {
     public required init(_ view: UIView, radius: CGFloat) {
         self.radius = radius
         super.init(frame: .zero)
-        
-        self.addSubview(view)
+
+        AddSubview(self).addSubview(view)
+
         view.snp.makeConstraints { $0.edges.equalTo(0) }
         self.clipsToBounds = true
     }
@@ -86,7 +87,7 @@ public extension RounderView {
         view.removeFromSuperview()
         
         let rounder = RounderView(view, radius: radius)
-        superview.addSubview(rounder)
+        AddSubview(superview).addSubview(rounder)
         
         rounder.snp.makeConstraints { $0.edges.equalTo(0) }
         return rounder
@@ -113,7 +114,7 @@ public extension UIImageView {
             if let rounder = self.rounder {
                 let superview = self.rounder?.superview ?? self.superview
                 rounder.removeFromSuperview()
-                superview?.addSubview(self)
+                AddSubview(superview)?.addSubview(self)
                 
                 if newValue == 0 {
                     self.snp.makeConstraints { $0.edges.equalTo(0) }

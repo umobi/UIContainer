@@ -22,8 +22,8 @@ open class NibView: View {
     
     private func loadFromNib() {
         Bundle(for: type(of: self)).loadNibNamed("\(self.className)", owner: self, options: nil)
-        
-        self.addSubview(view)
+
+        AddSubview(self).addSubview(view)
         view.frame = self.bounds
         view.autoresizingMask = [ .flexibleHeight, .flexibleWidth]
     }

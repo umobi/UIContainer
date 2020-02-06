@@ -52,7 +52,7 @@ public extension ContainerCellRepresentable {
 public extension ContainerCellRepresentable where Self: UICollectionViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
         let spacer = self.spacer(containerCell)
-        self.contentView.addSubview(spacer)
+        AddSubview(self.contentView).addSubview(spacer)
         spacer.snp.makeConstraints { $0.edges.equalTo(0) }
     }
 }
@@ -60,7 +60,7 @@ public extension ContainerCellRepresentable where Self: UICollectionViewCell, Co
 public extension ContainerCellRepresentable where Self: UITableViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
         let spacer = self.spacer(containerCell)
-        self.contentView.addSubview(spacer)
+        AddSubview(self.contentView).addSubview(spacer)
         spacer.snp.makeConstraints { $0.edges.equalTo(0) }
     }
 }

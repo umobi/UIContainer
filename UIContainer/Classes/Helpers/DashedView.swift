@@ -21,8 +21,8 @@ open class DashedView: View {
     public required init(_ view: UIView, dash pattern: [NSNumber]) {
         self.dashPattern = pattern
         super.init(frame: .zero)
-        
-        self.addSubview(view)
+
+        AddSubview(self).addSubview(view)
         view.snp.makeConstraints { $0.edges.equalTo(0) }
         
         self.reloadShape()

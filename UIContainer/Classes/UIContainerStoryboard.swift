@@ -77,7 +77,7 @@ public extension UIContainerStoryboard {
 public extension UIContainerStoryboard where Container: UIView {
     func addContainer(_ container: Container) {
         let spacer = self.spacer(container)
-        self.insertSubview(spacer, at: 0)
+        AddSubview(self).insertSubview(spacer, at: 0)
         spacer.snp.makeConstraints { $0.edges.equalTo(0) }
     }
     

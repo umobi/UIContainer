@@ -19,7 +19,7 @@ open class SpacerView: View {
         super.init(frame: .zero)
         
         self.view = view
-        self.addSubview(view)
+        AddSubview(self).addSubview(view)
         
         self.layout()
     }

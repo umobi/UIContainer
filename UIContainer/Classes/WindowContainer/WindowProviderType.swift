@@ -41,7 +41,7 @@ class DebugView: View {
             $0.leading.equalTo(0)
         }
 
-        self.addSubview(content)
+        AddSubview(self).addSubview(content)
         content.snp.makeConstraints {
             $0.top.trailing.equalTo(0)
             $0.bottom.equalTo(self.snp.topMargin)

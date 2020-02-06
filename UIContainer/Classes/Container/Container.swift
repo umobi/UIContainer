@@ -65,7 +65,7 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIViewCo
         
         self.view = view
         parent?.addChild(view)
-        self.addSubview(self.spacer(view.view))
+        AddSubview(self).addSubview(self.spacer(view.view))
         view.didMove(toParent: self.parent)
     }
 }

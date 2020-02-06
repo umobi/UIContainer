@@ -17,7 +17,7 @@ open class ContainerTableCell<View: UIViewController & ContainerCellDelegate>: U
     
     private func createSV() {
         let containerBox = ContainerBox()
-        self.contentView.addSubview(containerBox)
+        AddSubview(self.contentView).addSubview(containerBox)
         self.containerBox = containerBox
         containerBox.snp.makeConstraints { $0.edges.equalTo(0) }
     }

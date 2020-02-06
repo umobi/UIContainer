@@ -68,6 +68,6 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIView &
         
         self.view = view
         self.view.parent = self.parent
-        self.addSubview(self.spacer(view))
+        AddSubview(self).addSubview(self.spacer(view))
     }
 }
