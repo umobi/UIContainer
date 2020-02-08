@@ -68,6 +68,11 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIView &
         
         self.view = view
         self.view.parent = self.parent
-        AddSubview(self).addSubview(self.spacer(view))
+        let spacer = self.spacer(view)
+        AddSubview(self).addSubview(spacer)
+
+        spacer.snp.makeConstraints {
+            $0.edges.equalTo(0)
+        }
     }
 }

@@ -27,10 +27,6 @@ open class ContainerBox: UIView {
             AddSubview(self.view).addSubview(view)
         }() : {
             super.addSubview(view)
-
-            view.snp.makeConstraints {
-                $0.edges.equalTo(0)
-            }
         }()
     }
 
@@ -39,10 +35,6 @@ open class ContainerBox: UIView {
                 AddSubview(self.view).insertSubview(view, at: index)
            }() : {
             super.insertSubview(view, at: index)
-
-            view.snp.makeConstraints {
-                $0.edges.equalTo(0)
-            }
         }()
     }
 
@@ -55,20 +47,12 @@ open class ContainerBox: UIView {
             }
         }() : {
             super.insertSubview(view, aboveSubview: siblingSubview)
-
-            view.snp.makeConstraints {
-                $0.edges.equalTo(0)
-            }
         }()
     }
 
     override open func insertSubview(_ view: UIView, belowSubview siblingSubview: UIView) {
         self.cannotAddViews ? () : {
             super.insertSubview(view, belowSubview: siblingSubview)
-
-            view.snp.makeConstraints {
-                $0.edges.equalTo(0)
-            }
         }()
     }
 }

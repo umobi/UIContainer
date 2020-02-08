@@ -11,16 +11,8 @@ import UIKit
 import SnapKit
 
 open class ContainerCollectionCell<View: UIViewController & ContainerCellDelegate>: UICollectionViewCell, ContainerCellRepresentable {
-    public weak var containerBox: ContainerBox!
     public weak var containerView: Container<View>!
     public weak var parent: ParentView!
-    
-    private func createBox() {
-        let containerBox = ContainerBox()
-        AddSubview(self.contentView).addSubview(containerBox)
-        self.containerBox = containerBox
-        containerBox.snp.makeConstraints { $0.edges.equalTo(0) }
-    }
     
     open func spacer<T: UIView>(_ view: T) -> SpacerView {
         return .init(view, spacing: 0)
