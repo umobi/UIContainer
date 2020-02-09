@@ -29,8 +29,13 @@ public struct AddSubview<Super: UIView> {
     }
 
     private func spSafe() {
-        self.superview.setAutoresizingToFalse()
+        self.superview.setAutoresizingToFalse(.superview)
     }
+}
+
+enum AddSubviewMode {
+    case superview
+    case subview
 }
 
 public extension AddSubview {
@@ -75,7 +80,7 @@ public extension AddSubview where Super: UIStackView {
 
 private extension AddSubview {
     func safe(_ view: UIView) {
-        view.setAutoresizingToFalse()
+        view.setAutoresizingToFalse(.subview)
         if view === self.superview {
             fatalError()
         }
@@ -83,24 +88,26 @@ private extension AddSubview {
 }
 
 private extension UIView {
-    func setAutoresizingToFalse() {
-        switch self.next {
-        case is UIViewController:
-            return
-        case is UITableViewCell:
-            return
-        case is UICollectionViewCell:
-            return
-        case is UITableViewHeaderFooterView:
-            return
-        case is UICollectionReusableView:
-            return
-        default:
-            break
-        }
+    func setAutoresizingToFalse(_ mode: AddSubviewMode) {
+        if case .superview = mode {
+            switch self.next {
+            case is UIViewController:
+                return
+            case is UITableViewCell:
+                return
+            case is UICollectionViewCell:
+                return
+            case is UITableViewHeaderFooterView:
+                return
+            case is UICollectionReusableView:
+                return
+            default:
+                break
+            }
 
-        guard !(self is UIWindow) else {
-            return
+            guard !(self is UIWindow) else {
+                return
+            }
         }
 
         self.translatesAutoresizingMaskIntoConstraints = false

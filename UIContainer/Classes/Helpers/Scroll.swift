@@ -16,26 +16,27 @@ open class ScrollView: UIScrollView {
     }
 
     private var onSuperview: (() -> Void)? = nil
+    private weak var contentView: UIView!
 
     public required init(_ view: UIView, axis: Axis = .vertical) {
         super.init(frame: .zero)
-        AddSubview(self).addSubview(view)
-        view.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
 
-        self.onSuperview = { [weak self] in
+        self.contentView = view
+        self.onSuperview = { [weak self, view] in
+            AddSubview(self)?.addSubview(view)
             self?.setAxis(axis)
         }
     }
 
-    override open func didMoveToSuperview() {
-        super.didMoveToSuperview()
+    override open func layoutSubviews() {
+        super.layoutSubviews()
 
-        if self.superview != nil {
-            self.onSuperview?()
-            self.onSuperview = nil
+        guard self.superview != nil && self.frame.size != .zero else {
+            return
         }
+
+        self.onSuperview?()
+        self.onSuperview = nil
     }
 
     public func setAxis(_ axis: Axis) {
@@ -43,7 +44,7 @@ open class ScrollView: UIScrollView {
             return
         }
 
-        self.subviews.first!.snp.remakeConstraints {
+        self.contentView!.snp.remakeConstraints {
             $0.edges.equalTo(0)
             switch axis {
             case .vertical:

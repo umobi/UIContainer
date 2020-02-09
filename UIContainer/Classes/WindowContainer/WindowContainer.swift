@@ -132,7 +132,7 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
 extension WindowContainer {
     func prepareStack() {
         let stackView = UIStackView()
-        self.view.addSubview(stackView)
+        AddSubview(self.view).addSubview(stackView)
         self.stackView = stackView
         
         self.stackView.snp.makeConstraints {

@@ -129,4 +129,10 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
        super.viewDidDisappear(animated)
        (self.contentView as? ViewControllerAppearStates)?.viewDidDisappear(animated)
     }
+
+    @available(iOS 11.0, tvOS 11, *)
+    override public func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        self.view.setNeedsUpdateConstraints()
+    }
 }

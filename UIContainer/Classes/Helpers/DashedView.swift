@@ -103,7 +103,7 @@ public extension UIImageView {
         let superview = self.superview!
         self.removeFromSuperview()
         let dash = DashedView(RounderView(self, radius: cornerRadius), dash: pattern)
-        superview.insertSubview(dash, at: 0)
+        AddSubview(superview).insertSubview(dash, at: 0)
         dash.snp.makeConstraints { $0.edges.equalTo(0) }
         
         return dash

@@ -13,14 +13,13 @@ import SnapKit
 open class SpacerView: View {
     private weak var view: UIView!
     let margin: SpacerView.Margin
-    
+
     public required init(_ view: UIView!, margin: Margin) {
         self.margin = margin
         super.init(frame: .zero)
         
         self.view = view
         AddSubview(self).addSubview(view)
-        
         self.layout()
     }
     
@@ -36,7 +35,7 @@ open class SpacerView: View {
             $0.bottom.equalTo(-self.margin.bottom)
         }
     }
-    
+
     public convenience init(_ view: UIView!, vertical: CGFloat, horizontal: CGFloat) {
         self.init(view, margin: .init(vertical: vertical, horizontal: horizontal))
     }
