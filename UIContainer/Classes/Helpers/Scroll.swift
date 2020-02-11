@@ -8,6 +8,16 @@
 import Foundation
 import UIKit
 
+private extension UIView {
+    func setNeedsLayoutOnTree() {
+        self.subviews.forEach {
+            $0.setNeedsLayoutOnTree()
+        }
+
+        self.setNeedsLayout()
+    }
+}
+
 open class ScrollView: UIScrollView {
     class ContentView: UIView {
         weak var view: UIView!
@@ -65,8 +75,8 @@ open class ScrollView: UIScrollView {
                     self?.setAxis(axis)
                 }
 
-                self?.contentView?.setNeedsLayout()
-                self?.setNeedsLayout()
+                $0.setNeedsLayoutOnTree()
+                
                 for superview in sequence(first: $0, next: { $0.superview }) {
                     superview.setNeedsLayout()
 
@@ -107,23 +117,26 @@ open class ScrollView: UIScrollView {
 
         self.contentSize = self.contentView.frame.size
 
-        self.contentView!.snp.remakeConstraints {
-            $0.edges.equalTo(0)
-            switch axis {
-            case .vertical:
-                $0.width.equalTo(superview.snp.width).priority(.required)
-                $0.height.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
-            case .horizontal:
-                $0.height.equalTo(superview.snp.width).priority(.required)
-                $0.width.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
-            case .auto(let vertical, let horizontal):
-                $0.height.equalTo(superview.snp.width).priority(vertical)
-                $0.width.equalTo(superview.snp.height).priority(horizontal)
+        OperationQueue.main.addOperation {
+            self.contentView!.snp.remakeConstraints {
+                $0.edges.equalTo(0)
+                switch axis {
+                case .vertical:
+                    $0.width.equalTo(superview.snp.width).priority(.required)
+                    $0.height.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
+                case .horizontal:
+                    $0.height.equalTo(superview.snp.width).priority(.required)
+                    $0.width.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
+                case .auto(let vertical, let horizontal):
+                    $0.height.equalTo(superview.snp.width).priority(vertical)
+                    $0.width.equalTo(superview.snp.height).priority(horizontal)
+                }
             }
+
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
         }
 
-        self.setNeedsLayout()
-        self.layoutIfNeeded()
     }
 
     public required init?(coder: NSCoder) {

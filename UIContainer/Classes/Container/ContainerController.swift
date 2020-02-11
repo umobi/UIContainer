@@ -36,7 +36,7 @@ public protocol ViewControllerAppearStates {
     func viewDidDisappear(_ animated: Bool)
 }
 
-public protocol ViewControllerType {
+public protocol ViewControllerType: class {
     var content: ViewControllerMaker { get }
 }
 
@@ -68,7 +68,7 @@ public extension ViewControllerType {
 public class ContainerController<View: ViewControllerType>: UIViewController {
     private var appendView: View? = nil
 
-    public private(set) var contentView: View! {
+    public private(set) weak var contentView: View! {
         willSet {
             self.appendView = nil
         }

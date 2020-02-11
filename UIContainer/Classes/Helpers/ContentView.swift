@@ -11,11 +11,13 @@ import UIKit
 import SnapKit
 
 open class ContentView: View {
-    
+
+    weak var view: UIView!
     public required init(_ view: UIView!, contentMode: UIView.ContentMode, priority: ConstraintPriority = .required) {
         super.init(frame: .zero)
         AddSubview(self).addSubview(view)
-        view.snp.makeConstraints { $0.edges.equalTo(0).priority(priority) }
+        self.view = view
+
         self.reload(contentMode: contentMode, priority: priority)
     }
     
@@ -24,39 +26,37 @@ open class ContentView: View {
     }
     
     private func reload(contentMode: UIView.ContentMode, priority: ConstraintPriority) {
-        let view = self.subviews.first!
-        view.removeFromSuperview()
-        AddSubview(self).addSubview(view)
-        
+        let view: UIView! = self.view
+
         switch contentMode {
         case .bottom:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.bottom.equalTo(0).priority(priority)
                 $0.centerX.equalTo(self.snp.centerX).priority(priority)
                 $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
                 $0.trailing.lessThanOrEqualTo(0).priority(priority)
             }
         case .bottomLeft:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.bottom.leading.equalTo(0).priority(priority)
                 $0.top.greaterThanOrEqualTo(0).priority(priority)
                 $0.trailing.lessThanOrEqualTo(0).priority(priority)
             }
             
         case .bottomRight:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.bottom.trailing.equalTo(0).priority(priority)
                 $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
             }
         case .center:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
                 $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
                 $0.center.equalTo(self.snp.center).priority(priority)
             }
             
         case .left:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.top.greaterThanOrEqualTo(0).priority(priority)
                 $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
                 $0.leading.equalTo(0).priority(priority)
@@ -64,7 +64,7 @@ open class ContentView: View {
             }
             
         case .right:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
                 $0.bottom.lessThanOrEqualTo(0).priority(priority)
                 $0.trailing.equalTo(0).priority(priority)
@@ -72,7 +72,7 @@ open class ContentView: View {
             }
             
         case .top:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.top.equalTo(0).priority(priority)
                 $0.trailing.bottom.lessThanOrEqualTo(0).priority(priority)
                 $0.leading.greaterThanOrEqualTo(0).priority(priority)
@@ -80,13 +80,13 @@ open class ContentView: View {
             }
             
         case .topLeft:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.top.leading.equalTo(0).priority(priority)
                 $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
             }
                 
         case .topRight:
-            view.snp.makeConstraints {
+            view.snp.remakeConstraints {
                 $0.top.trailing.equalTo(0).priority(priority)
                 $0.bottom.lessThanOrEqualTo(0).priority(priority)
                 $0.leading.greaterThanOrEqualTo(0).priority(priority)
@@ -96,7 +96,7 @@ open class ContentView: View {
         case .redraw: fallthrough
         case .scaleAspectFit: fallthrough
         @unknown default:
-            view.snp.makeConstraints { $0.edges.equalTo(0).priority(priority) }
+            view.snp.remakeConstraints { $0.edges.equalTo(0).priority(priority) }
         }
     }
 }
