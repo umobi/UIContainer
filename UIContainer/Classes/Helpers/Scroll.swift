@@ -16,6 +16,14 @@ private extension UIView {
 
         self.setNeedsLayout()
     }
+
+    func setNeedsConstraintOnTree() {
+        self.subviews.forEach {
+            $0.setNeedsConstraintOnTree()
+        }
+
+        self.setNeedsUpdateConstraints()
+    }
 }
 
 open class ScrollView: UIScrollView {
@@ -54,7 +62,8 @@ open class ScrollView: UIScrollView {
     }
 
     private var onValidFrames: (() -> Void)? = nil
-    private var onSuperview: ((UIView) -> Void)? = nil
+    private var onSuperview: (() -> Void)? = nil
+    private var onWindow: (() -> Void)? = nil
     private weak var contentView: UIView!
 
     public required init(_ view: UIView, axis: Axis = .vertical) {
@@ -70,21 +79,35 @@ open class ScrollView: UIScrollView {
             }
 
             self?.onSuperview = { [axis] in
-
-                self?.onValidFrames = { [axis] in
-                    self?.setAxis(axis)
-                }
-
-                $0.setNeedsLayoutOnTree()
-                
-                for superview in sequence(first: $0, next: { $0.superview }) {
-                    superview.setNeedsLayout()
-
-                    if superview.frame.size != .zero {
-                        superview.layoutIfNeeded()
-                        break
+                let onWindow = { [axis] in
+                    guard let self = self else {
+                        return
                     }
+
+                    self.onValidFrames = { [weak self, axis] in
+                        self?.setAxis(axis)
+                    }
+
+                    var topSuperview: UIView! = self.superview
+                    for superview in sequence(first: topSuperview, next: { $0.superview }) {
+                        topSuperview = superview
+
+                        if superview.frame.size != .zero {
+                            break
+                        }
+                    }
+
+                    topSuperview.setNeedsConstraintOnTree()
+                    topSuperview.setNeedsLayoutOnTree()
+                    topSuperview.layoutIfNeeded()
                 }
+
+                if self?.window != nil {
+                    onWindow()
+                    return
+                }
+
+                self?.onWindow = onWindow
             }
         }
     }
@@ -98,7 +121,7 @@ open class ScrollView: UIScrollView {
 
         if let onSubview = self.onSuperview {
             self.onSuperview = nil
-            onSubview(superview)
+            onSubview()
             return
         }
         
@@ -110,6 +133,17 @@ open class ScrollView: UIScrollView {
         onValidFrames()
     }
 
+    override open func didMoveToWindow() {
+        super.didMoveToWindow()
+
+        guard self.window != nil, let onWindow = self.onWindow else {
+            return
+        }
+
+        self.onWindow = nil
+        onWindow()
+    }
+
     public func setAxis(_ axis: Axis) {
         guard let superview = self.superview else {
             return
@@ -117,26 +151,29 @@ open class ScrollView: UIScrollView {
 
         self.contentSize = self.contentView.frame.size
 
-        OperationQueue.main.addOperation {
-            self.contentView!.snp.remakeConstraints {
-                $0.edges.equalTo(0)
-                switch axis {
-                case .vertical:
-                    $0.width.equalTo(superview.snp.width).priority(.required)
-                    $0.height.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
-                case .horizontal:
-                    $0.height.equalTo(superview.snp.width).priority(.required)
-                    $0.width.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
-                case .auto(let vertical, let horizontal):
-                    $0.height.equalTo(superview.snp.width).priority(vertical)
-                    $0.width.equalTo(superview.snp.height).priority(horizontal)
-                }
+        #if DEBUG
+        print("[UIContainer] WARNING: - ScrollView may cause constraint errors, looking for solution")
+        #endif
+        self.contentView!.snp.remakeConstraints {
+            $0.edges.equalTo(0)
+            switch axis {
+            case .vertical:
+                $0.width.equalTo(superview.snp.width).priority(.required)
+                $0.height.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
+            case .horizontal:
+                $0.height.equalTo(superview.snp.width).priority(.required)
+                $0.width.equalTo(superview.snp.height).priority(UILayoutPriority.fittingSizeLevel)
+            case .auto(let vertical, let horizontal):
+                $0.height.equalTo(superview.snp.width).priority(vertical)
+                $0.width.equalTo(superview.snp.height).priority(horizontal)
             }
-
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
         }
 
+        #if DEBUG
+        print("[UIContainer] WARNING: - If Layout Engine throws some constraints error, please ignore while a fix is finded. This error happens because superviews have width or height equal to 0 and the content inside scrollview should have width or height at least grather than or equal to some x vale.")
+        #endif
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
 
     public required init?(coder: NSCoder) {
