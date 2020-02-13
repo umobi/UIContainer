@@ -92,6 +92,7 @@ open class BlurView: View {
         let vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
 
         AddSubview(blurEffectView.contentView).addSubview(vibrancyEffectView)
+        vibrancyEffectView.translatesAutoresizingMaskIntoConstraints = false
 
         vibrancyEffectView.snp.makeConstraints { make in
             make.top.bottom.trailing.leading.equalTo(0)
