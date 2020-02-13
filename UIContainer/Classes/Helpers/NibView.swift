@@ -24,7 +24,8 @@ open class NibView: View {
         Bundle(for: type(of: self)).loadNibNamed("\(self.className)", owner: self, options: nil)
 
         AddSubview(self).addSubview(view)
-        view.frame = self.bounds
-        view.autoresizingMask = [ .flexibleHeight, .flexibleWidth]
+        view.snp.makeConstraints {
+            $0.edges.equalTo(0)
+        }
     }
 }
