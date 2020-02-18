@@ -101,6 +101,8 @@ private extension UIView {
                 return
             case is UICollectionReusableView:
                 return
+            case is UIVisualEffectView:
+                return
             default:
                 break
             }
