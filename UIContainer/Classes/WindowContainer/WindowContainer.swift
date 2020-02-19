@@ -99,23 +99,24 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
             guard let root = container.view else {
                 return
             }
-            
-            if root.presentedViewController != nil {
-                print("[WindowContainer] WindowContainer will dismiss any present actions")
-                return
-            }
-            
-            root.present(viewControllerToPresent, animated: flag, completion: completion)
-            return
-        }
-        
-        if self.presentedViewController != nil {
-            print("[WindowContainer] WindowContainer will dismiss any present actions")
+
+            sequence(first: root, next: { $0.presentedViewController })
+                .reversed()
+                .last?
+                .present(viewControllerToPresent, animated: flag, completion: completion)
             return
         }
 
-        super.present(viewControllerToPresent, animated: flag, completion: completion)
-        return
+        let view = sequence(first: self, next: { $0.presentedViewController })
+            .reversed()
+            .last
+
+        guard view != self else {
+            super.present(viewControllerToPresent, animated: flag, completion: completion)
+            return
+        }
+
+        view?.present(viewControllerToPresent, animated: flag, completion: completion)
     }
     
     public func transition(toView viewController: UIViewController!, as providerType: Provider, completion handler: (() -> Void)? = nil) {
