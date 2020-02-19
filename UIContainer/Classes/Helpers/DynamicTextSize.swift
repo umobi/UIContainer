@@ -222,6 +222,7 @@ private extension UILabel {
         }()
 
         paragraphStyle.hyphenationFactor = factor
+        paragraphStyle.alignment = self.textAlignment
         attstr.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(0..<attstr.length))
         self.attributedText = attstr
     }
