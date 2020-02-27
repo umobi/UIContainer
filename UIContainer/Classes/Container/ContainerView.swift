@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 open class ContainerView<View: UIView & ContainerViewParent>: ContainerBox, ContainerRepresentable {
     
@@ -71,8 +72,9 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIView &
         let spacer = self.spacer(view)
         AddSubview(self).addSubview(spacer)
 
-        spacer.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
+        activate(
+            spacer.anchor
+                .edges
+        )
     }
 }

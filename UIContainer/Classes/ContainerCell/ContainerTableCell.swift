@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import SnapKit
 
 open class ContainerTableCell<View: UIViewController & ContainerCellDelegate>: UITableViewCell, ContainerCellRepresentable {
     public weak var containerView: Container<View>!

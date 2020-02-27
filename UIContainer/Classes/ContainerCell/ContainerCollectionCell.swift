@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import SnapKit
 
 open class ContainerCollectionCell<View: UIViewController & ContainerCellDelegate>: UICollectionViewCell, ContainerCellRepresentable {
     public weak var containerView: Container<View>!

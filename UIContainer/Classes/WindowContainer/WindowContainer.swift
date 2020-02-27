@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 public class WindowContainer<Provider: WindowContainerType>: UIViewController {
     
@@ -135,17 +136,20 @@ extension WindowContainer {
         let stackView = UIStackView()
         AddSubview(self.view).addSubview(stackView)
         self.stackView = stackView
-        
-        self.stackView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalTo(0)
-        }
+
+        activate(
+            stackView.anchor
+                .edges
+        )
     }
 
     func prepareDebugView() {
         let debugView = DebugView()
         AddSubview(self.view).addSubview(debugView)
-        debugView.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
+
+        activate(
+            debugView.anchor
+                .edges
+        )
     }
 }

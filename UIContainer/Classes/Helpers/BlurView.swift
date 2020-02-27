@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import SnapKit
+import EasyAnchor
 
 private var kVibrancyEffectStyle: UInt = 0
 
@@ -94,12 +94,17 @@ open class BlurView: View {
         AddSubview(blurEffectView.contentView).addSubview(vibrancyEffectView)
         vibrancyEffectView.translatesAutoresizingMaskIntoConstraints = false
 
-        vibrancyEffectView.snp.makeConstraints { make in
-            make.top.bottom.trailing.leading.equalTo(0)
-        }
+        activate(
+            vibrancyEffectView.anchor
+                .edges
+        )
 
         AddSubview(self).addSubview(blurEffectView)
-        blurEffectView.snp.makeConstraints { $0.edges.equalTo(0) }
+
+        activate(
+            blurEffectView.anchor
+                .edges
+        )
         
         return blurEffectView
     }

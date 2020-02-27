@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 open class ActivityView: View {
 
@@ -63,9 +64,11 @@ open class ActivityView: View {
         let contentView = UIView()
         let rounder = RounderView(contentView, radius: 5)
         AddSubview(self).addSubview(rounder)
-        rounder.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
+
+        activate(
+            rounder.anchor
+                .edges
+        )
 
         self.contentView = contentView
 
@@ -100,7 +103,11 @@ open class ActivityView: View {
         self.blur = blur
 
         AddSubview(self.contentView).addSubview(blur)
-        blur.snp.makeConstraints { $0.edges.equalTo(0) }
+
+        activate(
+            blur.anchor
+                .edges
+        )
 
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -108,7 +115,12 @@ open class ActivityView: View {
         let scroll = ScrollView(stackView, axis: .vertical)
 
         AddSubview(self.contentView).addSubview(scroll)
-        scroll.snp.makeConstraints { $0.edges.equalTo(0)}
+
+        activate(
+            scroll.anchor
+                .edges
+        )
+
         self.stackView = stackView
     }
 
@@ -147,18 +159,35 @@ open class ActivityView: View {
 
         return [SpacerView({
             let content = ContentView.Center(activity)
-            activity.snp.makeConstraints {
-                $0.leading.trailing.equalTo(0).priority(.high)
-                $0.top.equalTo(0).priority(.high)
-            }
+
+            activate(
+                activity.anchor
+                    .leading
+                    .trailing
+                    .priority(UILayoutPriority.defaultHigh.rawValue),
+
+                activity.anchor
+                    .top
+                    .priority(UILayoutPriority.defaultHigh.rawValue)
+            )
+
             return content
         }(), spacing: 30), {
             let spacer = SpacerView({
                 let content = ContentView.Center(titleLabel)
-                titleLabel.snp.makeConstraints {
-                    $0.leading.trailing.equalTo(0).priority(.high)
-                    $0.width.lessThanOrEqualTo(200)
-                }
+
+                activate(
+                    titleLabel.anchor
+                        .leading
+                        .trailing
+                        .priority(UILayoutPriority.defaultHigh.rawValue),
+
+                    titleLabel.anchor
+                        .width
+                        .lessThanOrEqual
+                        .to(200)
+                )
+
                 return content
             }(), top: 0, bottom: 15, leading: 15, trailing: 15)
             spacer.isHidden = true
@@ -214,7 +243,12 @@ open class ActivityView: View {
     public func show(inView view: UIView!) {
         let container = Container(in: nil, loadHandler: { self })
         AddSubview(view).addSubview(container)
-        container.snp.makeConstraints { $0.edges.equalTo(0) }
+
+        activate(
+            container.anchor
+                .edges
+        )
+
         self.start()
         self.container = container
     }
@@ -242,14 +276,13 @@ extension ActivityView {
         override func spacer<T>(_ view: T) -> SpacerView where T : UIView {
             let contentView = UIView()
 
-//            let fadeView = UIView()
-//            fadeView.backgroundColor = UIColor.black.withAlphaComponent(0.075)
-//            contentView.addSubview(fadeView)
-//            fadeView.snp.makeConstraints { $0.edges.equalTo(0) }
-
             let center = ContentView.Center(view)
             AddSubview(contentView).addSubview(center)
-            center.snp.makeConstraints { $0.edges.equalTo(0) }
+
+            activate(
+                center.anchor
+                    .edges
+            )
 
             center.layer.shadowOffset = .init(width: 1, height: 2)
             center.layer.shadowOpacity = 0.1
@@ -292,7 +325,11 @@ extension ActivityView: ViewControllerType {
         return .dynamic { [weak self] in
             let container = Container(in: $0, loadHandler: { self })
             AddSubview($0.view).addSubview(container)
-            container.snp.makeConstraints { $0.edges.equalTo(0) }
+
+            activate(
+                container.anchor
+                    .edges
+            )
         }
     }
 }

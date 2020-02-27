@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 open class Container<View: UIViewController>: ContainerBox, ContainerRepresentable {
     
@@ -67,11 +68,15 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIViewCo
         parent?.addChild(view)
 
         let spacer = self.spacer(view.view)
-        AddSubview(self).addSubview(spacer)
+        print(view.view.anchor.constraints())
 
-        spacer.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
+        AddSubview(self).addSubview(spacer)
+        print(view.view.anchor.constraints())
+
+        activate(
+            spacer.anchor
+                .edges
+        )
 
         view.didMove(toParent: self.parent)
     }

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 open class ScrollView: UIScrollView {
 
@@ -25,23 +26,62 @@ open class ScrollView: UIScrollView {
         AddSubview(self).addSubview(contentView)
         self.contentView = contentView
 
+        activate(
+            contentView.anchor
+                .edges
+        )
+
         self.setAxis(axis)
     }
 
     public func setAxis(_ axis: Axis) {
-        self.contentView!.snp.remakeConstraints {
-            $0.edges.equalTo(0)
-            switch axis {
-            case .vertical:
-                $0.width.equalTo(self.snp.width).priority(.required)
-                $0.height.equalTo(self.snp.height).priority(UILayoutPriority.fittingSizeLevel)
-            case .horizontal:
-                $0.height.equalTo(self.snp.height).priority(.required)
-                $0.width.equalTo(self.snp.width).priority(UILayoutPriority.fittingSizeLevel)
-            case .auto(let vertical, let horizontal):
-                $0.height.equalTo(self.snp.height).priority(vertical)
-                $0.width.equalTo(self.snp.width).priority(horizontal)
-            }
+
+        if let width = self.contentView.anchor.find(.width) {
+            NSLayoutConstraint.deactivate([width])
+        }
+
+        if let height = self.contentView.anchor.find(.height) {
+            NSLayoutConstraint.deactivate([height])
+        }
+
+        switch axis {
+        case .vertical:
+            activate(
+                contentView.anchor
+                    .width
+                    .equal.to(self.anchor.width)
+                    .priority(UILayoutPriority.required.rawValue),
+
+                contentView.anchor
+                    .height
+                    .equal.to(self.anchor.height)
+                    .priority(UILayoutPriority.fittingSizeLevel.rawValue)
+            )
+        case .horizontal:
+            activate(
+                contentView.anchor
+                    .width
+                    .equal.to(self.anchor.width)
+                    .priority(UILayoutPriority.fittingSizeLevel.rawValue),
+
+                contentView.anchor
+                    .height
+                    .equal.to(self.anchor.height)
+                    .priority(UILayoutPriority.required.rawValue)
+            )
+
+        case .auto(let vertical, let horizontal):
+            activate(
+                contentView.anchor
+                    .width
+                    .equal.to(self.anchor.width)
+                    .priority(vertical.rawValue),
+
+                contentView.anchor
+                    .height
+                    .equal.to(self.anchor.height)
+                    .priority(horizontal.rawValue)
+            )
         }
     }
 
@@ -60,9 +100,10 @@ private extension ScrollView {
 
             AddSubview(self).addSubview(view)
 
-            view.snp.makeConstraints {
-                $0.edges.equalTo(0)
-            }
+            activate(
+                view.anchor
+                    .edges
+            )
         }
     }
 }

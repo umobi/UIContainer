@@ -37,8 +37,8 @@ UIContainer helps by allowing you to keep the code more specific. You can write 
   # s.resource_bundles = {
   #   'UIContainer' => ['UIContainer/Assets/*.png']
   # }
-  
-  s.dependency 'SnapKit', '~> 5.0.1'
+
+  s.dependency 'EasyAnchor'
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'

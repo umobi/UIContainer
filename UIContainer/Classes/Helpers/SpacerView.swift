@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import SnapKit
+import EasyAnchor
 
 open class SpacerView: View {
     private weak var view: UIView!
@@ -28,12 +28,23 @@ open class SpacerView: View {
     }
     
     private func layout() {
-        view.snp.makeConstraints {
-            $0.top.equalTo(self.margin.top)
-            $0.leading.equalTo(self.margin.leading)
-            $0.trailing.equalTo(-self.margin.trailing)
-            $0.bottom.equalTo(-self.margin.bottom)
-        }
+        activate(
+            view.anchor
+                .top
+                .constant(self.margin.top),
+
+            view.anchor
+                .bottom
+                .constant(-self.margin.bottom),
+
+            view.anchor
+                .trailing
+                .constant(-self.margin.trailing),
+
+            view.anchor
+                .leading
+                .constant(self.margin.leading)
+        )
     }
 
     public convenience init(_ view: UIView!, vertical: CGFloat, horizontal: CGFloat) {

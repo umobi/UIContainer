@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 fileprivate extension Overlay {
     class Settings {
@@ -44,9 +45,11 @@ open class Overlay: UIView {
         #endif
         overlay.layer.zPosition = -1
         AddSubview(view).insertSubview(overlay, at: 0)
-        overlay.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
+
+        activate(
+            overlay.anchor
+                .edges
+        )
 
         overlay.backgroundColor = Self.Settings.color
         overlay.layer.cornerRadius = view.layer.cornerRadius

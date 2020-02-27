@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import SnapKit
+import EasyAnchor
 
 open class RounderView: View {
     public var radius: CGFloat {
@@ -22,7 +22,11 @@ open class RounderView: View {
 
         AddSubview(self).addSubview(view)
 
-        view.snp.makeConstraints { $0.edges.equalTo(0) }
+        activate(
+            view.anchor
+                .edges
+        )
+
         self.clipsToBounds = true
     }
     
@@ -88,8 +92,12 @@ public extension RounderView {
         
         let rounder = RounderView(view, radius: radius)
         AddSubview(superview).addSubview(rounder)
-        
-        rounder.snp.makeConstraints { $0.edges.equalTo(0) }
+
+        activate(
+            rounder.anchor
+                .edges
+        )
+
         return rounder
     }
 }
@@ -117,7 +125,11 @@ public extension UIImageView {
                 AddSubview(superview)?.addSubview(self)
                 
                 if newValue == 0 {
-                    self.snp.makeConstraints { $0.edges.equalTo(0) }
+                    activate(
+                        self.anchor
+                            .edges
+                    )
+
                     return
                 }
             }

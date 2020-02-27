@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import SnapKit
 
 open class ContainerBox: UIView {
     var cannotAddViews: Bool {
