@@ -47,6 +47,46 @@ open class SpacerView: View {
         )
     }
 
+    public func refresh() {
+        var pending: [ConstraintProducer] = []
+
+        if self.view.anchor.find(.top) == nil {
+            pending.append(
+                view.anchor
+                    .top
+                    .constant(self.margin.top)
+                )
+        }
+
+        if self.view.anchor.find(.bottom) == nil {
+            pending.append(
+                view.anchor
+                    .bottom
+                    .constant(-self.margin.bottom)
+                )
+        }
+
+        if self.view.anchor.find(.leading) == nil {
+            pending.append(
+                view.anchor
+                    .leading
+                    .constant(self.margin.leading)
+                )
+        }
+
+        if self.view.anchor.find(.trailing) == nil {
+            pending.append(
+                view.anchor
+                    .trailing
+                    .constant(-self.margin.trailing)
+                )
+        }
+        
+        pending.forEach {
+            activate($0)
+        }
+    }
+
     public convenience init(_ view: UIView!, vertical: CGFloat, horizontal: CGFloat) {
         self.init(view, margin: .init(vertical: vertical, horizontal: horizontal))
     }

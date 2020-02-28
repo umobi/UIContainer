@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import EasyAnchor
 
-public class WindowContainer<Provider: WindowContainerType>: UIViewController {
+public class WindowContainer<Provider: WindowContainerType>: UIViewController, StatusBarAppearanceManager {
     
     private weak var stackView: UIStackView!
     private weak var container: UIView!
@@ -17,14 +17,6 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
     weak var window: UIWindow!
     
     public private(set) var baseType: Provider?
-
-    #if os(iOS)
-    public var statusBarStyle: UIStatusBarStyle? = nil {
-        didSet {
-            self.setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    #endif
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +31,12 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
     }
 
     #if os(iOS)
+    public var statusBarStyle: UIStatusBarStyle? = nil {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.statusBarStyle ?? UIApplication.shared.statusBarStyle
     }
