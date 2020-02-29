@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import EasyAnchor
 
 open class NibView: View {
     @IBOutlet public weak var view: UIView!
@@ -22,9 +23,12 @@ open class NibView: View {
     
     private func loadFromNib() {
         Bundle(for: type(of: self)).loadNibNamed("\(self.className)", owner: self, options: nil)
-        
-        self.addSubview(view)
-        view.frame = self.bounds
-        view.autoresizingMask = [ .flexibleHeight, .flexibleWidth]
+
+        AddSubview(self).addSubview(view)
+
+        activate(
+            view.anchor
+                .edges
+        )
     }
 }

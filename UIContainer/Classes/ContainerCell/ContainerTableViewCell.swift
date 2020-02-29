@@ -11,7 +11,6 @@ import UIKit
 
 open class ContainerTableViewCell<View: UIView & ContainerViewParent & ContainerCellDelegate>: UITableViewCell, ContainerCellRepresentable {
     
-    public weak var containerBox: ContainerBox!
     public weak var containerView: ContainerView<View>!
     public weak var parent: ParentView!
     

@@ -7,59 +7,103 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 open class ScrollView: UIScrollView {
+
     public enum Axis {
         case vertical
         case horizontal
         case auto(vertical: UILayoutPriority, horizontal: UILayoutPriority)
     }
 
-    private var onSuperview: (() -> Void)? = nil
+    private weak var contentView: UIView!
 
     public required init(_ view: UIView, axis: Axis = .vertical) {
         super.init(frame: .zero)
-        self.addSubview(view)
-        view.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
 
-        self.onSuperview = { [weak self] in
-            self?.setAxis(axis)
-        }
-    }
+        let contentView = ContentView(view)
+        AddSubview(self).addSubview(contentView)
+        self.contentView = contentView
 
-    override open func didMoveToSuperview() {
-        super.didMoveToSuperview()
+        activate(
+            contentView.anchor
+                .edges
+        )
 
-        if self.superview != nil {
-            self.onSuperview?()
-            self.onSuperview = nil
-        }
+        self.setAxis(axis)
     }
 
     public func setAxis(_ axis: Axis) {
-        guard let superview = self.superview else {
-            return
+
+        if let width = self.contentView.anchor.find(.width) {
+            NSLayoutConstraint.deactivate([width])
         }
 
-        self.subviews.first!.snp.remakeConstraints {
-            $0.edges.equalTo(0)
-            switch axis {
-            case .vertical:
-                $0.width.equalTo(superview.snp.width).priority(.required)
-                $0.height.equalTo(superview.snp.height).priority(.low)
-            case .horizontal:
-                $0.height.equalTo(superview.snp.width).priority(.required)
-                $0.width.equalTo(superview.snp.height).priority(.low)
-            case .auto(let vertical, let horizontal):
-                $0.height.equalTo(superview.snp.width).priority(vertical)
-                $0.width.equalTo(superview.snp.height).priority(horizontal)
-            }
+        if let height = self.contentView.anchor.find(.height) {
+            NSLayoutConstraint.deactivate([height])
+        }
+
+        switch axis {
+        case .vertical:
+            activate(
+                contentView.anchor
+                    .width
+                    .equal.to(self.anchor.width)
+                    .priority(UILayoutPriority.required.rawValue),
+
+                contentView.anchor
+                    .height
+                    .equal.to(self.anchor.height)
+                    .priority(UILayoutPriority.fittingSizeLevel.rawValue)
+            )
+        case .horizontal:
+            activate(
+                contentView.anchor
+                    .width
+                    .equal.to(self.anchor.width)
+                    .priority(UILayoutPriority.fittingSizeLevel.rawValue),
+
+                contentView.anchor
+                    .height
+                    .equal.to(self.anchor.height)
+                    .priority(UILayoutPriority.required.rawValue)
+            )
+
+        case .auto(let vertical, let horizontal):
+            activate(
+                contentView.anchor
+                    .width
+                    .equal.to(self.anchor.width)
+                    .priority(vertical.rawValue),
+
+                contentView.anchor
+                    .height
+                    .equal.to(self.anchor.height)
+                    .priority(horizontal.rawValue)
+            )
         }
     }
 
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private extension ScrollView {
+    class ContentView: UIView {
+        weak var view: UIView!
+
+        convenience init(_ view: UIView) {
+            self.init(frame: .zero)
+            self.view = view
+
+            AddSubview(self).addSubview(view)
+
+            activate(
+                view.anchor
+                    .edges
+            )
+        }
     }
 }

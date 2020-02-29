@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 public protocol ContainerCellRepresentable: ContainerRepresentable where ContainerCell.View == View {
     associatedtype ContainerCell: ContainerRepresentable
@@ -52,16 +53,24 @@ public extension ContainerCellRepresentable {
 public extension ContainerCellRepresentable where Self: UICollectionViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
         let spacer = self.spacer(containerCell)
-        self.contentView.addSubview(spacer)
-        spacer.snp.makeConstraints { $0.edges.equalTo(0) }
+        AddSubview(self.contentView).addSubview(spacer)
+
+        activate(
+            spacer.anchor
+                .edges
+        )
     }
 }
 
 public extension ContainerCellRepresentable where Self: UITableViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
         let spacer = self.spacer(containerCell)
-        self.contentView.addSubview(spacer)
-        spacer.snp.makeConstraints { $0.edges.equalTo(0) }
+        AddSubview(self.contentView).addSubview(spacer)
+
+        activate(
+            spacer.anchor
+                .edges
+        )
     }
 }
 

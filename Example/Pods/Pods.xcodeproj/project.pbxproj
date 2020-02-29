@@ -12,6 +12,7 @@
 		0C00DBD22353EF21001E19C1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBD12353EF21001E19C1 /* ContentView.swift */; };
 		0C00DBD42353F46E001E19C1 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C00DBD32353F46E001E19C1 /* ContainerController.swift */; };
 		0C15FA9B2374D5260098A463 /* Overlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C15FA992374D5230098A463 /* Overlay.swift */; };
+		0C175C0F23EC479700A16220 /* AddSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C175C0E23EC479700A16220 /* AddSubview.swift */; };
 		0C2AFFB0235BAC9D000369AA /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2AFFAE235BAC9D000369AA /* GradientView.swift */; };
 		0C3DEC582326B5FE0021B5FD /* SpacerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC442326B5FE0021B5FD /* SpacerView.swift */; };
 		0C3DEC592326B5FE0021B5FD /* NibView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DEC452326B5FE0021B5FD /* NibView.swift */; };
@@ -66,6 +67,7 @@
 		0C00DBD12353EF21001E19C1 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0C00DBD32353F46E001E19C1 /* ContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
 		0C15FA992374D5230098A463 /* Overlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Overlay.swift; sourceTree = "<group>"; };
+		0C175C0E23EC479700A16220 /* AddSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSubview.swift; sourceTree = "<group>"; };
 		0C2AFFAE235BAC9D000369AA /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		0C3DEC442326B5FE0021B5FD /* SpacerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpacerView.swift; sourceTree = "<group>"; };
 		0C3DEC452326B5FE0021B5FD /* NibView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 		0C3DEC432326B5FE0021B5FD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				0C175C0E23EC479700A16220 /* AddSubview.swift */,
 				0C4F558623A2C428008DE5AC /* DynamicTextSize.swift */,
 				0C6CCF11236A0264008521BD /* TraitObject.swift */,
 				0C7587CF23787A38009DAF77 /* ActivityView.swift */,
@@ -450,6 +453,7 @@
 				0CD0038B234E39B900FA3289 /* ContainerCollectionCell.swift in Sources */,
 				0CCEF239233BDF9D009D5DBE /* WindowContainer.swift in Sources */,
 				0C4A97702374CD3D0082477E /* ColorType.swift in Sources */,
+				0C175C0F23EC479700A16220 /* AddSubview.swift in Sources */,
 				0C3DEC582326B5FE0021B5FD /* SpacerView.swift in Sources */,
 				0CD0038A234E39B900FA3289 /* ContainerCollectionViewCell.swift in Sources */,
 				0CE6B7A6233430E900DE9885 /* SpacerMargin.swift in Sources */,

@@ -7,8 +7,9 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
-public class WindowContainer<Provider: WindowContainerType>: UIViewController {
+public class WindowContainer<Provider: WindowContainerType>: UIViewController, StatusBarAppearanceManager {
     
     private weak var stackView: UIStackView!
     private weak var container: UIView!
@@ -16,14 +17,6 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
     weak var window: UIWindow!
     
     public private(set) var baseType: Provider?
-
-    #if os(iOS)
-    public var statusBarStyle: UIStatusBarStyle? = nil {
-        didSet {
-            self.setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    #endif
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +31,12 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
     }
 
     #if os(iOS)
+    public var statusBarStyle: UIStatusBarStyle? = nil {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.statusBarStyle ?? UIApplication.shared.statusBarStyle
     }
@@ -52,8 +51,8 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
         if !(container is ContainerRepresentable) {
             fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
-        
-        self.stackView.addArrangedSubview(container)
+
+        AddSubview(self.stackView).addArrangedSubview(container)
         self.container = container
     }
     
@@ -65,8 +64,8 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
         if !(containerView is ContainerRepresentable) {
             fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
-        
-        self.stackView.addArrangedSubview(containerView)
+
+        AddSubview(self.stackView).addArrangedSubview(containerView)
         
         let perform: () -> Void = {
             self.container?.removeFromSuperview()
@@ -99,23 +98,24 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
             guard let root = container.view else {
                 return
             }
-            
-            if root.presentedViewController != nil {
-                print("[WindowContainer] WindowContainer will dismiss any present actions")
-                return
-            }
-            
-            root.present(viewControllerToPresent, animated: flag, completion: completion)
-            return
-        }
-        
-        if self.presentedViewController != nil {
-            print("[WindowContainer] WindowContainer will dismiss any present actions")
+
+            sequence(first: root, next: { $0.presentedViewController })
+                .reversed()
+                .last?
+                .present(viewControllerToPresent, animated: flag, completion: completion)
             return
         }
 
-        super.present(viewControllerToPresent, animated: flag, completion: completion)
-        return
+        let view = sequence(first: self, next: { $0.presentedViewController })
+            .reversed()
+            .last
+
+        guard view != self else {
+            super.present(viewControllerToPresent, animated: flag, completion: completion)
+            return
+        }
+
+        view?.present(viewControllerToPresent, animated: flag, completion: completion)
     }
     
     public func transition(toView viewController: UIViewController!, as providerType: Provider, completion handler: (() -> Void)? = nil) {
@@ -132,19 +132,22 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController {
 extension WindowContainer {
     func prepareStack() {
         let stackView = UIStackView()
-        self.view.addSubview(stackView)
+        AddSubview(self.view).addSubview(stackView)
         self.stackView = stackView
-        
-        self.stackView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalTo(0)
-        }
+
+        activate(
+            stackView.anchor
+                .edges
+        )
     }
 
     func prepareDebugView() {
         let debugView = DebugView()
-        self.view.addSubview(debugView)
-        debugView.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
+        AddSubview(self.view).addSubview(debugView)
+
+        activate(
+            debugView.anchor
+                .edges
+        )
     }
 }

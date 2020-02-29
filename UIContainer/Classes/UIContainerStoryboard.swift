@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import SnapKit
+import EasyAnchor
 
 public protocol UIContainerStoryboard: View, ContainerRepresentable where View == Container.View {
     associatedtype Container: ContainerRepresentable
@@ -77,8 +77,12 @@ public extension UIContainerStoryboard {
 public extension UIContainerStoryboard where Container: UIView {
     func addContainer(_ container: Container) {
         let spacer = self.spacer(container)
-        self.insertSubview(spacer, at: 0)
-        spacer.snp.makeConstraints { $0.edges.equalTo(0) }
+        AddSubview(self).insertSubview(spacer, at: 0)
+        
+        activate(
+            spacer.anchor
+                .edges
+        )
     }
     
     func spacer<T>(_ view: T) -> SpacerView where T : UIView {

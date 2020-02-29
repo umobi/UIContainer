@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import SnapKit
+import EasyAnchor
 
 open class DashedView: View {
     
@@ -21,9 +21,13 @@ open class DashedView: View {
     public required init(_ view: UIView, dash pattern: [NSNumber]) {
         self.dashPattern = pattern
         super.init(frame: .zero)
-        
-        self.addSubview(view)
-        view.snp.makeConstraints { $0.edges.equalTo(0) }
+
+        AddSubview(self).addSubview(view)
+
+        activate(
+            view.anchor
+                .edges
+        )
         
         self.reloadShape()
     }
@@ -103,8 +107,12 @@ public extension UIImageView {
         let superview = self.superview!
         self.removeFromSuperview()
         let dash = DashedView(RounderView(self, radius: cornerRadius), dash: pattern)
-        superview.insertSubview(dash, at: 0)
-        dash.snp.makeConstraints { $0.edges.equalTo(0) }
+        AddSubview(superview).insertSubview(dash, at: 0)
+
+        activate(
+            dash.anchor
+                .edges
+        )
         
         return dash
     }

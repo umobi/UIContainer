@@ -36,7 +36,7 @@ public protocol ViewControllerAppearStates {
     func viewDidDisappear(_ animated: Bool)
 }
 
-public protocol ViewControllerType {
+public protocol ViewControllerType: class {
     var content: ViewControllerMaker { get }
 }
 
@@ -65,10 +65,16 @@ public extension ViewControllerType {
     }
 }
 
-public class ContainerController<View: ViewControllerType>: UIViewController {
+public protocol StatusBarAppearanceManager {
+    #if os(iOS)
+    var statusBarStyle: UIStatusBarStyle? { get nonmutating set }
+    #endif
+}
+
+public class ContainerController<View: ViewControllerType>: UIViewController, StatusBarAppearanceManager {
     private var appendView: View? = nil
 
-    public private(set) var contentView: View! {
+    public private(set) weak var contentView: View! {
         willSet {
             self.appendView = nil
         }
@@ -95,6 +101,18 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    #if os(iOS)
+    public var statusBarStyle: UIStatusBarStyle? = nil {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+
+    public override var preferredStatusBarStyle: UIStatusBarStyle {
+        return self.statusBarStyle ?? UIApplication.shared.statusBarStyle
+    }
+    #endif
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -128,5 +146,11 @@ public class ContainerController<View: ViewControllerType>: UIViewController {
     override public func viewDidDisappear(_ animated: Bool) {
        super.viewDidDisappear(animated)
        (self.contentView as? ViewControllerAppearStates)?.viewDidDisappear(animated)
+    }
+
+    @available(iOS 11.0, tvOS 11, *)
+    override public func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        self.view.setNeedsUpdateConstraints()
     }
 }
