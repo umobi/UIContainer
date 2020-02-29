@@ -8,14 +8,16 @@
 
 import Foundation
 import UIKit
-import SnapKit
+import EasyAnchor
 
 open class ContentView: View {
-    
-    public required init(_ view: UIView!, contentMode: UIView.ContentMode, priority: ConstraintPriority = .required) {
+
+    weak var view: UIView!
+    public required init(_ view: UIView!, contentMode: UIView.ContentMode, priority: UILayoutPriority = .required) {
         super.init(frame: .zero)
-        self.addSubview(view)
-        view.snp.makeConstraints { $0.edges.equalTo(0).priority(priority) }
+        AddSubview(self).addSubview(view)
+        self.view = view
+
         self.reload(contentMode: contentMode, priority: priority)
     }
     
@@ -23,90 +25,233 @@ open class ContentView: View {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func reload(contentMode: UIView.ContentMode, priority: ConstraintPriority) {
-        let view = self.subviews.first!
-        view.removeFromSuperview()
-        self.addSubview(view)
-        
+    private func reload(contentMode: UIView.ContentMode, priority: UILayoutPriority) {
+        let view: UIView! = self.view
+        NSLayoutConstraint.deactivate(view.anchor.constraints())
+
         switch contentMode {
         case .bottom:
-            view.snp.makeConstraints {
-                $0.bottom.equalTo(0).priority(priority)
-                $0.centerX.equalTo(self.snp.centerX).priority(priority)
-                $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
-                $0.trailing.lessThanOrEqualTo(0).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .bottom
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .centerX
+                    .equal.to(self.anchor.centerX)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .top
+                    .leading
+                    .greaterThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .trailing
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue)
+            )
         case .bottomLeft:
-            view.snp.makeConstraints {
-                $0.bottom.leading.equalTo(0).priority(priority)
-                $0.top.greaterThanOrEqualTo(0).priority(priority)
-                $0.trailing.lessThanOrEqualTo(0).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .bottom
+                    .leading
+                    .equal
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .top
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .trailing
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue)
+            )
             
         case .bottomRight:
-            view.snp.makeConstraints {
-                $0.bottom.trailing.equalTo(0).priority(priority)
-                $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .bottom
+                    .trailing
+                    .equal
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .top
+                    .leading
+                    .greaterThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue)
+            )
         case .center:
-            view.snp.makeConstraints {
-                $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
-                $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
-                $0.center.equalTo(self.snp.center).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .center
+                    .equal.to(self.anchor.center)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .top
+                    .leading
+                    .greaterThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .bottom
+                    .trailing
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue)
+            )
             
         case .left:
-            view.snp.makeConstraints {
-                $0.top.greaterThanOrEqualTo(0).priority(priority)
-                $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
-                $0.leading.equalTo(0).priority(priority)
-                $0.centerY.equalTo(self.snp.centerY).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .top
+                    .greaterThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .bottom
+                    .trailing
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .leading
+                    .equal
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .centerY
+                    .equal.to(self.anchor.centerY)
+                    .priority(priority.rawValue)
+            )
             
         case .right:
-            view.snp.makeConstraints {
-                $0.top.leading.greaterThanOrEqualTo(0).priority(priority)
-                $0.bottom.lessThanOrEqualTo(0).priority(priority)
-                $0.trailing.equalTo(0).priority(priority)
-                $0.centerY.equalTo(self.snp.centerY).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .top
+                    .leading
+                    .greaterThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .bottom
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .trailing
+                    .equal
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .centerY
+                    .equal.to(self.anchor.centerY)
+                    .priority(priority.rawValue)
+            )
             
         case .top:
-            view.snp.makeConstraints {
-                $0.top.equalTo(0).priority(priority)
-                $0.trailing.bottom.lessThanOrEqualTo(0).priority(priority)
-                $0.leading.greaterThanOrEqualTo(0).priority(priority)
-                $0.centerX.equalTo(self.snp.centerX).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .top
+                    .equal
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .bottom
+                    .trailing
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .leading
+                    .greaterThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .centerX
+                    .equal.to(self.anchor.centerX)
+                    .priority(priority.rawValue)
+            )
             
         case .topLeft:
-            view.snp.makeConstraints {
-                $0.top.leading.equalTo(0).priority(priority)
-                $0.bottom.trailing.lessThanOrEqualTo(0).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .top
+                    .leading
+                    .equal
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .bottom
+                    .trailing
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue)
+            )
                 
         case .topRight:
-            view.snp.makeConstraints {
-                $0.top.trailing.equalTo(0).priority(priority)
-                $0.bottom.lessThanOrEqualTo(0).priority(priority)
-                $0.leading.greaterThanOrEqualTo(0).priority(priority)
-            }
+            activate(
+                view.anchor
+                    .top
+                    .trailing
+                    .equal
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .bottom
+                    .lessThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue),
+
+                view.anchor
+                    .leading
+                    .greaterThanOrEqual
+                    .constant(0)
+                    .priority(priority.rawValue)
+            )
         case .scaleAspectFill: fallthrough
         case .scaleToFill: fallthrough
         case .redraw: fallthrough
         case .scaleAspectFit: fallthrough
         @unknown default:
-            view.snp.makeConstraints { $0.edges.equalTo(0).priority(priority) }
+            activate(
+                view.anchor
+                    .edges
+            )
         }
     }
 }
 
 public extension ContentView {
     func apply(contentMode: UIView.ContentMode) {
-        self.reload(contentMode: contentMode, priority: .high)
+        self.reload(contentMode: contentMode, priority: .defaultHigh)
     }
 
-    func apply(priority: ConstraintPriority) {
+    func apply(priority: UILayoutPriority) {
         self.reload(contentMode: contentMode, priority: priority)
     }
 }

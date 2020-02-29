@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import EasyAnchor
 
 public class DynamicTextSize: UIView {
     private weak var label: UILabel!
@@ -29,10 +30,12 @@ public class DynamicTextSize: UIView {
 
         self.label = label
         self.label.adjustsFontForContentSizeCategory = true
-        label.addSubview(self)
-        self.snp.makeConstraints {
-            $0.edges.equalTo(0)
-        }
+        AddSubview(label).addSubview(self)
+
+        activate(
+            self.anchor
+                .edges
+        )
 
         self.prepare()
     }
@@ -222,6 +225,7 @@ private extension UILabel {
         }()
 
         paragraphStyle.hyphenationFactor = factor
+        paragraphStyle.alignment = self.textAlignment
         attstr.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(0..<attstr.length))
         self.attributedText = attstr
     }

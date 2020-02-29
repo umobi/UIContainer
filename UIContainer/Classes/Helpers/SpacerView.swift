@@ -8,19 +8,18 @@
 
 import Foundation
 import UIKit
-import SnapKit
+import EasyAnchor
 
 open class SpacerView: View {
     private weak var view: UIView!
     let margin: SpacerView.Margin
-    
+
     public required init(_ view: UIView!, margin: Margin) {
         self.margin = margin
         super.init(frame: .zero)
         
         self.view = view
-        self.addSubview(view)
-        
+        AddSubview(self).addSubview(view)
         self.layout()
     }
     
@@ -29,14 +28,65 @@ open class SpacerView: View {
     }
     
     private func layout() {
-        view.snp.makeConstraints {
-            $0.top.equalTo(self.margin.top)
-            $0.leading.equalTo(self.margin.leading)
-            $0.trailing.equalTo(-self.margin.trailing)
-            $0.bottom.equalTo(-self.margin.bottom)
+        activate(
+            view.anchor
+                .top
+                .constant(self.margin.top),
+
+            view.anchor
+                .bottom
+                .constant(-self.margin.bottom),
+
+            view.anchor
+                .trailing
+                .constant(-self.margin.trailing),
+
+            view.anchor
+                .leading
+                .constant(self.margin.leading)
+        )
+    }
+
+    public func refresh() {
+        var pending: [ConstraintProducer] = []
+
+        if self.view.anchor.find(.top) == nil {
+            pending.append(
+                view.anchor
+                    .top
+                    .constant(self.margin.top)
+                )
+        }
+
+        if self.view.anchor.find(.bottom) == nil {
+            pending.append(
+                view.anchor
+                    .bottom
+                    .constant(-self.margin.bottom)
+                )
+        }
+
+        if self.view.anchor.find(.leading) == nil {
+            pending.append(
+                view.anchor
+                    .leading
+                    .constant(self.margin.leading)
+                )
+        }
+
+        if self.view.anchor.find(.trailing) == nil {
+            pending.append(
+                view.anchor
+                    .trailing
+                    .constant(-self.margin.trailing)
+                )
+        }
+        
+        pending.forEach {
+            activate($0)
         }
     }
-    
+
     public convenience init(_ view: UIView!, vertical: CGFloat, horizontal: CGFloat) {
         self.init(view, margin: .init(vertical: vertical, horizontal: horizontal))
     }

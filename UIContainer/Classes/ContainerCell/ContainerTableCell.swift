@@ -8,19 +8,10 @@
 
 import Foundation
 import UIKit
-import SnapKit
 
 open class ContainerTableCell<View: UIViewController & ContainerCellDelegate>: UITableViewCell, ContainerCellRepresentable {
-    public weak var containerBox: ContainerBox!
     public weak var containerView: Container<View>!
     public weak var parent: ParentView!
-    
-    private func createSV() {
-        let containerBox = ContainerBox()
-        self.contentView.addSubview(containerBox)
-        self.containerBox = containerBox
-        containerBox.snp.makeConstraints { $0.edges.equalTo(0) }
-    }
     
     open func spacer<T: UIView>(_ view: T) -> SpacerView {
         return .init(view, spacing: 0)

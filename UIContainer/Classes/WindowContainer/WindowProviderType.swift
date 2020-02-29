@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import EasyAnchor
 
 public protocol WindowContainerType {
     var container: UIView! { get }
@@ -37,14 +38,22 @@ class DebugView: View {
         label.setContentHuggingPriority(.required, for: .horizontal)
 
         let content = ContentView.Right(label)
-        label.snp.makeConstraints {
-            $0.leading.equalTo(0)
-        }
 
-        self.addSubview(content)
-        content.snp.makeConstraints {
-            $0.top.trailing.equalTo(0)
-            $0.bottom.equalTo(self.snp.topMargin)
-        }
+        activate(
+            label.anchor
+                .leading
+        )
+
+        AddSubview(self).addSubview(content)
+
+        activate(
+            content.anchor
+                .top
+                .trailing,
+
+            content.anchor
+                .bottom
+                .equal.to(self.anchor.topMargin)
+        )
     }
 }
