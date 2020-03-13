@@ -22,6 +22,14 @@ public class DynamicTextSize: UIView {
     public var overrideAdjustsFontSizeToFitWidth: Bool?
 
     var isMultilineText: Bool {
+        if self.label is UILabel.OneLine {
+            return false
+        }
+
+        if self.label is UILabel.Multiline {
+            return true
+        }
+
         return self.label?.numberOfLines ?? 1 != 1
     }
 
