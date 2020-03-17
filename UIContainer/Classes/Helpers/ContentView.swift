@@ -10,26 +10,237 @@ import Foundation
 import UIKit
 import EasyAnchor
 
-open class ContentView: View {
+open class ContentView: View, Content {
+    public var priority: UILayoutPriority {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
 
-    weak var view: UIView!
+    public var layoutMode: UIView.ContentMode {
+        didSet {
+            self.reloadContentLayout(oldValue)
+        }
+    }
+
+    weak var view: UIView?
     public required init(_ view: UIView!, contentMode: UIView.ContentMode, priority: UILayoutPriority = .required) {
+        self.priority = priority
+        self.layoutMode = contentMode
         super.init(frame: .zero)
-        AddSubview(self).addSubview(view)
-        self.view = view
+        self.addContent(view)
+    }
 
-        self.reload(contentMode: contentMode, priority: priority)
+    public required init(contentMode: UIView.ContentMode, priority: UILayoutPriority = .required) {
+        self.priority = priority
+        self.layoutMode = contentMode
+        super.init(frame: .zero)
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private func reload(contentMode: UIView.ContentMode, priority: UILayoutPriority) {
-        let view: UIView! = self.view
-        NSLayoutConstraint.deactivate(view.anchor.constraints())
 
-        switch contentMode {
+    public override init(frame: CGRect) {
+        self.priority = .defaultHigh
+        self.layoutMode = .scaleToFill
+        super.init(frame: frame)
+    }
+
+    public func addContent(_ view: UIView) {
+        AddSubview(self).addSubview(view)
+        self.view = view
+
+        self.reloadContentLayout()
+    }
+
+    private func removeConstraints(_ oldValue: UIView.ContentMode) {
+        guard let view = self.view else {
+            return
+        }
+
+        switch oldValue {
+        case .bottom:
+            Constraint.deactivate(
+                view.anchor
+                    .bottom,
+
+                view.anchor
+                    .centerX
+                    .equal.to(self.anchor.centerX),
+
+                view.anchor
+                    .top
+                    .leading
+                    .greaterThanOrEqual,
+
+                view.anchor
+                    .trailing
+                    .lessThanOrEqual
+            )
+
+        case .bottomLeft:
+            Constraint.deactivate(
+                view.anchor
+                    .bottom
+                    .leading
+                    .equal,
+
+                view.anchor
+                    .top
+                    .lessThanOrEqual,
+
+                view.anchor
+                    .trailing
+                    .lessThanOrEqual
+            )
+
+        case .bottomRight:
+            Constraint.deactivate(
+                view.anchor
+                    .bottom
+                    .trailing
+                    .equal,
+
+                view.anchor
+                    .top
+                    .leading
+                    .greaterThanOrEqual
+            )
+
+        case .center:
+            Constraint.deactivate(
+                view.anchor
+                    .center
+                    .equal.to(self.anchor.center),
+
+                view.anchor
+                    .top
+                    .leading
+                    .greaterThanOrEqual,
+
+                view.anchor
+                    .bottom
+                    .trailing
+                    .lessThanOrEqual
+            )
+
+        case .left:
+            Constraint.deactivate(
+                view.anchor
+                    .top
+                    .greaterThanOrEqual,
+
+                view.anchor
+                    .bottom
+                    .trailing
+                    .lessThanOrEqual,
+
+                view.anchor
+                    .leading
+                    .equal,
+
+                view.anchor
+                    .centerY
+                    .equal.to(self.anchor.centerY)
+            )
+
+        case .right:
+            Constraint.deactivate(
+                view.anchor
+                    .top
+                    .leading
+                    .greaterThanOrEqual,
+
+                view.anchor
+                    .bottom
+                    .lessThanOrEqual,
+
+                view.anchor
+                    .trailing
+                    .equal,
+
+                view.anchor
+                    .centerY
+                    .equal.to(self.anchor.centerY)
+            )
+
+        case .top:
+            Constraint.deactivate(
+                view.anchor
+                    .top
+                    .equal,
+
+                view.anchor
+                    .bottom
+                    .trailing
+                    .lessThanOrEqual,
+
+                view.anchor
+                    .leading
+                    .greaterThanOrEqual,
+
+                view.anchor
+                    .centerX
+                    .equal.to(self.anchor.centerX)
+            )
+
+        case .topLeft:
+            Constraint.deactivate(
+                view.anchor
+                    .top
+                    .leading
+                    .equal,
+
+                view.anchor
+                    .bottom
+                    .trailing
+                    .lessThanOrEqual
+            )
+
+        case .topRight:
+            Constraint.deactivate(
+                view.anchor
+                    .top
+                    .trailing
+                    .equal,
+
+                view.anchor
+                    .bottom
+                    .lessThanOrEqual,
+
+                view.anchor
+                    .leading
+                    .greaterThanOrEqual
+            )
+        case .scaleAspectFill: fallthrough
+        case .scaleToFill: fallthrough
+        case .redraw: fallthrough
+        case .scaleAspectFit: fallthrough
+        @unknown default:
+            Constraint.deactivate(
+                view.anchor
+                    .edges
+            )
+        }
+    }
+
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
+    public func reloadContentLayout() {
+        self.reloadContentLayout(nil)
+    }
+
+    private func reloadContentLayout(_ oldLayoutMode: UIView.ContentMode?) {
+        guard let view = self.view else {
+            return
+        }
+
+        self.removeConstraints(oldLayoutMode ?? self.layoutMode)
+
+        switch self.layoutMode {
         case .bottom:
             activate(
                 view.anchor
@@ -75,7 +286,7 @@ open class ContentView: View {
                     .constant(0)
                     .priority(priority.rawValue)
             )
-            
+
         case .bottomRight:
             activate(
                 view.anchor
@@ -113,7 +324,7 @@ open class ContentView: View {
                     .constant(0)
                     .priority(priority.rawValue)
             )
-            
+
         case .left:
             activate(
                 view.anchor
@@ -140,7 +351,7 @@ open class ContentView: View {
                     .equal.to(self.anchor.centerY)
                     .priority(priority.rawValue)
             )
-            
+
         case .right:
             activate(
                 view.anchor
@@ -167,7 +378,7 @@ open class ContentView: View {
                     .equal.to(self.anchor.centerY)
                     .priority(priority.rawValue)
             )
-            
+
         case .top:
             activate(
                 view.anchor
@@ -194,7 +405,7 @@ open class ContentView: View {
                     .equal.to(self.anchor.centerX)
                     .priority(priority.rawValue)
             )
-            
+
         case .topLeft:
             activate(
                 view.anchor
@@ -211,7 +422,7 @@ open class ContentView: View {
                     .constant(0)
                     .priority(priority.rawValue)
             )
-                
+
         case .topRight:
             activate(
                 view.anchor
@@ -243,16 +454,6 @@ open class ContentView: View {
                     .edges
             )
         }
-    }
-}
-
-public extension ContentView {
-    func apply(contentMode: UIView.ContentMode) {
-        self.reload(contentMode: contentMode, priority: .defaultHigh)
-    }
-
-    func apply(priority: UILayoutPriority) {
-        self.reload(contentMode: contentMode, priority: priority)
     }
 }
 

@@ -10,8 +10,9 @@ import Foundation
 import UIKit
 import EasyAnchor
 
-open class DashedView: View {
-    
+open class DashedView: View, Content {
+
+    weak var view: UIView?
     private(set) var strokeColor: UIColor = .clear
     private(set) var lineWidth: CGFloat = 1
     private(set) var dashPattern: [NSNumber]
@@ -21,30 +22,42 @@ open class DashedView: View {
     public required init(_ view: UIView, dash pattern: [NSNumber]) {
         self.dashPattern = pattern
         super.init(frame: .zero)
+        self.addContent(view)
+    }
 
+    public required init(dash pattern: [NSNumber]) {
+        self.dashPattern = pattern
+        super.init(frame: .zero)
+    }
+
+    public func addContent(_ view: UIView) {
         AddSubview(self).addSubview(view)
 
         activate(
             view.anchor
                 .edges
         )
-        
-        self.reloadShape()
+
+        self.view = view
+    }
+
+    public func reloadContentLayout() {
+        self.shape = self.shape ?? self.createShape()
+
+        self.shape.strokeColor = strokeColor.cgColor
+        self.shape.lineWidth = self.lineWidth
+        self.shape.lineDashPattern = self.dashPattern
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func reloadShape() {
-        self.shape = self.shape ?? self.createShape()
-        
-        self.shape.strokeColor = strokeColor.cgColor
-        self.shape.lineWidth = self.lineWidth
-        self.shape.lineDashPattern = self.dashPattern
-    }
-    
     private func createShape() -> CAShapeLayer {
+        guard let view = self.view else {
+            return CAShapeLayer()
+        }
+
         let shapeLayer: CAShapeLayer = CAShapeLayer()
         let frameSize = self.frame.size
         let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: frameSize.height)
@@ -56,7 +69,7 @@ open class DashedView: View {
         shapeLayer.lineWidth = self.lineWidth
         shapeLayer.lineJoin = CAShapeLayerLineJoin.round
         shapeLayer.lineDashPattern = self.dashPattern
-        shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: self.subviews.first!.layer.cornerRadius).cgPath
+        shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: view.layer.cornerRadius).cgPath
 
         self.layer.addSublayer(shapeLayer)
         
@@ -65,18 +78,22 @@ open class DashedView: View {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
+
+        guard let view = self.view else {
+            return
+        }
+
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
         
-        self.subviews.first?.setNeedsLayout()
-        self.subviews.first?.layoutIfNeeded()
-        
-        self.shape.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.subviews.first!.layer.cornerRadius).cgPath
+        self.shape.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: view.layer.cornerRadius).cgPath
         self.shape.frame = self.bounds
         self.shape.cornerRadius = self.subviews.first!.layer.cornerRadius
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        self.reloadShape()
+        self.reloadContentLayout()
     }
 }
 
@@ -98,7 +115,7 @@ public extension DashedView {
     }
     
     func refresh() {
-        self.reloadShape()
+        self.reloadContentLayout()
     }
 }
 

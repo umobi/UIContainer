@@ -9,7 +9,17 @@ import Foundation
 import UIKit
 import EasyAnchor
 
-open class ScrollView: UIScrollView {
+public struct Constraint {
+    public static func deactivate(_ array: [NSLayoutConstraint]) {
+        NSLayoutConstraint.deactivate(array)
+    }
+
+    public static func deactivate(_ anchors: Anchor...) {
+        self.deactivate(anchors.reduce([]) { $0 + $1.findByContent() })
+    }
+}
+
+open class ScrollView: UIScrollView, Content {
 
     public enum Axis {
         case vertical
@@ -18,10 +28,25 @@ open class ScrollView: UIScrollView {
     }
 
     private weak var contentView: UIView!
+    public var axis: Axis {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
 
     public required init(_ view: UIView, axis: Axis = .vertical) {
+        self.axis = axis
         super.init(frame: .zero)
 
+        self.addContent(view)
+    }
+
+    public required init(axis: Axis = .vertical) {
+        self.axis = axis
+        super.init(frame: .zero)
+    }
+
+    public func addContent(_ view: UIView) {
         let contentView = ContentView(view)
         AddSubview(self).addSubview(contentView)
         self.contentView = contentView
@@ -31,17 +56,16 @@ open class ScrollView: UIScrollView {
                 .edges
         )
 
-        self.setAxis(axis)
+        self.reloadContentLayout()
     }
 
-    public func setAxis(_ axis: Axis) {
-
-        if let width = self.contentView.anchor.find(.width) {
-            NSLayoutConstraint.deactivate([width])
+    public func reloadContentLayout() {
+        if let width = self.contentView.anchor.width.equal.to(self.anchor.width).findByContent().first {
+            Constraint.deactivate([width])
         }
 
-        if let height = self.contentView.anchor.find(.height) {
-            NSLayoutConstraint.deactivate([height])
+        if let height = self.contentView.anchor.height.equal.to(self.anchor.height).findByContent().first {
+            Constraint.deactivate([height])
         }
 
         switch axis {
