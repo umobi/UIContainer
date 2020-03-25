@@ -48,7 +48,7 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController, S
         self.window = window
         
         let container: UIView! = Provider.launcher(in: self)
-        if !(container is ContainerRepresentable) {
+        if !(container is ContainerType) {
             fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
 
@@ -61,7 +61,7 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController, S
     }
     
     private func changeContainer(_ containerView: UIView!, animated: Bool, completion handler: (() -> Void)? = nil) {
-        if !(containerView is ContainerRepresentable) {
+        if !(containerView is ContainerType) {
             fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
 
