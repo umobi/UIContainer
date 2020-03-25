@@ -27,8 +27,31 @@ open class ScrollView: UIScrollView, Content {
         case auto(vertical: UILayoutPriority, horizontal: UILayoutPriority)
     }
 
+    public enum Margin {
+        case safeArea
+        case bounds
+    }
+
     private weak var contentView: UIView!
     public var axis: Axis {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
+
+    public var verticalMargin: Margin = .safeArea {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
+
+    public var horizontalMargin: Margin = .bounds {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
+
+    open override var contentInset: UIEdgeInsets {
         didSet {
             self.reloadContentLayout()
         }
@@ -73,44 +96,88 @@ open class ScrollView: UIScrollView, Content {
             activate(
                 contentView.anchor
                     .width
-                    .equal.to(self.anchor.width)
-                    .priority(UILayoutPriority.required.rawValue),
+                    .equal.to(self.widthMarginAnchor)
+                    .priority(UILayoutPriority.required.rawValue)
+                    .constant(-self.horizontalOffset),
 
                 contentView.anchor
                     .height
-                    .equal.to(self.anchor.height)
+                    .equal.to(self.heightMarginAnchor)
                     .priority(UILayoutPriority.fittingSizeLevel.rawValue)
+                    .constant(-self.verticalOffset)
             )
         case .horizontal:
             activate(
                 contentView.anchor
                     .width
-                    .equal.to(self.anchor.width)
-                    .priority(UILayoutPriority.fittingSizeLevel.rawValue),
+                    .equal.to(self.widthMarginAnchor)
+                    .priority(UILayoutPriority.fittingSizeLevel.rawValue)
+                    .constant(-self.horizontalOffset),
 
                 contentView.anchor
                     .height
-                    .equal.to(self.anchor.height)
+                    .equal.to(self.heightMarginAnchor)
                     .priority(UILayoutPriority.required.rawValue)
+                    .constant(-self.verticalOffset)
             )
 
         case .auto(let vertical, let horizontal):
             activate(
                 contentView.anchor
                     .width
-                    .equal.to(self.anchor.width)
-                    .priority(vertical.rawValue),
+                    .equal.to(self.widthMarginAnchor)
+                    .priority(vertical.rawValue)
+                    .constant(-self.horizontalOffset),
 
                 contentView.anchor
                     .height
-                    .equal.to(self.anchor.height)
+                    .equal.to(self.heightMarginAnchor)
                     .priority(horizontal.rawValue)
+                    .constant(-self.verticalOffset)
             )
         }
     }
 
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private extension ScrollView {
+    var heightMarginAnchor: Anchor {
+        switch self.verticalMargin {
+        case .bounds:
+            return self.anchor.height
+        case .safeArea:
+            if #available(iOS 11, tvOS 11, *) {
+                return self.safeAreaLayoutGuide.anchor.height
+            }
+
+            return self.layoutMarginsGuide.anchor.height
+        }
+    }
+
+    var widthMarginAnchor: Anchor {
+        switch self.verticalMargin {
+        case .bounds:
+            return self.anchor.width
+        case .safeArea:
+            if #available(iOS 11, tvOS 11, *) {
+                return self.safeAreaLayoutGuide.anchor.width
+            }
+
+            return self.layoutMarginsGuide.anchor.width
+        }
+    }
+}
+
+private extension ScrollView {
+    var verticalOffset: CGFloat {
+        return self.contentInset.top + self.contentInset.bottom
+    }
+
+    var horizontalOffset: CGFloat {
+        return self.contentInset.left + self.contentInset.right
     }
 }
 
