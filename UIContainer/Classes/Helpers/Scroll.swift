@@ -15,7 +15,7 @@ public struct Constraint {
     }
 
     public static func deactivate(_ anchors: Anchor...) {
-        self.deactivate(anchors.reduce([]) { $0 + $1.findByContent() })
+        self.deactivate(anchors.reduce([]) { $0 + $1.find() })
     }
 }
 
@@ -83,11 +83,11 @@ open class ScrollView: UIScrollView, Content {
     }
 
     public func reloadContentLayout() {
-        if let width = self.contentView.anchor.width.equal.to(self.anchor.width).findByContent().first {
+        if let width = self.contentView.anchor.width.equal.to(self.anchor.width).find().first {
             Constraint.deactivate([width])
         }
 
-        if let height = self.contentView.anchor.height.equal.to(self.anchor.height).findByContent().first {
+        if let height = self.contentView.anchor.height.equal.to(self.anchor.height).find().first {
             Constraint.deactivate([height])
         }
 
