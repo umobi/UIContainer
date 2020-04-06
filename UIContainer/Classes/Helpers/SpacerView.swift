@@ -113,7 +113,7 @@ open class SpacerView: View, Content {
     }
 
     public func reloadContentLayout() {
-        guard let view = self.view else {
+        guard self.view != nil else {
             return
         }
 
