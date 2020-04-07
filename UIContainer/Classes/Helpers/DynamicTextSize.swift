@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 public class DynamicTextSize: UIView {
     private weak var label: UILabel!
@@ -40,8 +40,8 @@ public class DynamicTextSize: UIView {
         self.label.adjustsFontForContentSizeCategory = true
         AddSubview(label).addSubview(self)
 
-        activate(
-            self.anchor
+        Constraintable.activate(
+            self.cbuild
                 .edges
         )
 

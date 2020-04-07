@@ -38,7 +38,7 @@ UIContainer helps by allowing you to keep the code more specific. You can write 
   #   'UIContainer' => ['UIContainer/Assets/*.png']
   # }
 
-  s.dependency 'EasyAnchor', '~> 3.0.0'
+  s.dependency 'ConstraintBuilder'
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'

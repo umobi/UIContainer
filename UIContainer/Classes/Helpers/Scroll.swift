@@ -7,17 +7,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
-
-public struct Constraint {
-    public static func deactivate(_ array: [NSLayoutConstraint]) {
-        NSLayoutConstraint.deactivate(array)
-    }
-
-    public static func deactivate(_ anchors: Anchor...) {
-        self.deactivate(anchors.reduce([]) { $0 + $1.find() })
-    }
-}
+import ConstraintBuilder
 
 open class ScrollView: UIScrollView, Content {
 
@@ -74,8 +64,8 @@ open class ScrollView: UIScrollView, Content {
         AddSubview(self).addSubview(contentView)
         self.contentView = contentView
 
-        activate(
-            contentView.anchor
+        Constraintable.activate(
+            contentView.cbuild
                 .edges
         )
 
@@ -83,56 +73,53 @@ open class ScrollView: UIScrollView, Content {
     }
 
     public func reloadContentLayout() {
-        if let width = self.contentView.anchor.width.equal.to(self.anchor.width).find().first {
-            Constraint.deactivate([width])
-        }
-
-        if let height = self.contentView.anchor.height.equal.to(self.anchor.height).find().first {
-            Constraint.deactivate([height])
-        }
+        Constraintable.deactivate(
+            self.contentView.cbuild.width.equalTo(self.cbuild.width),
+            self.contentView.cbuild.height.equalTo(self.cbuild.height)
+        )
 
         switch axis {
         case .vertical:
-            activate(
-                contentView.anchor
+            Constraintable.activate(
+                contentView.cbuild
                     .width
-                    .equal.to(self.widthMarginAnchor)
-                    .priority(UILayoutPriority.required.rawValue)
+                    .equalTo(self.widthMarginAnchor)
+                    .priority(.required)
                     .constant(-self.horizontalOffset),
 
-                contentView.anchor
+                contentView.cbuild
                     .height
-                    .equal.to(self.heightMarginAnchor)
-                    .priority(UILayoutPriority.fittingSizeLevel.rawValue)
+                    .equalTo(self.heightMarginAnchor)
+                    .priority(.fittingSizeLevel)
                     .constant(-self.verticalOffset)
             )
         case .horizontal:
-            activate(
-                contentView.anchor
+            Constraintable.activate(
+                contentView.cbuild
                     .width
-                    .equal.to(self.widthMarginAnchor)
-                    .priority(UILayoutPriority.fittingSizeLevel.rawValue)
+                    .equalTo(self.widthMarginAnchor)
+                    .priority(.fittingSizeLevel)
                     .constant(-self.horizontalOffset),
 
-                contentView.anchor
+                contentView.cbuild
                     .height
-                    .equal.to(self.heightMarginAnchor)
-                    .priority(UILayoutPriority.required.rawValue)
+                    .equalTo(self.heightMarginAnchor)
+                    .priority(.required)
                     .constant(-self.verticalOffset)
             )
 
         case .auto(let vertical, let horizontal):
-            activate(
-                contentView.anchor
+            Constraintable.activate(
+                contentView.cbuild
                     .width
-                    .equal.to(self.widthMarginAnchor)
-                    .priority(vertical.rawValue)
+                    .equalTo(self.widthMarginAnchor)
+                    .priority(vertical)
                     .constant(-self.horizontalOffset),
 
-                contentView.anchor
+                contentView.cbuild
                     .height
-                    .equal.to(self.heightMarginAnchor)
-                    .priority(horizontal.rawValue)
+                    .equalTo(self.heightMarginAnchor)
+                    .priority(horizontal)
                     .constant(-self.verticalOffset)
             )
         }
@@ -144,29 +131,29 @@ open class ScrollView: UIScrollView, Content {
 }
 
 private extension ScrollView {
-    var heightMarginAnchor: Anchor {
+    var heightMarginAnchor: ConstraintDimension {
         switch self.verticalMargin {
         case .bounds:
-            return self.anchor.height
+            return self.cbuild.height
         case .safeArea:
             if #available(iOS 11, tvOS 11, *) {
-                return self.safeAreaLayoutGuide.anchor.height
+                return self.safeAreaLayoutGuide.cbuild.height
             }
 
-            return self.layoutMarginsGuide.anchor.height
+            return self.layoutMarginsGuide.cbuild.height
         }
     }
 
-    var widthMarginAnchor: Anchor {
+    var widthMarginAnchor: ConstraintDimension {
         switch self.verticalMargin {
         case .bounds:
-            return self.anchor.width
+            return self.cbuild.width
         case .safeArea:
             if #available(iOS 11, tvOS 11, *) {
-                return self.safeAreaLayoutGuide.anchor.width
+                return self.safeAreaLayoutGuide.cbuild.width
             }
 
-            return self.layoutMarginsGuide.anchor.width
+            return self.layoutMarginsGuide.cbuild.width
         }
     }
 }
@@ -191,8 +178,8 @@ private extension ScrollView {
 
             AddSubview(self).addSubview(view)
 
-            activate(
-                view.anchor
+            Constraintable.activate(
+                view.cbuild
                     .edges
             )
         }

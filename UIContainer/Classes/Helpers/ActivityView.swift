@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 open class ActivityView: View {
 
@@ -65,8 +65,8 @@ open class ActivityView: View {
         let rounder = RounderView(contentView, radius: 5)
         AddSubview(self).addSubview(rounder)
 
-        activate(
-            rounder.anchor
+        Constraintable.activate(
+            rounder.cbuild
                 .edges
         )
 
@@ -104,8 +104,8 @@ open class ActivityView: View {
 
         AddSubview(self.contentView).addSubview(blur)
 
-        activate(
-            blur.anchor
+        Constraintable.activate(
+            blur.cbuild
                 .edges
         )
 
@@ -116,8 +116,8 @@ open class ActivityView: View {
 
         AddSubview(self.contentView).addSubview(scroll)
 
-        activate(
-            scroll.anchor
+        Constraintable.activate(
+            scroll.cbuild
                 .edges
         )
 
@@ -160,15 +160,15 @@ open class ActivityView: View {
         return [SpacerView({
             let content = ContentView.Center(activity)
 
-            activate(
-                activity.anchor
+            Constraintable.activate(
+                activity.cbuild
                     .leading
                     .trailing
-                    .priority(UILayoutPriority.defaultHigh.rawValue),
+                    .priority(.defaultHigh),
 
-                activity.anchor
+                activity.cbuild
                     .top
-                    .priority(UILayoutPriority.defaultHigh.rawValue)
+                    .priority(.defaultHigh)
             )
 
             return content
@@ -176,16 +176,15 @@ open class ActivityView: View {
             let spacer = SpacerView({
                 let content = ContentView.Center(titleLabel)
 
-                activate(
-                    titleLabel.anchor
+                Constraintable.activate(
+                    titleLabel.cbuild
                         .leading
                         .trailing
-                        .priority(UILayoutPriority.defaultHigh.rawValue),
+                        .priority(.defaultHigh),
 
-                    titleLabel.anchor
+                    titleLabel.cbuild
                         .width
-                        .lessThanOrEqual
-                        .to(200)
+                        .lessThanOrEqualTo(200)
                 )
 
                 return content
@@ -244,8 +243,8 @@ open class ActivityView: View {
         let container = Container(in: nil, loadHandler: { self })
         AddSubview(view).addSubview(container)
 
-        activate(
-            container.anchor
+        Constraintable.activate(
+            container.cbuild
                 .edges
         )
 
@@ -279,8 +278,8 @@ extension ActivityView {
             let center = ContentView.Center(view)
             AddSubview(contentView).addSubview(center)
 
-            activate(
-                center.anchor
+            Constraintable.activate(
+                center.cbuild
                     .edges
             )
 
@@ -326,8 +325,8 @@ extension ActivityView: ViewControllerType {
             let container = Container(in: $0, loadHandler: { self })
             AddSubview($0.view).addSubview(container)
 
-            activate(
-                container.anchor
+            Constraintable.activate(
+                container.cbuild
                     .edges
             )
         }

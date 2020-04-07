@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 open class SpacerView: View, Content {
     private weak var view: UIView?
@@ -35,81 +35,37 @@ open class SpacerView: View, Content {
             return
         }
 
-        activate(
-            view.anchor
+        Constraintable.update(
+            view.cbuild
                 .top
+                .equalTo(self)
+                .update()
                 .constant(self.margin.top),
 
-            view.anchor
+            view.cbuild
                 .bottom
-                .constant(-self.margin.bottom),
+                .equalTo(self)
+                .update()
+                .constant(self.margin.bottom),
 
-            view.anchor
+            view.cbuild
                 .trailing
-                .constant(-self.margin.trailing),
+                .equalTo(self)
+                .update()
+                .constant(self.margin.trailing),
 
-            view.anchor
+            view.cbuild
                 .leading
+                .equalTo(self)
+                .update()
                 .constant(self.margin.leading)
         )
     }
+
     public func addContent(_ view: UIView) {
         self.view = view
         AddSubview(self).addSubview(view)
         self.layout()
-    }
-
-    enum Relation: CaseIterable {
-        case top
-        case bottom
-        case leading
-        case trailing
-
-        func anchor(_ view: UIView) -> Anchor {
-            switch self {
-            case .top:
-                return view.anchor.top
-            case .bottom:
-                return view.anchor.bottom
-            case .leading:
-                return view.anchor.leading
-            case .trailing:
-                return view.anchor.trailing
-            }
-        }
-
-        func constant(_ margin: Margin) -> CGFloat {
-            switch self {
-            case .top:
-                return margin.top
-            case .leading:
-                return margin.leading
-            case .trailing:
-                return -margin.trailing
-            case .bottom:
-                return -margin.bottom
-            }
-        }
-    }
-
-    func update(_ relation: Relation) {
-        guard let view = self.view else {
-            return
-        }
-
-        let constraints = relation.anchor(view).find()
-
-        if constraints.isEmpty {
-            activate(
-                relation.anchor(view)
-                    .constant(relation.constant(self.margin))
-            )
-            return
-        }
-
-        constraints.forEach {
-            $0.constant = relation.constant(self.margin)
-        }
     }
 
     public func reloadContentLayout() {
@@ -117,9 +73,7 @@ open class SpacerView: View, Content {
             return
         }
 
-        Relation.allCases.forEach {
-            self.update($0)
-        }
+        self.layout()
     }
 
     public convenience init(_ view: UIView!, vertical: CGFloat, horizontal: CGFloat) {

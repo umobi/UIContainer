@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 public protocol UIContainerStoryboard: View, ContainerRepresentable where View == Container.View {
     associatedtype Container: ContainerRepresentable
@@ -79,8 +79,8 @@ public extension UIContainerStoryboard where Container: UIView {
         let spacer = self.spacer(container)
         AddSubview(self).insertSubview(spacer, at: 0)
         
-        activate(
-            spacer.anchor
+        Constraintable.activate(
+            spacer.cbuild
                 .edges
         )
     }

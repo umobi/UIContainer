@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 open class DashedView: View, Content {
 
@@ -33,8 +33,8 @@ open class DashedView: View, Content {
     public func addContent(_ view: UIView) {
         AddSubview(self).addSubview(view)
 
-        activate(
-            view.anchor
+        Constraintable.activate(
+            view.cbuild
                 .edges
         )
 
@@ -126,8 +126,8 @@ public extension UIImageView {
         let dash = DashedView(RounderView(self, radius: cornerRadius), dash: pattern)
         AddSubview(superview).insertSubview(dash, at: 0)
 
-        activate(
-            dash.anchor
+        Constraintable.activate(
+            dash.cbuild
                 .edges
         )
         

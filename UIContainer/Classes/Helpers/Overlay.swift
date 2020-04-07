@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 fileprivate extension Overlay {
     class Settings {
@@ -46,8 +46,8 @@ open class Overlay: UIView {
         overlay.layer.zPosition = -1
         AddSubview(view).insertSubview(overlay, at: 0)
 
-        activate(
-            overlay.anchor
+        Constraintable.activate(
+            overlay.cbuild
                 .edges
         )
 

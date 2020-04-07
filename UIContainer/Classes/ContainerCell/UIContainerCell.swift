@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 public protocol ContainerCellRepresentable: ContainerRepresentable where ContainerCell.View == View {
     associatedtype ContainerCell: ContainerRepresentable
@@ -55,8 +55,8 @@ public extension ContainerCellRepresentable where Self: UICollectionViewCell, Co
         let spacer = self.spacer(containerCell)
         AddSubview(self.contentView).addSubview(spacer)
 
-        activate(
-            spacer.anchor
+        Constraintable.activate(
+            spacer.cbuild
                 .edges
         )
     }
@@ -67,8 +67,8 @@ public extension ContainerCellRepresentable where Self: UITableViewCell, Contain
         let spacer = self.spacer(containerCell)
         AddSubview(self.contentView).addSubview(spacer)
 
-        activate(
-            spacer.anchor
+        Constraintable.activate(
+            spacer.cbuild
                 .edges
         )
     }

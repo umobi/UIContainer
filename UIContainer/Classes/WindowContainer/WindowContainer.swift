@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 public class WindowContainer<Provider: WindowContainerType>: UIViewController, StatusBarAppearanceManager {
     
@@ -135,8 +135,8 @@ extension WindowContainer {
         AddSubview(self.view).addSubview(stackView)
         self.stackView = stackView
 
-        activate(
-            stackView.anchor
+        Constraintable.activate(
+            stackView.cbuild
                 .edges
         )
     }
@@ -145,8 +145,8 @@ extension WindowContainer {
         let debugView = DebugView()
         AddSubview(self.view).addSubview(debugView)
 
-        activate(
-            debugView.anchor
+        Constraintable.activate(
+            debugView.cbuild
                 .edges
         )
     }

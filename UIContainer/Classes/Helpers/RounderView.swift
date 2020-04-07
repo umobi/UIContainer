@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 public protocol Content {
     func addContent(_ view: UIView)
@@ -35,8 +35,8 @@ open class RounderView: View, Content {
     public func addContent(_ view: UIView) {
         AddSubview(self).addSubview(view)
 
-        activate(
-            view.anchor
+        Constraintable.activate(
+            view.cbuild
                 .edges
         )
         self.clipsToBounds = true
@@ -106,8 +106,8 @@ public extension RounderView {
         let rounder = RounderView(view, radius: radius)
         AddSubview(superview).addSubview(rounder)
 
-        activate(
-            rounder.anchor
+        Constraintable.activate(
+            rounder.cbuild
                 .edges
         )
 
@@ -138,8 +138,8 @@ public extension UIImageView {
                 AddSubview(superview)?.addSubview(self)
                 
                 if newValue == 0 {
-                    activate(
-                        self.anchor
+                    Constraintable.activate(
+                        self.cbuild
                             .edges
                     )
 

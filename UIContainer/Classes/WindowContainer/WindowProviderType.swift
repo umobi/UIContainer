@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import EasyAnchor
+import ConstraintBuilder
 
 public protocol WindowContainerType {
     var container: UIView! { get }
@@ -39,21 +39,23 @@ class DebugView: View {
 
         let content = ContentView.Right(label)
 
-        activate(
-            label.anchor
+        Constraintable.activate(
+            label.cbuild
                 .leading
         )
 
         AddSubview(self).addSubview(content)
 
-        activate(
-            content.anchor
-                .top
+        Constraintable.activate(
+            content.cbuild
+                .top,
+
+            content.cbuild
                 .trailing,
 
-            content.anchor
+            content.cbuild
                 .bottom
-                .equal.to(self.anchor.topMargin)
+                .equalTo(self.cbuild.topMargin)
         )
     }
 }
