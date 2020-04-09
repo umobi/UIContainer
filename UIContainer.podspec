@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.2.0-beta.5'
+  s.version          = '1.2.0-beta.6'
   s.summary          = 'Creating containers for UIViewController, UIView, UITableViewCell and UICollectionViewCell'
 
 # This description is used to generate tags and improve search results.
@@ -38,7 +38,7 @@ UIContainer helps by allowing you to keep the code more specific. You can write 
   #   'UIContainer' => ['UIContainer/Assets/*.png']
   # }
 
-  s.dependency 'ConstraintBuilder'
+  s.dependency 'ConstraintBuilder', "1.0.0"
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
