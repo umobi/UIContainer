@@ -10,7 +10,7 @@ import UIKit
 
 public extension SpacerView {
     class Margin {
-        let top, bottom, leading, trailing: CGFloat
+        public let top, bottom, leading, trailing: CGFloat
         
         public required init(top: CGFloat, bottom: CGFloat, leading: CGFloat, trailing: CGFloat) {
             self.top = top

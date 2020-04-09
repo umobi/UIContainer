@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 private var kVibrancyEffectStyle: UInt = 0
 
@@ -94,15 +94,15 @@ open class BlurView: View {
         AddSubview(blurEffectView.contentView).addSubview(vibrancyEffectView)
         vibrancyEffectView.translatesAutoresizingMaskIntoConstraints = false
 
-        activate(
-            vibrancyEffectView.anchor
+        Constraintable.activate(
+            vibrancyEffectView.cbuild
                 .edges
         )
 
         AddSubview(self).addSubview(blurEffectView)
 
-        activate(
-            blurEffectView.anchor
+        Constraintable.activate(
+            blurEffectView.cbuild
                 .edges
         )
         

@@ -9,7 +9,11 @@
 import Foundation
 import UIKit
 
-public protocol ContainerRepresentable: class {
+public protocol ContainerType: class {
+
+}
+
+public protocol ContainerRepresentable: ContainerType {
     typealias ParentView = UIViewController
     associatedtype View: AnyObject
     

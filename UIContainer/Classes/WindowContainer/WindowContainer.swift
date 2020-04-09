@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 public class WindowContainer<Provider: WindowContainerType>: UIViewController, StatusBarAppearanceManager {
     
@@ -48,7 +48,7 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController, S
         self.window = window
         
         let container: UIView! = Provider.launcher(in: self)
-        if !(container is ContainerRepresentable) {
+        if !(container is ContainerType) {
             fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
 
@@ -61,7 +61,7 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController, S
     }
     
     private func changeContainer(_ containerView: UIView!, animated: Bool, completion handler: (() -> Void)? = nil) {
-        if !(containerView is ContainerRepresentable) {
+        if !(containerView is ContainerType) {
             fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
         }
 
@@ -135,8 +135,8 @@ extension WindowContainer {
         AddSubview(self.view).addSubview(stackView)
         self.stackView = stackView
 
-        activate(
-            stackView.anchor
+        Constraintable.activate(
+            stackView.cbuild
                 .edges
         )
     }
@@ -145,8 +145,8 @@ extension WindowContainer {
         let debugView = DebugView()
         AddSubview(self.view).addSubview(debugView)
 
-        activate(
-            debugView.anchor
+        Constraintable.activate(
+            debugView.cbuild
                 .edges
         )
     }

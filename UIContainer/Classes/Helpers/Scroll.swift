@@ -7,9 +7,9 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
-open class ScrollView: UIScrollView {
+open class ScrollView: UIScrollView, Content {
 
     public enum Axis {
         case vertical
@@ -17,76 +17,154 @@ open class ScrollView: UIScrollView {
         case auto(vertical: UILayoutPriority, horizontal: UILayoutPriority)
     }
 
+    public enum Margin {
+        case safeArea
+        case bounds
+    }
+
     private weak var contentView: UIView!
+    public var axis: Axis {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
+
+    public var verticalMargin: Margin = .safeArea {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
+
+    public var horizontalMargin: Margin = .bounds {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
+
+    open override var contentInset: UIEdgeInsets {
+        didSet {
+            self.reloadContentLayout()
+        }
+    }
 
     public required init(_ view: UIView, axis: Axis = .vertical) {
+        self.axis = axis
         super.init(frame: .zero)
 
+        self.addContent(view)
+    }
+
+    public required init(axis: Axis = .vertical) {
+        self.axis = axis
+        super.init(frame: .zero)
+    }
+
+    public func addContent(_ view: UIView) {
         let contentView = ContentView(view)
         AddSubview(self).addSubview(contentView)
         self.contentView = contentView
 
-        activate(
-            contentView.anchor
+        Constraintable.activate(
+            contentView.cbuild
                 .edges
         )
 
-        self.setAxis(axis)
+        self.reloadContentLayout()
     }
 
-    public func setAxis(_ axis: Axis) {
-
-        if let width = self.contentView.anchor.find(.width) {
-            NSLayoutConstraint.deactivate([width])
-        }
-
-        if let height = self.contentView.anchor.find(.height) {
-            NSLayoutConstraint.deactivate([height])
-        }
+    public func reloadContentLayout() {
+        Constraintable.deactivate(
+            self.contentView.cbuild.width.equalTo(self.cbuild.width),
+            self.contentView.cbuild.height.equalTo(self.cbuild.height)
+        )
 
         switch axis {
         case .vertical:
-            activate(
-                contentView.anchor
+            Constraintable.activate(
+                contentView.cbuild
                     .width
-                    .equal.to(self.anchor.width)
-                    .priority(UILayoutPriority.required.rawValue),
+                    .equalTo(self.widthMarginAnchor)
+                    .priority(.required)
+                    .constant(-self.horizontalOffset),
 
-                contentView.anchor
+                contentView.cbuild
                     .height
-                    .equal.to(self.anchor.height)
-                    .priority(UILayoutPriority.fittingSizeLevel.rawValue)
+                    .equalTo(self.heightMarginAnchor)
+                    .priority(.fittingSizeLevel)
+                    .constant(-self.verticalOffset)
             )
         case .horizontal:
-            activate(
-                contentView.anchor
+            Constraintable.activate(
+                contentView.cbuild
                     .width
-                    .equal.to(self.anchor.width)
-                    .priority(UILayoutPriority.fittingSizeLevel.rawValue),
+                    .equalTo(self.widthMarginAnchor)
+                    .priority(.fittingSizeLevel)
+                    .constant(-self.horizontalOffset),
 
-                contentView.anchor
+                contentView.cbuild
                     .height
-                    .equal.to(self.anchor.height)
-                    .priority(UILayoutPriority.required.rawValue)
+                    .equalTo(self.heightMarginAnchor)
+                    .priority(.required)
+                    .constant(-self.verticalOffset)
             )
 
         case .auto(let vertical, let horizontal):
-            activate(
-                contentView.anchor
+            Constraintable.activate(
+                contentView.cbuild
                     .width
-                    .equal.to(self.anchor.width)
-                    .priority(vertical.rawValue),
+                    .equalTo(self.widthMarginAnchor)
+                    .priority(vertical)
+                    .constant(-self.horizontalOffset),
 
-                contentView.anchor
+                contentView.cbuild
                     .height
-                    .equal.to(self.anchor.height)
-                    .priority(horizontal.rawValue)
+                    .equalTo(self.heightMarginAnchor)
+                    .priority(horizontal)
+                    .constant(-self.verticalOffset)
             )
         }
     }
 
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private extension ScrollView {
+    var heightMarginAnchor: ConstraintDimension {
+        switch self.verticalMargin {
+        case .bounds:
+            return self.cbuild.height
+        case .safeArea:
+            if #available(iOS 11, tvOS 11, *) {
+                return self.safeAreaLayoutGuide.cbuild.height
+            }
+
+            return self.layoutMarginsGuide.cbuild.height
+        }
+    }
+
+    var widthMarginAnchor: ConstraintDimension {
+        switch self.verticalMargin {
+        case .bounds:
+            return self.cbuild.width
+        case .safeArea:
+            if #available(iOS 11, tvOS 11, *) {
+                return self.safeAreaLayoutGuide.cbuild.width
+            }
+
+            return self.layoutMarginsGuide.cbuild.width
+        }
+    }
+}
+
+private extension ScrollView {
+    var verticalOffset: CGFloat {
+        return self.contentInset.top + self.contentInset.bottom
+    }
+
+    var horizontalOffset: CGFloat {
+        return self.contentInset.left + self.contentInset.right
     }
 }
 
@@ -100,8 +178,8 @@ private extension ScrollView {
 
             AddSubview(self).addSubview(view)
 
-            activate(
-                view.anchor
+            Constraintable.activate(
+                view.cbuild
                     .edges
             )
         }

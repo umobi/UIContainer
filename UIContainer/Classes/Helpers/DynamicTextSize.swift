@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 public class DynamicTextSize: UIView {
     private weak var label: UILabel!
@@ -22,6 +22,14 @@ public class DynamicTextSize: UIView {
     public var overrideAdjustsFontSizeToFitWidth: Bool?
 
     var isMultilineText: Bool {
+        if self.label is UILabel.OneLine {
+            return false
+        }
+
+        if self.label is UILabel.Multiline {
+            return true
+        }
+
         return self.label?.numberOfLines ?? 1 != 1
     }
 
@@ -32,8 +40,8 @@ public class DynamicTextSize: UIView {
         self.label.adjustsFontForContentSizeCategory = true
         AddSubview(label).addSubview(self)
 
-        activate(
-            self.anchor
+        Constraintable.activate(
+            self.cbuild
                 .edges
         )
 
@@ -214,8 +222,16 @@ public extension UILabel {
 }
 
 private extension UILabel {
-    func hyphenate(factor: Float = 1.0) {
+    var paragraphStyle: NSMutableParagraphStyle {
         let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = self.textAlignment
+        paragraphStyle.lineBreakMode = self.lineBreakMode
+
+        return paragraphStyle
+    }
+
+    func hyphenate(factor: Float = 1.0) {
+        let paragraphStyle = self.paragraphStyle
         let attstr: NSMutableAttributedString = {
             if let attributedText = self.attributedText {
                 return NSMutableAttributedString(attributedString: attributedText)
@@ -225,7 +241,6 @@ private extension UILabel {
         }()
 
         paragraphStyle.hyphenationFactor = factor
-        paragraphStyle.alignment = self.textAlignment
         attstr.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(0..<attstr.length))
         self.attributedText = attstr
     }

@@ -8,19 +8,22 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
-open class SpacerView: View {
-    private weak var view: UIView!
+open class SpacerView: View, Content {
+    private weak var view: UIView?
     let margin: SpacerView.Margin
+
+    public required init(margin: Margin) {
+        self.margin = margin
+        super.init(frame: .zero)
+    }
 
     public required init(_ view: UIView!, margin: Margin) {
         self.margin = margin
         super.init(frame: .zero)
         
-        self.view = view
-        AddSubview(self).addSubview(view)
-        self.layout()
+        self.addContent(view)
     }
     
     public convenience init(_ view: UIView!, top: CGFloat, bottom: CGFloat, leading: CGFloat, trailing: CGFloat) {
@@ -28,63 +31,49 @@ open class SpacerView: View {
     }
     
     private func layout() {
-        activate(
-            view.anchor
+        guard let view = self.view else {
+            return
+        }
+
+        Constraintable.update(
+            view.cbuild
                 .top
+                .equalTo(self)
+                .update()
                 .constant(self.margin.top),
 
-            view.anchor
+            view.cbuild
                 .bottom
-                .constant(-self.margin.bottom),
+                .equalTo(self)
+                .update()
+                .constant(self.margin.bottom),
 
-            view.anchor
+            view.cbuild
                 .trailing
-                .constant(-self.margin.trailing),
+                .equalTo(self)
+                .update()
+                .constant(self.margin.trailing),
 
-            view.anchor
+            view.cbuild
                 .leading
+                .equalTo(self)
+                .update()
                 .constant(self.margin.leading)
         )
     }
 
-    public func refresh() {
-        var pending: [ConstraintProducer] = []
+    public func addContent(_ view: UIView) {
+        self.view = view
+        AddSubview(self).addSubview(view)
+        self.layout()
+    }
 
-        if self.view.anchor.find(.top) == nil {
-            pending.append(
-                view.anchor
-                    .top
-                    .constant(self.margin.top)
-                )
-        }
-
-        if self.view.anchor.find(.bottom) == nil {
-            pending.append(
-                view.anchor
-                    .bottom
-                    .constant(-self.margin.bottom)
-                )
+    public func reloadContentLayout() {
+        guard self.view != nil else {
+            return
         }
 
-        if self.view.anchor.find(.leading) == nil {
-            pending.append(
-                view.anchor
-                    .leading
-                    .constant(self.margin.leading)
-                )
-        }
-
-        if self.view.anchor.find(.trailing) == nil {
-            pending.append(
-                view.anchor
-                    .trailing
-                    .constant(-self.margin.trailing)
-                )
-        }
-        
-        pending.forEach {
-            activate($0)
-        }
+        self.layout()
     }
 
     public convenience init(_ view: UIView!, vertical: CGFloat, horizontal: CGFloat) {

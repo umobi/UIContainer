@@ -7,27 +7,48 @@
 
 import Foundation
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
-open class RounderView: View {
+public protocol Content {
+    func addContent(_ view: UIView)
+    func reloadContentLayout()
+}
+
+open class RounderView: View, Content {
     public var radius: CGFloat {
-        willSet {
-            self.update(radius: newValue)
+        didSet {
+            self.reloadContentLayout()
         }
+    }
+
+    public required init(radius: CGFloat) {
+        self.radius = radius
+        super.init(frame: .zero)
     }
 
     public required init(_ view: UIView, radius: CGFloat) {
         self.radius = radius
         super.init(frame: .zero)
+        self.addContent(view)
+    }
 
+    public func addContent(_ view: UIView) {
         AddSubview(self).addSubview(view)
 
-        activate(
-            view.anchor
+        Constraintable.activate(
+            view.cbuild
                 .edges
         )
-
         self.clipsToBounds = true
+        self.reloadContentLayout()
+    }
+
+    public func reloadContentLayout() {
+        if self.radius < 1 {
+            self.layer.cornerRadius = self.frame.height * self.radius
+        } else {
+            self.layer.cornerRadius = self.radius
+        }
     }
     
     override init(frame: CGRect) {
@@ -40,16 +61,8 @@ open class RounderView: View {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.update(radius: self.radius)
-    }
 
-    private func update(radius: CGFloat) {
-        if radius < 1 {
-            self.layer.cornerRadius = self.frame.height * radius
-        } else {
-            self.layer.cornerRadius = radius
-        }
+        self.reloadContentLayout()
     }
 
     public static func full(_ view: UIView) -> RounderView {
@@ -93,8 +106,8 @@ public extension RounderView {
         let rounder = RounderView(view, radius: radius)
         AddSubview(superview).addSubview(rounder)
 
-        activate(
-            rounder.anchor
+        Constraintable.activate(
+            rounder.cbuild
                 .edges
         )
 
@@ -125,8 +138,8 @@ public extension UIImageView {
                 AddSubview(superview)?.addSubview(self)
                 
                 if newValue == 0 {
-                    activate(
-                        self.anchor
+                    Constraintable.activate(
+                        self.cbuild
                             .edges
                     )
 

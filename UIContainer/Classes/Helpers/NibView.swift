@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import EasyAnchor
+import ConstraintBuilder
 
 open class NibView: View {
     @IBOutlet public weak var view: UIView!
@@ -26,8 +26,8 @@ open class NibView: View {
 
         AddSubview(self).addSubview(view)
 
-        activate(
-            view.anchor
+        Constraintable.activate(
+            view.cbuild
                 .edges
         )
     }
