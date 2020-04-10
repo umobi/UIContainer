@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.2.0-beta.7'
+  s.version          = '1.2.0-beta.8'
   s.summary          = 'Creating containers for UIViewController, UIView, UITableViewCell and UICollectionViewCell'
 
 # This description is used to generate tags and improve search results.
@@ -24,7 +24,7 @@ UIContainer helps by allowing you to keep the code more specific. You can write 
   s.homepage         = 'https://github.com/umobi/UIContainer'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'brennobemoura' => 'brennobemoura@outlook.com' }
+  s.author           = { 'brennobemoura' => 'brenno@umobi.com.br' }
   s.source           = { :git => 'https://github.com/umobi/UIContainer.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
