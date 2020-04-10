@@ -77,7 +77,7 @@
 		0C3DEC502326B5FE0021B5FD /* ContainerCellDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerCellDelegate.swift; sourceTree = "<group>"; };
 		0C3DEC512326B5FE0021B5FD /* ContainerTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerTableCell.swift; sourceTree = "<group>"; };
 		0C3DEC522326B5FE0021B5FD /* ContainerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerTableViewCell.swift; sourceTree = "<group>"; };
-		0C3DEC532326B5FE0021B5FD /* UIContainerStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIContainerStoryboard.swift; path = UIContainer/Classes/UIContainerStoryboard.swift; sourceTree = "<group>"; };
+		0C3DEC532326B5FE0021B5FD /* UIContainerStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIContainerStoryboard.swift; path = Sources/UIContainer/Classes/UIContainerStoryboard.swift; sourceTree = "<group>"; };
 		0C3DEC552326B5FE0021B5FD /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		0C3DEC562326B5FE0021B5FD /* UIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIContainer.swift; sourceTree = "<group>"; };
 		0C3DEC572326B5FE0021B5FD /* ContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 				0C3DEC472326B5FE0021B5FD /* View.swift */,
 			);
 			name = Helpers;
-			path = UIContainer/Classes/Helpers;
+			path = Sources/UIContainer/Classes/Helpers;
 			sourceTree = "<group>";
 		};
 		0C3DEC482326B5FE0021B5FD /* ContainerCell */ = {
@@ -176,7 +176,7 @@
 				0C3DEC522326B5FE0021B5FD /* ContainerTableViewCell.swift */,
 			);
 			name = ContainerCell;
-			path = UIContainer/Classes/ContainerCell;
+			path = Sources/UIContainer/Classes/ContainerCell;
 			sourceTree = "<group>";
 		};
 		0C3DEC542326B5FE0021B5FD /* Container */ = {
@@ -190,7 +190,7 @@
 				0C3DEC572326B5FE0021B5FD /* ContainerView.swift */,
 			);
 			name = Container;
-			path = UIContainer/Classes/Container;
+			path = Sources/UIContainer/Classes/Container;
 			sourceTree = "<group>";
 		};
 		0C4A976B2374CD3D0082477E /* Color */ = {
@@ -201,7 +201,7 @@
 				0C4A976E2374CD3D0082477E /* ColorComponents.swift */,
 			);
 			name = Color;
-			path = UIContainer/Classes/Color;
+			path = Sources/UIContainer/Classes/Color;
 			sourceTree = "<group>";
 		};
 		0CCEF23A233BDFA1009D5DBE /* WindowContainer */ = {
@@ -212,7 +212,7 @@
 				0CCEF237233BDF9B009D5DBE /* WindowContainer.swift */,
 			);
 			name = WindowContainer;
-			path = UIContainer/Classes/WindowContainer;
+			path = Sources/UIContainer/Classes/WindowContainer;
 			sourceTree = "<group>";
 		};
 		3ADF097838CDF12C94D6D271C38775FB /* Products */ = {
