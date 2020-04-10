@@ -20,6 +20,7 @@
 // THE SOFTWARE.
 //
 
+import Foundation
 import UIKit
 
 open class GradientView: View {
