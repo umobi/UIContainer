@@ -370,7 +370,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 ```
 ## Author
 
-brennobemoura, brennobemoura@outlook.com
+brennobemoura, brenno@umobi.com.br
 
 ## License
 
