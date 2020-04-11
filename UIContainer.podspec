@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.2.0-beta.9+17'
+  s.version          = '1.2.0-beta.10'
   s.summary          = 'Creating containers for UIViewController, UIView, UITableViewCell and UICollectionViewCell'
   s.homepage         = 'https://github.com/umobi/UIContainer'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
