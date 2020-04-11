@@ -24,6 +24,22 @@ import Foundation
 import UIKit
 import ConstraintBuilder
 
+extension NotificationCenter {
+    fileprivate func traitDidChange(_ traitCollection: UITraitCollection) {
+        self.post(.init(name: .init("UIViewController.traitDidChange"), object: nil, userInfo: ["traitCollection": traitCollection]))
+    }
+
+    func onTraitChange(_ handler: @escaping (UITraitCollection) -> Void) {
+        self.addObserver(forName: .init("UIViewController.traitDidChange"), object: nil, queue: nil, using: {
+            guard let trait = $0.userInfo?["traitCollection"] as? UITraitCollection else {
+                return
+            }
+
+            handler(trait)
+        })
+    }
+}
+
 public class WindowContainer<Provider: WindowContainerType>: UIViewController, StatusBarAppearanceManager {
     
     private weak var stackView: UIStackView!
@@ -69,6 +85,11 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController, S
 
         AddSubview(self.stackView).addArrangedSubview(container)
         self.container = container
+    }
+
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        NotificationCenter.default.traitDidChange(self.traitCollection)
     }
     
     required init?(coder aDecoder: NSCoder) {

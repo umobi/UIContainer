@@ -117,10 +117,10 @@ public extension TraitObject where T: UIColor {
     var asColor: UIColor {
         if #available(iOS 13.0, tvOS 13.0, *) {
             return .init(dynamicProvider: { trait in
-                return self.onTrait(trait)
+                return self.traitDidChange(trait)
             })
         }
 
-        return self.onTrait(.init())
+        return self.traitDidChange(.init())
     }
 }
