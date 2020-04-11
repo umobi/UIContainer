@@ -30,7 +30,16 @@ public class TraitObject<T> {
         self.dynamic = dynamic
     }
 
-    public func onTrait(_ trait: UITraitCollection) -> T {
+    public func traitDidChange(_ trait: UITraitCollection) -> T {
         return self.dynamic(trait)
+    }
+
+    static func next(_ handler: @escaping (UITraitCollection) -> Void) {
+        NotificationCenter.default.onTraitChange(handler)
+    }
+
+    static func sync(from object: UIView,_ handler: @escaping (UITraitCollection) -> Void) {
+        NotificationCenter.default.onTraitChange(handler)
+        handler(object.traitCollection)
     }
 }

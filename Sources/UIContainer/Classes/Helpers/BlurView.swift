@@ -89,7 +89,7 @@ open class BlurView: View {
     }
     
     private func createEffect() -> UIVisualEffectView {
-        let blurEffect = UIBlurEffect(style: self.blurEffect.onTrait(self.traitCollection))
+        let blurEffect = UIBlurEffect(style: self.blurEffect.traitDidChange(self.traitCollection))
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
 
         let vibrancyEffect: UIVibrancyEffect = {
@@ -98,7 +98,7 @@ open class BlurView: View {
                 return UIVibrancyEffect(blurEffect: blurEffect)
             }
 
-            return .init(blurEffect: blurEffect, style: self.vibrancyEffect.onTrait(self.traitCollection))
+            return .init(blurEffect: blurEffect, style: self.vibrancyEffect.traitDidChange(self.traitCollection))
             #else
             return UIVibrancyEffect(blurEffect: blurEffect)
             #endif
@@ -150,7 +150,7 @@ open class BlurView: View {
         self.reload()
     }
 
-    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.reload()
     }

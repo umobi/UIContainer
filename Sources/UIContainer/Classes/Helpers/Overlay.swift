@@ -80,7 +80,7 @@ open class Overlay: UIView {
     }
 
     private func reload() {
-        self.alpha = Self.Settings.alpha(self.dynamicAlpha.onTrait(self.traitCollection))
+        self.alpha = Self.Settings.alpha(self.dynamicAlpha.traitDidChange(self.traitCollection))
     }
 }
 
