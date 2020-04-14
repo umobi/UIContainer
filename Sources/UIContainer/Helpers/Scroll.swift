@@ -140,7 +140,11 @@ private extension ScrollView {
                 return self.safeAreaLayoutGuide.cbuild.height
             }
 
-            return self.layoutMarginsGuide.cbuild.height
+            if case .vertical = self.axis {
+                return self.layoutMarginsGuide.cbuild.height
+            }
+
+            return self.cbuild.height
         }
     }
 
@@ -153,7 +157,11 @@ private extension ScrollView {
                 return self.safeAreaLayoutGuide.cbuild.width
             }
 
-            return self.layoutMarginsGuide.cbuild.width
+            if case .horizontal = self.axis {
+                return self.layoutMarginsGuide.cbuild.width
+            }
+
+            return self.cbuild.width
         }
     }
 }
