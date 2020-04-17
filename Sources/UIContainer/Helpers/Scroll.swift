@@ -113,13 +113,13 @@ open class ScrollView: UIScrollView, Content {
                 contentView.cbuild
                     .width
                     .equalTo(self.widthMarginAnchor)
-                    .priority(vertical)
+                    .priority(horizontal)
                     .constant(-self.horizontalOffset),
 
                 contentView.cbuild
                     .height
                     .equalTo(self.heightMarginAnchor)
-                    .priority(horizontal)
+                    .priority(vertical)
                     .constant(-self.verticalOffset)
             )
         }
