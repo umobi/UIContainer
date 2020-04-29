@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '1.2.0-beta.10'
+  s.version          = '1.2.0'
   s.summary          = 'Creating containers for UIViewController, UIView, UITableViewCell and UICollectionViewCell'
   s.homepage         = 'https://github.com/umobi/UIContainer'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/UIContainer/**/*'
 
-  s.dependency 'ConstraintBuilder', "1.0.2"
+  s.dependency 'ConstraintBuilder', ">= 1.0.2", "< 2.0.0"
   
 end
