@@ -24,6 +24,7 @@ import Foundation
 import UIKit
 import ConstraintBuilder
 
+@available(*, deprecated, message: "use UICDashedView from UICreator")
 open class DashedView: View, Content {
 
     weak var view: UIView?
@@ -93,16 +94,18 @@ open class DashedView: View, Content {
     open override func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let view = self.view else {
-            return
-        }
+        func prepareToReload() {
+            guard let view = self.view else {
+                return
+            }
 
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-        
-        self.shape.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: view.layer.cornerRadius).cgPath
-        self.shape.frame = self.bounds
-        self.shape.cornerRadius = self.subviews.first!.layer.cornerRadius
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+
+            self.shape.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: view.layer.cornerRadius).cgPath
+            self.shape.frame = self.bounds
+            self.shape.cornerRadius = self.subviews.first!.layer.cornerRadius
+        }
     }
 
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -146,5 +149,24 @@ public extension UIImageView {
         )
         
         return dash
+    }
+}
+
+extension UIView {
+    func layoutCenter() {
+        Constraintable.activate(
+            self.cbuild
+                .top
+                .bottom
+                .greaterThanOrEqualTo(0),
+
+            self.cbuild
+                .leading
+                .trailing
+                .greaterThanOrEqualTo(0),
+
+            self.cbuild
+                .center
+        )
     }
 }

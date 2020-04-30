@@ -24,6 +24,7 @@ import Foundation
 import UIKit
 
 /// AddSubview class is a wrapper that will add the subview into superview, but checking the `translatesAutoresizingMaskIntoConstraints` and set to false if is needed
+@available(*, deprecated, message: "moved to ConstraintBuilder")
 public struct AddSubview<Super: UIView> {
     fileprivate weak var superview: Super!
 

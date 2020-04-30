@@ -41,8 +41,9 @@ public protocol ContainerRepresentable: ContainerType {
     func insertContainer(view: View!)
     
     func prepare(parentView: ParentView!)
-    
-    func spacer<T: UIView>(_ view: T) -> SpacerView
+
+    func loadView<T: UIView>(_ view: T) -> UIView
+    var edges: UIEdgeInsets { get }
     
     func containerDidLoad()
     
@@ -53,8 +54,12 @@ public extension ContainerRepresentable {
     func prepare(parentView: ParentView!) {
         self.parent = parentView
     }
-    
-    func spacer<T: UIView>(_ view: T) -> SpacerView {
-        return .init(view, spacing: 0)
+
+    func loadView<T: UIView>(_ view: T) -> UIView {
+        return view
+    }
+
+    var edges: UIEdgeInsets {
+        return .zero
     }
 }

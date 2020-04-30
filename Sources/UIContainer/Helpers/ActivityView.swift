@@ -24,6 +24,7 @@ import Foundation
 import UIKit
 import ConstraintBuilder
 
+@available(*, deprecated, message: "ActivityView is available on UMUtils")
 open class ActivityView: View {
 
     private weak var contentView: UIView!
@@ -287,7 +288,11 @@ open class ActivityView: View {
 
 extension ActivityView {
     class Container: ContainerView<ActivityView> {
-        override func spacer<T>(_ view: T) -> SpacerView where T : UIView {
+        var edges: UIEdgeInsets {
+            .zero
+        }
+
+        func loadView<T>(_ view: T) -> UIView where T : UIView {
             let contentView = UIView()
 
             let center = ContentView.Center(view)
@@ -302,7 +307,7 @@ extension ActivityView {
             center.layer.shadowOpacity = 0.1
             center.layer.shadowRadius = 3
 
-            return .init(contentView, spacing: 0)
+            return contentView
         }
     }
 }

@@ -81,13 +81,11 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIViewCo
         self.view = view
         parent?.addChild(view)
 
-        let spacer = self.spacer(view.view)
-        AddSubview(self).addSubview(spacer)
+        let spacer = self.edges
+        let uiView = self.loadView(view.view)
+        AddSubview(self).addSubview(uiView)
 
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
+        uiView.applyEdges(spacer)
 
         view.didMove(toParent: self.parent)
     }

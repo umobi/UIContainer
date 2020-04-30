@@ -34,10 +34,6 @@ open class ContainerView<View: UIView & ContainerViewParent>: ContainerBox, Cont
         super.removeFromSuperview()
     }
     
-    open func spacer<T: UIView>(_ view: T) -> SpacerView {
-        return .init(view, spacing: 0)
-    }
-    
     open func containerDidLoad() {}
     
     public required init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
@@ -83,12 +79,10 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIView &
         
         self.view = view
         self.view.parent = self.parent
-        let spacer = self.spacer(view)
-        AddSubview(self).addSubview(spacer)
+        let spacer = self.edges
+        let view = self.loadView(view)
+        AddSubview(self).addSubview(view)
 
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
+        view.applyEdges(spacer)
     }
 }

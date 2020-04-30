@@ -53,12 +53,6 @@ public class WindowContainer<Provider: WindowContainerType>: UIViewController, S
         super.viewDidLoad()
         
         self.prepareStack()
-
-        #if DEBUG
-        if Provider.showDebugView {
-            self.prepareDebugView()
-        }
-        #endif
     }
 
     #if os(iOS)
@@ -173,16 +167,6 @@ extension WindowContainer {
 
         Constraintable.activate(
             stackView.cbuild
-                .edges
-        )
-    }
-
-    func prepareDebugView() {
-        let debugView = DebugView()
-        AddSubview(self.view).addSubview(debugView)
-
-        Constraintable.activate(
-            debugView.cbuild
                 .edges
         )
     }

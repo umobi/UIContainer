@@ -24,6 +24,7 @@ import Foundation
 import UIKit
 import ConstraintBuilder
 
+@available(*, deprecated, message: "use UICContentView from UICreator")
 open class ContentView: View, Content {
     public var priority: UILayoutPriority {
         didSet {
@@ -492,6 +493,7 @@ open class ContentView: View, Content {
     }
 }
 
+@available(*, deprecated, message: "will be unavailable")
 public extension ContentView {
     class func Center(_ view: UIView) -> ContentView {
         return .init(view, contentMode: .center)

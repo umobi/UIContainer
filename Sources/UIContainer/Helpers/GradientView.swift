@@ -23,6 +23,7 @@
 import Foundation
 import UIKit
 
+@available(*, deprecated, message: "use UICGradientView from UICreator")
 open class GradientView: View {
 
     fileprivate let gradientLayer = CAGradientLayer()
@@ -126,30 +127,5 @@ public extension GradientView {
 extension CGPoint {
     func distance(to point: CGPoint) -> CGFloat {
         return sqrt(pow(x - point.x, 2) + pow(y - point.y, 2))
-    }
-}
-
-extension GradientView {
-    class var Skeleton: GradientView {
-        let gradient = GradientView()
-
-        gradient.colors = (0..<4).reduce([UIColor]()) { sum, _ in
-            return sum + [#colorLiteral(red: 0.8980392157, green: 0.8980392157, blue: 0.8980392157, alpha: 1), #colorLiteral(red: 0.968627451, green: 0.968627451, blue: 0.968627451, alpha: 1)]
-        }
-
-        gradient.direction = .other(.init(x: -2.0, y: 0.0), .init(x: 1.5, y: 0.0))
-
-        gradient.animates { layer in
-            let animation = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.locations))
-            animation.duration = 1.75
-            animation.repeatCount = .infinity
-            animation.fromValue = [Double]([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5]).map { NSNumber(value: $0) }
-            animation.toValue = [Double]([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5]).map { NSNumber(value: $0 + 2) }
-            animation.fillMode = .forwards
-            animation.isRemovedOnCompletion = false
-            layer.add(animation, forKey: #keyPath(CAGradientLayer.locations))
-        }
-
-        return gradient
     }
 }

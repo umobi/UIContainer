@@ -23,6 +23,7 @@
 import Foundation
 import UIKit
 
+@available(*, deprecated, message: "Use ColorModifierType from UMKit")
 public protocol ColorDynamicType {
     typealias ColorTrait = TraitObject<UIColor>
     associatedtype RawValue: ColorType

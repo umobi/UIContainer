@@ -29,6 +29,7 @@ public protocol Content {
     func reloadContentLayout()
 }
 
+@available(*, deprecated, message: "use UICRounderView from UICreator")
 open class RounderView: View, Content {
     public var radius: CGFloat {
         didSet {

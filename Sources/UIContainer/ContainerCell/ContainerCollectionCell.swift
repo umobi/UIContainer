@@ -27,10 +27,6 @@ open class ContainerCollectionCell<View: UIViewController & ContainerCellDelegat
     public weak var containerView: Container<View>!
     public weak var parent: ParentView!
     
-    open func spacer<T: UIView>(_ view: T) -> SpacerView {
-        return .init(view, spacing: 0)
-    }
-    
     open func containerDidLoad() {}
     
     required public init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {

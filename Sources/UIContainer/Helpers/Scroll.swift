@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import ConstraintBuilder
 
+@available(*, deprecated, message: "Use UICScrollView from UICreator")
 open class ScrollView: UIScrollView, Content {
 
     public enum Axis {

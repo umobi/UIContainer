@@ -24,6 +24,8 @@ import Foundation
 import UIKit
 import ConstraintBuilder
 
+#if !canImport(UICreator)
+@available(*, deprecated, message: "moved to UMKit")
 fileprivate extension Overlay {
     class Settings {
         static var alpha: (CGFloat) -> CGFloat = { _ in 0.16 }
@@ -31,6 +33,7 @@ fileprivate extension Overlay {
     }
 }
 
+@available(*, deprecated, message: "use UMOverlay from UMKit")
 open class Overlay: UIView {
     public typealias DynamicAlpha = TraitObject<CGFloat>
 
@@ -84,6 +87,7 @@ open class Overlay: UIView {
     }
 }
 
+@available(*, deprecated, message: "moved to UMKit")
 @objc public extension UIView {
     @IBInspectable
     var isOverlayHidden: Bool {
@@ -127,6 +131,7 @@ open class Overlay: UIView {
     }
 }
 
+@available(*, deprecated, message: "moved to UMKit")
 public extension UIView {
     static var overlayAlpha: (CGFloat) -> CGFloat {
         get {
@@ -149,6 +154,7 @@ public extension UIView {
     }
 }
 
+@available(*, deprecated, message: "moved to UMKit")
 public extension Overlay {
     static func defaultLayout(backgroundColor: UIColor) {
         let alphas = (self.zeroTilFiveAlpha + self.sixTilTwelveAlpha + self.thirteenTilTwentyFourAlpha)
@@ -183,3 +189,4 @@ public extension Overlay {
         })[1..<array.count])
     }
 }
+#endif

@@ -24,6 +24,7 @@ import Foundation
 import UIKit
 import ConstraintBuilder
 
+@available(*, deprecated, message: "use UMDynamicTextSize from UMKit")
 public class DynamicTextSize: UIView {
     private weak var label: UILabel!
     fileprivate var textValueObserver: NSKeyValueObservation!
@@ -139,6 +140,7 @@ public class DynamicTextSize: UIView {
     }
 }
 
+@available(*, deprecated, message: "use UMLabel from UMKit")
 public class Label: UILabel {
     deinit {
         if #available(iOS 11, *) {
@@ -159,6 +161,7 @@ public class Label: UILabel {
     }
 }
 
+@available(*, deprecated, message: "see UMKit")
 public extension UILabel {
     @IBInspectable var isDynamicTextSize: Bool {
         get { return DynamicTextSize.orEmpty(in: self) != nil }
@@ -184,6 +187,7 @@ public extension UILabel {
     }
 }
 
+@available(*, deprecated, message: "use UMLineLabel from UMKit")
 public extension UILabel {
     class OneLine: Label {
         override init(frame: CGRect) {
@@ -210,6 +214,7 @@ public extension UILabel {
     }
 }
 
+@available(*, deprecated, message: "use UMMultilineLabel from UMKit")
 public extension UILabel {
     class Multiline: Label {
         override init(frame: CGRect) {
@@ -268,5 +273,7 @@ private extension UILabel {
     }
 }
 
+@available(*, deprecated, message: "use UMLineLabel from UMKit")
 public class OneLineLabel: UILabel.OneLine {}
+@available(*, deprecated, message: "use UMMultilineLabel from UMKit")
 public class HyphenateLabel: UILabel.Multiline {}

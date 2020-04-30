@@ -29,9 +29,6 @@ public protocol ContainerCellRepresentable: ContainerRepresentable where Contain
     var containerView: ContainerCell! { get set }
     
     func addCell(_ containerCell: ContainerCell)
-    
-    //func containerDidLoad()
-    func spacer<T: UIView>(_ view: T) -> SpacerView
 }
 
 public extension ContainerCellRepresentable {
@@ -64,27 +61,42 @@ public extension ContainerCellRepresentable {
     }
 }
 
+extension UIView {
+    func applyEdges(_ edges: UIEdgeInsets) {
+        Constraintable.activate(
+            self.cbuild
+                .top
+                .equalTo(edges.top),
+            self.cbuild
+                .bottom
+                .equalTo(edges.top),
+            self.cbuild
+                .leading
+                .equalTo(edges.left),
+            self.cbuild
+                .trailing
+                .equalTo(edges.right)
+        )
+    }
+}
+
 public extension ContainerCellRepresentable where Self: UICollectionViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
-        let spacer = self.spacer(containerCell)
-        AddSubview(self.contentView).addSubview(spacer)
+        let spacer = self.edges
+        let view = self.loadView(containerCell)
+        AddSubview(self.contentView).addSubview(view)
 
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
+        view.applyEdges(spacer)
     }
 }
 
 public extension ContainerCellRepresentable where Self: UITableViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
-        let spacer = self.spacer(containerCell)
-        AddSubview(self.contentView).addSubview(spacer)
+        let spacer = self.edges
+        let view = self.loadView(containerCell)
+        AddSubview(self.contentView).addSubview(view)
 
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
+        view.applyEdges(spacer)
     }
 }
 

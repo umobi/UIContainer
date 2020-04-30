@@ -24,6 +24,7 @@ import Foundation
 import UIKit
 import ConstraintBuilder
 
+@available(*, deprecated, message: "use UICSpacerView from UICreator")
 open class SpacerView: View, Content {
     private weak var view: UIView?
     let margin: SpacerView.Margin

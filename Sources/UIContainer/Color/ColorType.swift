@@ -23,6 +23,7 @@
 import Foundation
 import UIKit
 
+@available(*, deprecated, message: "Use ColorType from UMKit")
 public protocol ColorType: OptionSet where RawValue == Int {
     static var white: Self { get }
 
