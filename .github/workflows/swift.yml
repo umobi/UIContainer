@@ -1,0 +1,35 @@
+name: Swift
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build iOS
+      run: |
+        swift package generate-xcodeproj
+        xcodebuild build -sdk iphoneos -scheme 'UIContainer-Package'
+        xcodebuild test -destination 'name=iPhone 11' -scheme 'UIContainer-Package'
+        
+    - name: Build tvOS
+      run: |
+        swift package generate-xcodeproj
+        xcodebuild build -sdk appletvos -scheme 'UIContainer-Package'
+        xcodebuild test -destination 'name=Apple TV' -scheme 'UIContainer-Package'
+        
+    - name: cocoapods lint
+      run: |
+          pod lib lint --allow-warnings
+      
+    - name: Swiftlint
+      run: |
+        swiftlint
+        
