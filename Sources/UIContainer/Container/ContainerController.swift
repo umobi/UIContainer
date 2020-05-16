@@ -31,15 +31,15 @@ import UIKit
 
 public class ViewControllerMaker {
     private let view: (CBViewController) -> Void
-    
+
     private init(_ view: @escaping (CBViewController) -> Void) {
         self.view = view
     }
-    
+
     public static func dynamic(_ view: @escaping (CBViewController) -> Void) -> ViewControllerMaker {
         return .init(view)
     }
-    
+
     func make(inside viewController: CBViewController!) {
         self.view(viewController)
     }
@@ -64,7 +64,7 @@ public protocol StatusBarAppearanceManager {
 }
 
 public class ContainerController<View: ViewControllerType>: CBViewController, StatusBarAppearanceManager {
-    private var appendView: View? = nil
+    private var appendView: View?
 
     public private(set) weak var contentView: View! {
         willSet {
@@ -77,7 +77,7 @@ public class ContainerController<View: ViewControllerType>: CBViewController, St
         return (self.appendView ?? self.contentView).navigationItem
     }
     #endif
-    
+
     public init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -123,22 +123,21 @@ public class ContainerController<View: ViewControllerType>: CBViewController, St
     }
 
     #if !os(macOS)
-
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (self.contentView as? ViewControllerAppearStates)?.viewWillAppear(animated)
     }
-    
+
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         (self.contentView as? ViewControllerAppearStates)?.viewDidAppear(animated)
     }
-    
+
     override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         (self.contentView as? ViewControllerAppearStates)?.viewWillDisappear(animated)
     }
-    
+
     override public func viewDidDisappear(_ animated: Bool) {
        super.viewDidDisappear(animated)
        (self.contentView as? ViewControllerAppearStates)?.viewDidDisappear(animated)
@@ -149,7 +148,6 @@ public class ContainerController<View: ViewControllerType>: CBViewController, St
         super.viewSafeAreaInsetsDidChange()
         self.view.setNeedsUpdateConstraints()
     }
-
     #else
     override public func viewWillAppear() {
         super.viewWillAppear()
@@ -170,6 +168,5 @@ public class ContainerController<View: ViewControllerType>: CBViewController, St
        super.viewDidDisappear()
        (self.contentView as? ViewControllerAppearStates)?.viewDidDisappear()
     }
-
     #endif
 }

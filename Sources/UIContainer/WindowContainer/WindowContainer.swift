@@ -62,7 +62,10 @@ public extension NSWindow {
             fatalError()
         }
 
-        private func changeContainer(_ containerView: CBView!, animated: Bool, completion handler: (() -> Void)? = nil) {
+        private func changeContainer(
+            _ containerView: CBView!,
+            animated: Bool,
+            completion handler: (() -> Void)? = nil) {
             if !(containerView is ContainerType) {
                 fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
             }
@@ -120,11 +123,23 @@ public extension NSWindow {
                 hostController.present(viewController, animator: animator)
             case .popover(let positioningRect, let positioningView, let preferredEdge, let behavior):
                 if hostController === self {
-                    super.present(viewController, asPopoverRelativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge, behavior: behavior)
+                    super.present(
+                        viewController,
+                        asPopoverRelativeTo: positioningRect,
+                        of: positioningView,
+                        preferredEdge: preferredEdge,
+                        behavior: behavior
+                    )
                     return
                 }
 
-                hostController.present(viewController, asPopoverRelativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge, behavior: behavior)
+                hostController.present(
+                    viewController,
+                    asPopoverRelativeTo: positioningRect,
+                    of: positioningView,
+                    preferredEdge: preferredEdge,
+                    behavior: behavior
+                )
             }
         }
 
@@ -168,12 +183,27 @@ public extension NSWindow {
             self.present(viewController, type: .sheet)
         }
 
-        override public func present(_ viewController: NSViewController, animator: NSViewControllerPresentationAnimator) {
+        override public func present(
+            _ viewController: NSViewController,
+            animator: NSViewControllerPresentationAnimator) {
             self.present(viewController, type: .animator(animator))
         }
 
-        override public func present(_ viewController: NSViewController, asPopoverRelativeTo positioningRect: NSRect, of positioningView: NSView, preferredEdge: NSRectEdge, behavior: NSPopover.Behavior) {
-            self.present(viewController, type: .popover(positioningRect, positioningView, preferredEdge, behavior))
+        override public func present(
+            _ viewController: NSViewController,
+            asPopoverRelativeTo positioningRect: NSRect,
+            of positioningView: NSView,
+            preferredEdge: NSRectEdge,
+            behavior: NSPopover.Behavior) {
+            self.present(
+                viewController,
+                type: .popover(
+                    positioningRect,
+                    positioningView,
+                    preferredEdge,
+                    behavior
+                )
+            )
         }
 
         public func transition(

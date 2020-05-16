@@ -26,18 +26,19 @@ import ConstraintBuilder
 #if !os(macOS)
 import UIKit
 
-open class ContainerCollectionViewCell<View: CBView & ContainerViewParent & ContainerCellDelegate>: UICollectionViewCell, ContainerCellRepresentable {
-    
+open class ContainerCollectionViewCell<View>: UICollectionViewCell, ContainerCellRepresentable
+    where View: CBView & ContainerViewParent & ContainerCellDelegate {
+
     public weak var containerView: ContainerView<View>!
     public weak var parent: ParentView!
-    
+
     open func containerDidLoad() {}
-    
+
     required public init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         super.init(frame: .zero)
         self.prepareContainer(inside: parentView, loadHandler: loadHandler)
     }
-    
+
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

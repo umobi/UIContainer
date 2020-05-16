@@ -28,7 +28,7 @@ public extension CBViewController {
         let identifier = nibName ?? "\(self)"
         return fromNib(nibName: identifier)
     }
-    
+
     class func fromNib<T: CBViewController>(nibName: String) -> T {
         return T(nibName: nibName, bundle: nil)
     }

@@ -24,17 +24,17 @@ import Foundation
 import ConstraintBuilder
 
 open class ContainerView<View: CBView & ContainerViewParent>: ContainerBox, ContainerRepresentable {
-    
+
     public final weak var view: View!
     public weak var parent: ParentView!
-    
+
     open override func removeFromSuperview() {
         self.removeContainer()
         super.removeFromSuperview()
     }
-    
+
     open func containerDidLoad() {}
-    
+
     public required init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         super.init(frame: .zero)
         self.prepareContainer(inside: parentView, loadHandler: loadHandler)
@@ -44,38 +44,38 @@ open class ContainerView<View: CBView & ContainerViewParent>: ContainerBox, Cont
     public required init() {
         super.init(frame: .zero)
     }
-    
+
     required public init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 public extension ContainerRepresentable where Self: ContainerBox, View: CBView & ContainerViewParent {
-    
+
     func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         self.prepare(parentView: parentView)
-        
+
         guard let loader = loadHandler else {
             self.insertContainer(view: View())
             return
         }
-        
+
         self.insertContainer(view: loader())
     }
-    
+
     func removeContainer() {
         guard let view = view else {
             return
         }
-        
+
         let spacer = view.superview
         view.removeFromSuperview()
         spacer?.removeFromSuperview()
     }
-    
+
     func insertContainer(view: View!) {
         self.removeContainer()
-        
+
         self.view = view
         self.view.parent = self.parent
         let spacer = self.edgeInsets

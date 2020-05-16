@@ -47,7 +47,6 @@ open class ContainerBox: CBView {
     }
     #endif
 
-
     override open func addSubview(_ view: CBView) {
         self.cannotAddViews ? {
             CBSubview(self.view).addSubview(view)
@@ -84,7 +83,10 @@ open class ContainerBox: CBView {
     }
 
     #else
-    open override func addSubview(_ view: CBView, positioned place: CBWindow.OrderingMode, relativeTo otherView: CBView?) {
+    open override func addSubview(
+        _ view: CBView,
+        positioned place: CBWindow.OrderingMode,
+        relativeTo otherView: CBView?) {
         self.cannotAddViews ? {
             if otherView == self.view {
                 CBSubview(otherView)?.insertSubview(view, at: 0)

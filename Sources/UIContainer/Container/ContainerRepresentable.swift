@@ -38,23 +38,23 @@ public protocol ContainerType: class {
 public protocol ContainerRepresentable: ContainerType {
     typealias ParentView = CBViewController
     associatedtype View: AnyObject
-    
+
     var view: View! { get set }
     var parent: ParentView! { get set }
-    
+
     func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)?)
-    
+
     func removeContainer()
-    
+
     func insertContainer(view: View!)
-    
+
     func prepare(parentView: ParentView!)
 
     func loadView<T: CBView>(_ view: T) -> CBView
     var edgeInsets: CTEdgeInsets { get }
-    
+
     func containerDidLoad()
-    
+
     init(in parentView: ParentView!, loadHandler: (() -> View?)?)
 }
 

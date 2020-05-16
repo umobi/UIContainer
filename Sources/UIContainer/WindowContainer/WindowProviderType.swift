@@ -26,5 +26,5 @@ import ConstraintBuilder
 public protocol WindowContainerType {
     var container: CBView! { get }
 
-    static func launcher(in windowContainer: WindowContainer<Self>) -> CBView!    
+    static func launcher(in windowContainer: WindowContainer<Self>) -> CBView!
 }

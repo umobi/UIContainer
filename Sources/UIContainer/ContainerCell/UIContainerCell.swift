@@ -29,7 +29,7 @@ import UIKit
 public protocol ContainerCellRepresentable: ContainerRepresentable where ContainerCell.View == View {
     associatedtype ContainerCell: ContainerRepresentable
     var containerView: ContainerCell! { get set }
-    
+
     func addCell(_ containerCell: ContainerCell)
 }
 
@@ -38,20 +38,20 @@ public extension ContainerCellRepresentable {
         get {
             return self.containerView.view
         }
-        
+
         set {
             self.containerView.view = newValue
         }
     }
-    
+
     func removeContainer() {
         fatalError("Don't try to remove ContainerCell")
     }
-    
+
     func insertContainer(view: View!) {
         fatalError("Don't try to insert in ContainerCell")
     }
-    
+
     weak var parent: ParentView! {
         return self.containerView.parent
     }
@@ -82,13 +82,13 @@ public extension ContainerCellRepresentable where View: ContainerCellDelegate {
         if self.containerView != nil {
             return
         }
-        
+
         let containerView = ContainerCell(in: parentView, loadHandler: loadHandler)
         containerView.view.cellDelegate = parentView as? ContainerCell.View.Delegate
-        
+
         self.containerView = containerView
         self.addCell(containerView)
-        
+
         self.containerDidLoad()
     }
 }
@@ -96,7 +96,7 @@ public extension ContainerCellRepresentable where View: ContainerCellDelegate {
 
 extension CBView {
     func applyEdges(_ edges: CTEdgeInsets) {
-        
+
         Constraintable.activate(
             self.cbuild
                 .top

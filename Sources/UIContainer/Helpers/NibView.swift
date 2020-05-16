@@ -31,12 +31,12 @@ open class NibView: View {
         return String(describing: type(of: self))
     }
     #endif
-    
+
     open override func prepare() {
         super.prepare()
         self.loadFromNib()
     }
-    
+
     private func loadFromNib() {
         #if !os(macOS)
         Bundle(for: type(of: self)).loadNibNamed("\(self.className)", owner: self, options: nil)
