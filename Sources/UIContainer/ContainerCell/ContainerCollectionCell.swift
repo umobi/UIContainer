@@ -21,9 +21,12 @@
 //
 
 import Foundation
+import ConstraintBuilder
+
+#if !os(macOS)
 import UIKit
 
-open class ContainerCollectionCell<View: UIViewController & ContainerCellDelegate>: UICollectionViewCell, ContainerCellRepresentable {
+open class ContainerCollectionCell<View: CBViewController & ContainerCellDelegate>: UICollectionViewCell, ContainerCellRepresentable {
     public weak var containerView: Container<View>!
     public weak var parent: ParentView!
     
@@ -38,3 +41,4 @@ open class ContainerCollectionCell<View: UIViewController & ContainerCellDelegat
         fatalError("init(coder:) has not been implemented")
     }
 }
+#endif

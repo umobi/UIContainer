@@ -21,21 +21,29 @@
 //
 
 import Foundation
-import UIKit
+import ConstraintBuilder
 
-open class View: UIView, ContainerViewParent {
-    
-    public weak var parent: UIViewController!
-    
-    public override init(frame: CGRect) {
+#if !os(macOS)
+import UIKit
+public typealias CTRect = CGRect
+#else
+import AppKit
+public typealias CTRect = NSRect
+#endif
+
+open class View: CBView, ContainerViewParent {
+
+    public weak var parent: CBViewController!
+
+    public override init(frame: CTRect) {
         super.init(frame: frame)
         self.prepare()
     }
-    
+
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.prepare()
     }
-    
+
     open func prepare() {}
 }

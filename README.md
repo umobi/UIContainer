@@ -14,6 +14,10 @@ it, simply add the following line to your Podfile:
 pod 'UIContainer'
 ```
 
+# macOS support
+
+The actual development stage of this lib for macOS hasn't been tested yet.
+
 ## Definitions
 ----
 
@@ -28,7 +32,7 @@ The methods developed for any UIContainer are:
 - .removeContainer()
 - .insertContainer(view: View!)
 - .prepare(parentView: ParentView!)
-- .spacer<T: UIView>(_ view: T) -> Spacer
+- .loadView<T: UIView>(_ view: T) -> UIView
 - .containerDidLoad()
 - .init(in parentView: ParentView!, loadHandler: (() -> View?)?)
 
@@ -110,11 +114,7 @@ class CartView: View {
 }
 
 extension CartView {
-    class Container: ContainerView<CartView> {
-        override func spacer<T: UIView>(_ view: T) -> Spacer {
-            return .init(view, spacing: 20) // Helps creating padding between the container and the cart view 
-        }
-        
+    class Container: ContainerView<CartView> {        
         override func containerDidLoad() {
             super.containerDidLoad()
             
@@ -137,7 +137,7 @@ class ExampleViewController: UIViewController {
 }
 ```
 
-Remember that Container and ContainerView have the same methods and life cycle. There are other methods you can override in the container, but the spacer and containerDidLoad are the most important. The containerDidLoad is called after the cycle end, and the container has mounted the view inside itself, but it has not been presented inside the parent view yet.
+Remember that Container and ContainerView have the same methods and life cycle. The containerDidLoad is called after the cycle end, and the container has mounted the view inside itself, but it has not been presented inside the parent view yet.
 
 ### 2. UIContainerCell
 
@@ -217,7 +217,7 @@ class CartViewStoryboard: View, UIContainerStoryboard {
     typealias View = CartView
     weak var containerView: ContainerView<CartView>!
     
-    var margin: Spacer.Margin = .init(spacing: 15)
+    var edgeInsets: UIEdgeInsets = .init(top: 15, left: 15, bottom: 15, right: 15)
     
     func containerDidLoad() {
         // stylize the container
@@ -235,86 +235,13 @@ class ExampleViewController: UIViewController {
 }
 ```
 
-### 4. Helpers
-
-#### 4. a) Spacer
-
-This is a view that creates padding for any view by calling `Spacer(UIView, spacing: CGFloat)`. Remember to add its as subview not the UIView instance.
-
-#### 4. b) Rounder
-
-The rounder is a helper for creating rounded views. It works as same as Spacer but with `radius` CGFloat variable. If you put some value between 0 and 1, it will multiply by itself height to round view. But if you put values above 1, it will set `.layer.cornerRadius` with self.radius.
-
-#### 4. c) Dashed
-
-The dashed view helps creating views with dashed border.  Here it goes some example:
-
-```swift
-extension ExampleViewController {
-    func prepareViews() {
-        let view = ExampleView.Container(in: self)
-        let dashedView = Dashed(Rounder(view, radius: cornerRadius), dash: pattern)
-        self.contentView.insertSubview(dashedView, at: 0)
-        dashedView.snp.makeConstraints { $0.edges.equalTo(0) }
-    }
-}
-```
-
-We have already implemented for UIImageViews:
-
-```swift
-extension ExampleViewController {
-    func prepareLayout() {
-        self.imageView.dashed(with: [2,3], cornerRadius: 15)
-            .apply(lineWidth: 1)
-            .apply(strokeColor: .fkDarkBlue)
-            .refresh()
-    }
-}
-```
-
-#### 4. d) Content
-
-Content is a view to follow the contentMode. Sometimes we want to center the view or stick the view to the bottom of the superview. To make this it is simple, you only have to put your view inside Content like that:
-
-```swift
-    extension TestView {
-        class Container {
-            override func spacer<T>(_ view: T) -> Spacer where T : UIView {
-            return .init({
-                let contentView = UIView()
-
-                contentView.addSubview(Content.Center(
-                    Rounder(view, radius: view.layer.cornerRadius)
-                )) { maker, _ in
-                    maker.edges.equalTo(0)
-                }
-                
-                return contentView
-            }(), spacing: 0)
-        }
-    }
-```
-
-#### 4. e) Blur
-
-The blur view helps by creating the blur effect view on .init(blur: blur: UIBlurEffect.Style). You only need to add the view in your superview desired. We implement the .apply(blurEffect: UIBlurEffect.Style) if you want to update the blur effect in running time.
-
-#### 4. f) Gradient
-
-The gradient view helps creating gradient backgrounds and it only asks for colors: [UIColor] and direction that can be .other(CGPoint, CGPoint). We add the .animates(animator: (CAGradientLayer) -> Void) so you can animate the background as you like.
-
-#### 4. g) ViewSharedContext
-
-This is a helper for views inside UIWindow. We know some views are unique and keeps on memory for a long time. Sometimes we are at ViewControllerB and want to access ViewControllerA. So, to do that in specific cases, generally, for after transition cases, the ViewSharedContext will be good enough. You can access your view controller by using the shared static variable like `ViewControllerA.shared.doSomething()`. The shared variable will be free that the time when your view controller instance doesn't exist anymore.
-
-### 5. ContainerController
+### 4. ContainerController
 
 ContainerController helps by creating conforming views as UIViewController. You only need to conform your view with the ViewControllerType protocol and implement the content: ViewControllerMaker { get } using the ViewControllerMaker.dynamic(_: (UIViewController) -> Void).
 
 After that, you should create the UIViewController instance using the ContainerController.init(_: View) where View conforms with ViewControllerType.
 
-### 6. WindowContainer<Provider: WindowContainerType>
+### 5. WindowContainer<Provider: WindowContainerType>
 
 The WindowContainer is our latest new feature that may change over some updates. It only works with the fade effect developed with no classes or special methods.
 

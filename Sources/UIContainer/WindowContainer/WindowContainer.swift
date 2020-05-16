@@ -21,153 +21,325 @@
 //
 
 import Foundation
-import UIKit
 import ConstraintBuilder
 
-extension NotificationCenter {
-    fileprivate func traitDidChange(_ traitCollection: UITraitCollection) {
-        self.post(.init(name: .init("UIViewController.traitDidChange"), object: nil, userInfo: ["traitCollection": traitCollection]))
+#if os(macOS)
+import AppKit
+
+public extension NSWindow {
+    fileprivate enum CTViewPresent {
+        case sheet
+        case modal
+        case animator(NSViewControllerPresentationAnimator)
+        case popover(NSRect, NSView, NSRectEdge, NSPopover.Behavior)
     }
 
-    func onTraitChange(_ handler: @escaping (UITraitCollection) -> Void) {
-        self.addObserver(forName: .init("UIViewController.traitDidChange"), object: nil, queue: nil, using: {
-            guard let trait = $0.userInfo?["traitCollection"] as? UITraitCollection else {
+    class WindowContainer<Provider: WindowContainerType>: CBViewController, StatusBarAppearanceManager {
+
+        private weak var stackView: CBStackView!
+        private weak var container: CBView!
+
+        public private(set) var baseType: Provider?
+
+        public init() {
+            super.init(nibName: nil, bundle: nil)
+        }
+
+        public override func loadView() {
+            let stackView = self.loadStack()
+
+            let container: CBView! = Provider.launcher(in: self)
+            if !(container is ContainerType) {
+                fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
+            }
+
+            CBView.CBSubview(self.stackView).addArrangedSubview(container)
+            self.container = container
+            self.view = stackView
+        }
+
+        required init?(coder aDecoder: NSCoder) {
+            fatalError()
+        }
+
+        private func changeContainer(_ containerView: CBView!, animated: Bool, completion handler: (() -> Void)? = nil) {
+            if !(containerView is ContainerType) {
+                fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
+            }
+
+            CBView.CBSubview(self.stackView).addArrangedSubview(containerView)
+
+            let perform: () -> Void = {
+                self.container?.removeFromSuperview()
+                self.presentedViewControllers?.forEach {
+                    self.dismiss($0)
+                }
+            }
+
+            let commitChanges: () -> Void = {
+                // Commit Changes
+                self.container = containerView
+                handler?()
+            }
+
+            if animated {
+                CATransaction.begin()
+                CATransaction.setCompletionBlock(commitChanges)
+                CATransaction.setAnimationDuration(0.4)
+                CATransaction.setAnimationTimingFunction(.init(name: .easeInEaseOut))
+                perform()
+                CATransaction.commit()
+            } else {
+                perform()
+                commitChanges()
+            }
+        }
+
+        private func present(_ viewController: NSViewController, in hostController: NSViewController, type: Present) {
+            switch type {
+            case .sheet:
+                if hostController === self {
+                    super.presentAsSheet(viewController)
+                    return
+                }
+
+                hostController.presentAsSheet(viewController)
+            case .modal:
+                if hostController === self {
+                    super.presentAsModalWindow(viewController)
+                    return
+                }
+
+                hostController.presentAsModalWindow(viewController)
+            case .animator(let animator):
+                if hostController === self {
+                    super.present(viewController, animator: animator)
+                    return
+                }
+
+                hostController.present(viewController, animator: animator)
+            case .popover(let positioningRect, let positioningView, let preferredEdge, let behavior):
+                if hostController === self {
+                    super.present(viewController, asPopoverRelativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge, behavior: behavior)
+                    return
+                }
+
+                hostController.present(viewController, asPopoverRelativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge, behavior: behavior)
+            }
+        }
+
+        private func present(_ viewController: NSViewController, type: CTViewPresent) {
+            if let container = self.container as? Container {
+                guard let root = container.view else {
+                    return
+                }
+
+                guard
+                    let hostController = root.sequenceOfPresentedViewControllers
+                    .reversed()
+                    .last?
+                    .last
+                    else {
+                        return
+                    }
+
+                self.present(viewController, in: hostController, type: type)
                 return
             }
 
-            handler(trait)
+            let view = self.sequenceOfPresentedViewControllers
+                .reversed()
+                .last?
+                .last
+
+            guard view !== self else {
+                self.present(viewController, in: self, type: type)
+                return
+            }
+
+            self.present(viewController, in: view!, type: type)
+        }
+
+        override public func presentAsModalWindow(_ viewController: NSViewController) {
+            self.present(viewController, type: .modal)
+        }
+
+        override public func presentAsSheet(_ viewController: NSViewController) {
+            self.present(viewController, type: .sheet)
+        }
+
+        override public func present(_ viewController: NSViewController, animator: NSViewControllerPresentationAnimator) {
+            self.present(viewController, type: .animator(animator))
+        }
+
+        override public func present(_ viewController: NSViewController, asPopoverRelativeTo positioningRect: NSRect, of positioningView: NSView, preferredEdge: NSRectEdge, behavior: NSPopover.Behavior) {
+            self.present(viewController, type: .popover(positioningRect, positioningView, preferredEdge, behavior))
+        }
+
+        public func transition(
+            toView viewController: CBViewController!,
+            as providerType: Provider,
+            completion handler: (() -> Void)? = nil
+        ) {
+            self.baseType = providerType
+            self.changeContainer(Container(in: self) { viewController }, animated: true, completion: handler)
+        }
+
+        public func transition(to providerType: Provider, completion handler: (() -> Void)? = nil) {
+            self.baseType = providerType
+            self.changeContainer(providerType.container, animated: true, completion: handler)
+        }
+    }
+}
+
+extension NSViewController {
+    var sequenceOfPresentedViewControllers: UnfoldSequence<[NSViewController], ([NSViewController]?, Bool)> {
+        sequence(first: [self], next: {
+            let presentedViewControllers = $0.reduce([]) { $0 + ($1.presentedViewControllers ?? []) }
+            if presentedViewControllers.isEmpty {
+                return nil
+            }
+
+            return presentedViewControllers
         })
     }
 }
 
-public class WindowContainer<Provider: WindowContainerType>: UIViewController, StatusBarAppearanceManager {
-    
-    private weak var stackView: UIStackView!
-    private weak var container: UIView!
-    
-    weak var window: UIWindow!
-    
-    public private(set) var baseType: Provider?
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.prepareStack()
-    }
+#else
+import UIKit
 
-    #if os(iOS)
-    public var statusBarStyle: UIStatusBarStyle? = nil {
-        didSet {
-            self.setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
-        return self.statusBarStyle ?? UIApplication.shared.statusBarStyle
-    }
-    #endif
-    
-    public init(_ window: UIWindow) {
-        super.init(nibName: nil, bundle: nil)
-        self.view.backgroundColor = .white
-        self.window = window
-        
-        let container: UIView! = Provider.launcher(in: self)
-        if !(container is ContainerType) {
-            fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
+public extension UIWindow {
+    class WindowContainer<Provider: WindowContainerType>: CBViewController, StatusBarAppearanceManager {
+
+        private weak var stackView: CBStackView!
+        private weak var container: CBView!
+
+        public private(set) var baseType: Provider?
+
+        #if os(iOS)
+        public var statusBarStyle: UIStatusBarStyle? = nil {
+            didSet {
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
         }
 
-        AddSubview(self.stackView).addArrangedSubview(container)
-        self.container = container
-    }
+        public override var preferredStatusBarStyle: UIStatusBarStyle {
+            return self.statusBarStyle ?? UIApplication.shared.statusBarStyle
+        }
+        #endif
 
-    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        NotificationCenter.default.traitDidChange(self.traitCollection)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError()
-    }
-    
-    private func changeContainer(_ containerView: UIView!, animated: Bool, completion handler: (() -> Void)? = nil) {
-        if !(containerView is ContainerType) {
-            fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
+        public init() {
+            super.init(nibName: nil, bundle: nil)
         }
 
-        AddSubview(self.stackView).addArrangedSubview(containerView)
-        
-        let perform: () -> Void = {
-            self.container?.removeFromSuperview()
-            self.dismiss(animated: false, completion: nil)
+        public override func loadView() {
+            let stackView = self.loadStack()
+
+            let container: CBView! = Provider.launcher(in: self)
+            if !(container is ContainerType) {
+                fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
+            }
+
+            CBView.CBSubview(self.stackView).addArrangedSubview(container)
+            self.container = container
+            self.view = stackView
         }
-        
-        let commitChanges: () -> Void = {
-            // Commit Changes
-            self.container = containerView
-            #if os(iOS)
-            self.setNeedsStatusBarAppearanceUpdate()
-            #endif
-            handler?()
+
+        required init?(coder aDecoder: NSCoder) {
+            fatalError()
         }
-        
-        if animated {
-            UIView.transition(with: window!, duration: 0.4, options: .transitionCrossDissolve, animations: {
+
+        private func changeContainer(
+            _ containerView: CBView!,
+            animated: Bool,
+            completion handler: (() -> Void)? = nil) {
+            if !(containerView is ContainerType) {
+                fatalError("WindowContainer only accepts classes derivated from ContainerRepresentable protocol")
+            }
+
+            CBView.CBSubview(self.stackView).addArrangedSubview(containerView)
+
+            let perform: () -> Void = {
+                self.container?.removeFromSuperview()
+                self.dismiss(animated: false, completion: nil)
+            }
+
+            let commitChanges: () -> Void = {
+                // Commit Changes
+                self.container = containerView
+                #if os(iOS)
+                self.setNeedsStatusBarAppearanceUpdate()
+                #endif
+                handler?()
+            }
+
+            if animated {
+                CBView.transition(
+                    with: self.view.window!,
+                    duration: 0.4,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        perform()
+                    },
+                    completion: { _ in
+                        commitChanges()
+                    })
+            } else {
                 perform()
-            }) { _ in
                 commitChanges()
             }
-        } else {
-            perform()
-            commitChanges()
         }
-    }
-    
-    override public func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
-        if let container = self.container as? Container {
-            guard let root = container.view else {
+
+        override public func present(
+            _ viewControllerToPresent: CBViewController,
+            animated flag: Bool,
+            completion: (() -> Void)? = nil) {
+            if let container = self.container as? Container {
+                guard let root = container.view else {
+                    return
+                }
+
+                sequence(first: root, next: { $0.presentedViewController })
+                    .reversed()
+                    .last?
+                    .present(viewControllerToPresent, animated: flag, completion: completion)
                 return
             }
 
-            sequence(first: root, next: { $0.presentedViewController })
+            let view = sequence(first: self, next: { $0.presentedViewController })
                 .reversed()
-                .last?
-                .present(viewControllerToPresent, animated: flag, completion: completion)
-            return
+                .last
+
+            guard view != self else {
+                super.present(viewControllerToPresent, animated: flag, completion: completion)
+                return
+            }
+
+            view?.present(viewControllerToPresent, animated: flag, completion: completion)
         }
 
-        let view = sequence(first: self, next: { $0.presentedViewController })
-            .reversed()
-            .last
-
-        guard view != self else {
-            super.present(viewControllerToPresent, animated: flag, completion: completion)
-            return
+        public func transition(
+            toView viewController: CBViewController!,
+            as providerType: Provider,
+            completion handler: (() -> Void)? = nil) {
+            self.baseType = providerType
+            self.changeContainer(Container(in: self) { viewController }, animated: true, completion: handler)
         }
 
-        view?.present(viewControllerToPresent, animated: flag, completion: completion)
-    }
-    
-    public func transition(toView viewController: UIViewController!, as providerType: Provider, completion handler: (() -> Void)? = nil) {
-        self.baseType = providerType
-        self.changeContainer(Container(in: self) { viewController }, animated: true, completion: handler)
-    }
-    
-    public func transition(to providerType: Provider, completion handler: (() -> Void)? = nil) {
-        self.baseType = providerType
-        self.changeContainer(providerType.container, animated: true, completion: handler)
+        public func transition(to providerType: Provider, completion handler: (() -> Void)? = nil) {
+            self.baseType = providerType
+            self.changeContainer(providerType.container, animated: true, completion: handler)
+        }
     }
 }
+#endif
 
-extension WindowContainer {
-    func prepareStack() {
-        let stackView = UIStackView()
-        AddSubview(self.view).addSubview(stackView)
+extension CBWindow.WindowContainer {
+    func loadStack() -> CBStackView {
+        let stackView = CBStackView()
         self.stackView = stackView
-
-        Constraintable.activate(
-            stackView.cbuild
-                .edges
-        )
+        return stackView
     }
 }
+
+public typealias WindowContainer<Provider: WindowContainerType> = CBWindow.WindowContainer<Provider>

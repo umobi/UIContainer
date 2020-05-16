@@ -21,33 +21,32 @@
 //
 
 import Foundation
+import ConstraintBuilder
+
+#if os(macOS)
+import AppKit
+#else
 import UIKit
+#endif
 
 public class ViewControllerMaker {
-    private let view: (UIViewController) -> Void
+    private let view: (CBViewController) -> Void
     
-    private init(_ view: @escaping (UIViewController) -> Void) {
+    private init(_ view: @escaping (CBViewController) -> Void) {
         self.view = view
     }
     
-    public static func dynamic(_ view: @escaping (UIViewController) -> Void) -> ViewControllerMaker {
+    public static func dynamic(_ view: @escaping (CBViewController) -> Void) -> ViewControllerMaker {
         return .init(view)
     }
     
-    func make(inside viewController: UIViewController!) {
+    func make(inside viewController: CBViewController!) {
         self.view(viewController)
     }
 }
 
 public protocol ViewControllerLoadStates {
     func viewDidLoad()
-}
-
-public protocol ViewControllerAppearStates {
-    func viewWillAppear(_ animated: Bool)
-    func viewDidAppear(_ animated: Bool)
-    func viewWillDisappear(_ animated: Bool)
-    func viewDidDisappear(_ animated: Bool)
 }
 
 public protocol ViewControllerType: class {
@@ -58,34 +57,13 @@ public extension ViewControllerLoadStates {
     func viewDidLoad() {}
 }
 
-public extension ViewControllerAppearStates {
-    func viewWillAppear(_ animated: Bool) {}
-    func viewDidAppear(_ animated: Bool) {}
-    func viewWillDisappear(_ animated: Bool) {}
-    func viewDidDisappear(_ animated: Bool) {}
-}
-
-private var navigationKey: UInt = 0
-
-public extension ViewControllerType {
-    var navigationItem: UINavigationItem {
-        guard let nav = objc_getAssociatedObject(self, &navigationKey) as? UINavigationItem else {
-            let nav: UINavigationItem = .init()
-            objc_setAssociatedObject(self, &navigationKey, nav, .OBJC_ASSOCIATION_RETAIN)
-            return nav
-        }
-
-        return nav
-    }
-}
-
 public protocol StatusBarAppearanceManager {
     #if os(iOS)
     var statusBarStyle: UIStatusBarStyle? { get nonmutating set }
     #endif
 }
 
-public class ContainerController<View: ViewControllerType>: UIViewController, StatusBarAppearanceManager {
+public class ContainerController<View: ViewControllerType>: CBViewController, StatusBarAppearanceManager {
     private var appendView: View? = nil
 
     public private(set) weak var contentView: View! {
@@ -94,9 +72,11 @@ public class ContainerController<View: ViewControllerType>: UIViewController, St
         }
     }
 
+    #if !os(macOS)
     override public var navigationItem: UINavigationItem {
         return (self.appendView ?? self.contentView).navigationItem
     }
+    #endif
     
     public init() {
         super.init(nibName: nil, bundle: nil)
@@ -141,7 +121,9 @@ public class ContainerController<View: ViewControllerType>: UIViewController, St
 
         (self.contentView as? ViewControllerLoadStates)?.viewDidLoad()
     }
-    
+
+    #if !os(macOS)
+
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (self.contentView as? ViewControllerAppearStates)?.viewWillAppear(animated)
@@ -167,4 +149,27 @@ public class ContainerController<View: ViewControllerType>: UIViewController, St
         super.viewSafeAreaInsetsDidChange()
         self.view.setNeedsUpdateConstraints()
     }
+
+    #else
+    override public func viewWillAppear() {
+        super.viewWillAppear()
+        (self.contentView as? ViewControllerAppearStates)?.viewWillAppear()
+    }
+
+    override public func viewDidAppear() {
+        super.viewDidAppear()
+        (self.contentView as? ViewControllerAppearStates)?.viewDidAppear()
+    }
+
+    override public func viewWillDisappear() {
+        super.viewWillDisappear()
+        (self.contentView as? ViewControllerAppearStates)?.viewWillDisappear()
+    }
+
+    override public func viewDidDisappear() {
+       super.viewDidDisappear()
+       (self.contentView as? ViewControllerAppearStates)?.viewDidDisappear()
+    }
+
+    #endif
 }

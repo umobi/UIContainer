@@ -21,9 +21,12 @@
 //
 
 import Foundation
+import ConstraintBuilder
+
+#if !os(macOS)
 import UIKit
 
-open class ContainerTableViewCell<View: UIView & ContainerViewParent & ContainerCellDelegate>: UITableViewCell, ContainerCellRepresentable {
+open class ContainerTableViewCell<View: CBView & ContainerViewParent & ContainerCellDelegate>: UITableViewCell, ContainerCellRepresentable {
     
     public weak var containerView: ContainerView<View>!
     public weak var parent: ParentView!
@@ -43,3 +46,4 @@ open class ContainerTableViewCell<View: UIView & ContainerViewParent & Container
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
 }
+#endif

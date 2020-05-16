@@ -21,15 +21,16 @@
 //
 
 import Foundation
-import UIKit
 import ConstraintBuilder
 
 open class NibView: View {
-    @IBOutlet public weak var view: UIView!
+    @IBOutlet public weak var view: CBView!
 
+    #if !os(macOS)
     open var className: String {
         return String(describing: type(of: self))
     }
+    #endif
     
     open override func prepare() {
         super.prepare()
@@ -37,9 +38,13 @@ open class NibView: View {
     }
     
     private func loadFromNib() {
+        #if !os(macOS)
         Bundle(for: type(of: self)).loadNibNamed("\(self.className)", owner: self, options: nil)
+        #else
+        Bundle(for: type(of: self)).loadNibNamed("\(self.className)", owner: self, topLevelObjects: nil)
+        #endif
 
-        AddSubview(self).addSubview(view)
+        CBSubview(self).addSubview(view)
 
         Constraintable.activate(
             view.cbuild

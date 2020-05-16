@@ -21,10 +21,9 @@
 //
 
 import Foundation
-import UIKit
 import ConstraintBuilder
 
-open class Container<View: UIViewController>: ContainerBox, ContainerRepresentable {
+open class Container<View: CBViewController>: ContainerBox, ContainerRepresentable {
     
     public weak var view: View!
     public weak var parent: ParentView!
@@ -51,7 +50,7 @@ open class Container<View: UIViewController>: ContainerBox, ContainerRepresentab
     }
 }
 
-public extension ContainerRepresentable where Self: ContainerBox, View: UIViewController {
+public extension ContainerRepresentable where Self: ContainerBox, View: CBViewController {
     func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         self.prepare(parentView: parentView)
         
@@ -69,7 +68,11 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIViewCo
         }
         
         let spacer = view.view.superview
+        #if !os(macOS)
         view.willMove(toParent: nil)
+        #else
+        view.removeFromParent()
+        #endif
         view.view.removeFromSuperview()
         spacer?.removeFromSuperview()
         view.removeFromParent()
@@ -81,12 +84,16 @@ public extension ContainerRepresentable where Self: ContainerBox, View: UIViewCo
         self.view = view
         parent?.addChild(view)
 
-        let spacer = self.edges
+        let edgeInsets = self.edgeInsets
         let uiView = self.loadView(view.view)
-        AddSubview(self).addSubview(uiView)
+        CBSubview(self).addSubview(uiView)
 
-        uiView.applyEdges(spacer)
+        uiView.applyEdges(edgeInsets)
 
+        #if !os(macOS)
         view.didMove(toParent: self.parent)
+        #else
+        self.parent.addChild(view)
+        #endif
     }
 }

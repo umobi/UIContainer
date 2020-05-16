@@ -21,7 +21,6 @@
 //
 
 import Foundation
-import UIKit
 import ConstraintBuilder
 
 public protocol UIContainerStoryboard: View, ContainerRepresentable where View == Container.View {
@@ -30,7 +29,7 @@ public protocol UIContainerStoryboard: View, ContainerRepresentable where View =
     
     func addContainer(_ container: Container)
     
-    var margin: SpacerView.Margin { get set }
+    var edgeInsets: CTEdgeInsets { get set }
 }
 
 public extension UIContainerStoryboard {
@@ -78,8 +77,8 @@ public extension UIContainerStoryboard {
         self.containerDidLoad()
     }
     
-    func prepareContainer(inside parentView: ParentView!, margin: SpacerView.Margin) {
-        self.margin = margin
+    func prepareContainer(inside parentView: ParentView!, edgeInsets: CTEdgeInsets) {
+        self.edgeInsets = edgeInsets
         self.prepareContainer(inside: parentView)
     }
     
@@ -88,18 +87,12 @@ public extension UIContainerStoryboard {
     }
 }
 
-public extension UIContainerStoryboard where Container: UIView {
+public extension UIContainerStoryboard where Container: CBView {
     func addContainer(_ container: Container) {
-        let spacer = self.spacer(container)
-        AddSubview(self).insertSubview(spacer, at: 0)
-        
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
-    }
-    
-    func spacer<T>(_ view: T) -> SpacerView where T : UIView {
-        return .init(view, margin: self.margin)
+        let edgeInsets = self.edgeInsets
+        let view = self.loadView(container)
+        CBSubview(self).insertSubview(view, at: 0)
+
+        view.applyEdges(edgeInsets)
     }
 }

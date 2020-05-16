@@ -21,41 +21,54 @@
 //
 
 import Foundation
-import UIKit
+import ConstraintBuilder
 
-open class ContainerBox: UIView {
+open class ContainerBox: CBView {
     var cannotAddViews: Bool {
         return self.view != nil
     }
 
-    private var view: UIView! {
+    private var view: CBView! {
         return super.subviews.first
     }
 
-    override open var subviews: [UIView] {
+    #if !os(macOS)
+    override open var subviews: [CBView] {
         return [self.view].compactMap { $0 } + (self.view?.subviews ?? [])
     }
+    #else
+    override open var subviews: [CBView] {
+        get {
+            return [self.view].compactMap { $0 } + (self.view?.subviews ?? [])
+        }
+        set {
+            super.subviews = newValue.filter { $0 !== self }
+        }
+    }
+    #endif
 
-    override open func addSubview(_ view: UIView) {
+
+    override open func addSubview(_ view: CBView) {
         self.cannotAddViews ? {
-            AddSubview(self.view).addSubview(view)
+            CBSubview(self.view).addSubview(view)
         }() : {
             super.addSubview(view)
         }()
     }
 
-    override open func insertSubview(_ view: UIView, at index: Int) {
+    #if !os(macOS)
+    override open func insertSubview(_ view: CBView, at index: Int) {
         self.cannotAddViews ?  {
-                AddSubview(self.view).insertSubview(view, at: index)
+                CBSubview(self.view).insertSubview(view, at: index)
            }() : {
             super.insertSubview(view, at: index)
         }()
     }
 
-    override open func insertSubview(_ view: UIView, aboveSubview siblingSubview: UIView) {
+    override open func insertSubview(_ view: CBView, aboveSubview siblingSubview: CBView) {
         self.cannotAddViews ? {
             if siblingSubview == self.view {
-                AddSubview(self.view).insertSubview(view, at: 0)
+                CBSubview(self.view).insertSubview(view, at: 0)
             } else {
                 self.view.insertSubview(view, aboveSubview: siblingSubview)
             }
@@ -64,9 +77,23 @@ open class ContainerBox: UIView {
         }()
     }
 
-    override open func insertSubview(_ view: UIView, belowSubview siblingSubview: UIView) {
+    override open func insertSubview(_ view: CBView, belowSubview siblingSubview: CBView) {
         self.cannotAddViews ? () : {
             super.insertSubview(view, belowSubview: siblingSubview)
         }()
     }
+
+    #else
+    open override func addSubview(_ view: CBView, positioned place: CBWindow.OrderingMode, relativeTo otherView: CBView?) {
+        self.cannotAddViews ? {
+            if otherView == self.view {
+                CBSubview(otherView)?.insertSubview(view, at: 0)
+            } else {
+                self.view.addSubview(view, positioned: place, relativeTo: otherView)
+            }
+        }() : {
+            super.addSubview(view, positioned: place, relativeTo: otherView)
+        }()
+    }
+    #endif
 }

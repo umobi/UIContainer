@@ -21,8 +21,10 @@
 //
 
 import Foundation
-import UIKit
 import ConstraintBuilder
+
+#if !os(macOS)
+import UIKit
 
 public protocol ContainerCellRepresentable: ContainerRepresentable where ContainerCell.View == View {
     associatedtype ContainerCell: ContainerRepresentable
@@ -51,40 +53,15 @@ public extension ContainerCellRepresentable {
     }
     
     weak var parent: ParentView! {
-        get {
-            return self.containerView.parent
-        }
-        
-        set {
-            fatalError("Setting parent for UIContainerCell should never happen")
-        }
-    }
-}
-
-extension UIView {
-    func applyEdges(_ edges: UIEdgeInsets) {
-        Constraintable.activate(
-            self.cbuild
-                .top
-                .equalTo(edges.top),
-            self.cbuild
-                .bottom
-                .equalTo(edges.top),
-            self.cbuild
-                .leading
-                .equalTo(edges.left),
-            self.cbuild
-                .trailing
-                .equalTo(edges.right)
-        )
+        return self.containerView.parent
     }
 }
 
 public extension ContainerCellRepresentable where Self: UICollectionViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
-        let spacer = self.edges
+        let spacer = self.edgeInsets
         let view = self.loadView(containerCell)
-        AddSubview(self.contentView).addSubview(view)
+        CBSubview(self.contentView).addSubview(view)
 
         view.applyEdges(spacer)
     }
@@ -92,11 +69,11 @@ public extension ContainerCellRepresentable where Self: UICollectionViewCell, Co
 
 public extension ContainerCellRepresentable where Self: UITableViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
-        let spacer = self.edges
+        let edgeInsets = self.edgeInsets
         let view = self.loadView(containerCell)
-        AddSubview(self.contentView).addSubview(view)
+        CBSubview(self.contentView).addSubview(view)
 
-        view.applyEdges(spacer)
+        view.applyEdges(edgeInsets)
     }
 }
 
@@ -113,5 +90,26 @@ public extension ContainerCellRepresentable where View: ContainerCellDelegate {
         self.addCell(containerView)
         
         self.containerDidLoad()
+    }
+}
+#endif
+
+extension CBView {
+    func applyEdges(_ edges: CTEdgeInsets) {
+        
+        Constraintable.activate(
+            self.cbuild
+                .top
+                .equalTo(edges.top),
+            self.cbuild
+                .bottom
+                .equalTo(edges.top),
+            self.cbuild
+                .leading
+                .equalTo(edges.left),
+            self.cbuild
+                .trailing
+                .equalTo(edges.right)
+        )
     }
 }
