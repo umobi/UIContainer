@@ -63,10 +63,6 @@ public extension ContainerRepresentable {
         self.parent = parentView
     }
 
-    func loadView<T: CBView>(_ view: T) -> CBView {
-        return view
-    }
-
     var edgeInsets: CTEdgeInsets {
         return .zero
     }

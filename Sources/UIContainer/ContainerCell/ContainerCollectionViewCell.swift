@@ -34,6 +34,10 @@ open class ContainerCollectionViewCell<View>: UICollectionViewCell, ContainerCel
 
     open func containerDidLoad() {}
 
+    open func loadView<T>(_ view: T) -> CBView where T : CBView {
+        return view
+    }
+
     required public init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         super.init(frame: .zero)
         self.prepareContainer(inside: parentView, loadHandler: loadHandler)

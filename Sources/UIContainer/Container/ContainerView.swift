@@ -35,6 +35,10 @@ open class ContainerView<View: CBView & ContainerViewParent>: ContainerBox, Cont
 
     open func containerDidLoad() {}
 
+    open func loadView<T: CBView>(_ view: T) -> CBView {
+        return view
+    }
+
     public required init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         super.init(frame: .zero)
         self.prepareContainer(inside: parentView, loadHandler: loadHandler)
