@@ -47,6 +47,11 @@ public extension NSWindow {
 
         public override func loadView() {
             let stackView = self.loadStack()
+            self.view = stackView
+        }
+
+        public override func viewDidLoad() {
+            super.viewDidLoad()
 
             let container: CBView! = Provider.launcher(in: self)
             if !(container is ContainerType) {
@@ -55,7 +60,6 @@ public extension NSWindow {
 
             CBView.CBSubview(self.stackView).addArrangedSubview(container)
             self.container = container
-            self.view = stackView
         }
 
         required init?(coder aDecoder: NSCoder) {
@@ -264,6 +268,11 @@ public extension UIWindow {
 
         public override func loadView() {
             let stackView = self.loadStack()
+            self.view = stackView
+        }
+
+        public override func viewDidLoad() {
+            super.viewDidLoad()
 
             let container: CBView! = Provider.launcher(in: self)
             if !(container is ContainerType) {
@@ -272,7 +281,6 @@ public extension UIWindow {
 
             CBView.CBSubview(self.stackView).addArrangedSubview(container)
             self.container = container
-            self.view = stackView
         }
 
         required init?(coder aDecoder: NSCoder) {
