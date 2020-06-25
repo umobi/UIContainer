@@ -21,8 +21,8 @@
 //
 
 import Foundation
-import UIKit
+import ConstraintBuilder
 
 public protocol ContainerViewParent {
-    var parent: UIViewController! { get set }
+    var parent: CBViewController! { get set }
 }

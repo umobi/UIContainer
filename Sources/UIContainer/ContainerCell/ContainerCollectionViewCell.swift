@@ -21,24 +21,28 @@
 //
 
 import Foundation
+import ConstraintBuilder
+
+#if !os(macOS)
 import UIKit
 
-open class ContainerCollectionViewCell<View: UIView & ContainerViewParent & ContainerCellDelegate>: UICollectionViewCell, ContainerCellRepresentable {
-    
+open class ContainerCollectionViewCell<View>: UICollectionViewCell, ContainerCellRepresentable
+    where View: CBView & ContainerViewParent & ContainerCellDelegate {
+
     public weak var containerView: ContainerView<View>!
     public weak var parent: ParentView!
-    
-    open func spacer<T: UIView>(_ view: T) -> SpacerView {
-        return .init(view, spacing: 0)
-    }
-    
+
     open func containerDidLoad() {}
-    
+
+    open func loadView<T>(_ view: T) -> CBView where T: CBView {
+        return view
+    }
+
     required public init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         super.init(frame: .zero)
         self.prepareContainer(inside: parentView, loadHandler: loadHandler)
     }
-    
+
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -47,3 +51,4 @@ open class ContainerCollectionViewCell<View: UIView & ContainerViewParent & Cont
         super.init(frame: frame)
     }
 }
+#endif

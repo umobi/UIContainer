@@ -21,15 +21,15 @@
 //
 
 import Foundation
-import UIKit
+import ConstraintBuilder
 
-public extension UIViewController {
+public extension CBViewController {
     class func fromNib(_ nibName: String? = nil) -> Self {
         let identifier = nibName ?? "\(self)"
         return fromNib(nibName: identifier)
     }
-    
-    class func fromNib<T: UIViewController>(nibName: String) -> T {
+
+    class func fromNib<T: CBViewController>(nibName: String) -> T {
         return T(nibName: nibName, bundle: nil)
     }
 }

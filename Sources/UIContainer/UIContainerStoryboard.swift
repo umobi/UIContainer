@@ -21,16 +21,15 @@
 //
 
 import Foundation
-import UIKit
 import ConstraintBuilder
 
 public protocol UIContainerStoryboard: View, ContainerRepresentable where View == Container.View {
     associatedtype Container: ContainerRepresentable
     var containerView: Container! { get set }
-    
+
     func addContainer(_ container: Container)
-    
-    var margin: SpacerView.Margin { get set }
+
+    var edgeInsets: CTEdgeInsets { get set }
 }
 
 public extension UIContainerStoryboard {
@@ -38,68 +37,56 @@ public extension UIContainerStoryboard {
         get {
             return self.containerView.view
         }
-        
+
         set {
             self.containerView.view = newValue
         }
     }
-    
+
     weak var parent: ParentView! {
-        get {
-            return self.containerView.parent
-        }
-        
-        set {
-            fatalError("Setting parent for UIContainerStoryboard should never happen")
-        }
+        return self.containerView.parent
     }
-    
+
     func removeContainer() {
         fatalError("Don't try to remove ContainerStoryboard")
     }
-    
+
     func insertContainer(view: View!) {
         fatalError("Don't try to insert in ContainerCell")
     }
-    
+
     func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         if loadHandler != nil {
             fatalError("ContainerStoryboard should not be prepared with loadHandler")
         }
-        
+
         if self.containerView != nil {
             return
         }
-        
+
         let containerView = Container(in: parentView, loadHandler: loadHandler)
         self.containerView = containerView
         self.addContainer(containerView)
-        
+
         self.containerDidLoad()
     }
-    
-    func prepareContainer(inside parentView: ParentView!, margin: SpacerView.Margin) {
-        self.margin = margin
+
+    func prepareContainer(inside parentView: ParentView!, edgeInsets: CTEdgeInsets) {
+        self.edgeInsets = edgeInsets
         self.prepareContainer(inside: parentView)
     }
-    
+
     init(in parentView: ParentView!, loadHandler: (() -> View?)?) {
         fatalError("ContainerStoryboard should not be instanciated by code")
     }
 }
 
-public extension UIContainerStoryboard where Container: UIView {
+public extension UIContainerStoryboard where Container: CBView {
     func addContainer(_ container: Container) {
-        let spacer = self.spacer(container)
-        AddSubview(self).insertSubview(spacer, at: 0)
-        
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
-    }
-    
-    func spacer<T>(_ view: T) -> SpacerView where T : UIView {
-        return .init(view, margin: self.margin)
+        let edgeInsets = self.edgeInsets
+        let view = self.loadView(container)
+        CBSubview(self).insertSubview(view, at: 0)
+
+        view.applyEdges(edgeInsets)
     }
 }

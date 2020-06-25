@@ -21,14 +21,28 @@
 //
 
 import Foundation
+import ConstraintBuilder
+
+#if os(macOS)
+import AppKit
+
+public extension CBWindow {
+    static func container<Provider: WindowContainerType>(_ providerType: Provider.Type) -> CBWindow {
+        let window = CBWindow(contentViewController: WindowContainer<Provider>())
+        window.backgroundColor = .white
+        return window
+    }
+}
+#else
 import UIKit
 
-public extension UIWindow {
-    static func container<Provider: WindowContainerType>(_ providerType: Provider.Type) -> UIWindow {
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = WindowContainer<Provider>(window)
+public extension CBWindow {
+    static func container<Provider: WindowContainerType>(_ providerType: Provider.Type) -> CBWindow {
+        let window = CBWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = WindowContainer<Provider>()
         window.backgroundColor = .white
         window.clipsToBounds = true
         return window
     }
 }
+#endif

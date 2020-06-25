@@ -21,74 +21,83 @@
 //
 
 import Foundation
-import UIKit
 import ConstraintBuilder
 
-open class Container<View: UIViewController>: ContainerBox, ContainerRepresentable {
-    
+open class Container<View: CBViewController>: ContainerBox, ContainerRepresentable {
+
     public weak var view: View!
     public weak var parent: ParentView!
-    
+
     open override func removeFromSuperview() {
         super.removeFromSuperview()
         self.removeContainer()
     }
-    
+
     open func containerDidLoad() {}
-    
+
+    open func loadView<T>(_ view: T) -> CBView where T: CBView {
+        return view
+    }
+
     public required init(in parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         super.init(frame: .zero)
         self.prepareContainer(inside: parentView, loadHandler: loadHandler)
         self.containerDidLoad()
     }
-    
+
     public required init() {
         super.init(frame: .zero)
     }
-    
+
     required public init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
-public extension ContainerRepresentable where Self: ContainerBox, View: UIViewController {
+public extension ContainerRepresentable where Self: ContainerBox, View: CBViewController {
     func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)? = nil) {
         self.prepare(parentView: parentView)
-        
+
         guard let loader = loadHandler else {
             self.insertContainer(view: View.fromNib())
             return
         }
-        
+
         self.insertContainer(view: loader())
     }
-    
+
     func removeContainer() {
         guard let view = view else {
             return
         }
-        
+
         let spacer = view.view.superview
+        #if !os(macOS)
         view.willMove(toParent: nil)
+        #else
+        view.removeFromParent()
+        #endif
         view.view.removeFromSuperview()
         spacer?.removeFromSuperview()
         view.removeFromParent()
     }
-    
+
     func insertContainer(view: View!) {
         self.removeContainer()
-        
+
         self.view = view
         parent?.addChild(view)
 
-        let spacer = self.spacer(view.view)
-        AddSubview(self).addSubview(spacer)
+        let edgeInsets = self.edgeInsets
+        let uiView = self.loadView(view.view)
+        CBSubview(self).addSubview(uiView)
 
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
+        uiView.applyEdges(edgeInsets)
 
+        #if !os(macOS)
         view.didMove(toParent: self.parent)
+        #else
+        self.parent.addChild(view)
+        #endif
     }
 }

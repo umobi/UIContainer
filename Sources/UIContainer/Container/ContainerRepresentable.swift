@@ -21,39 +21,57 @@
 //
 
 import Foundation
+import ConstraintBuilder
+
+#if os(macOS)
+import AppKit
+public typealias CTEdgeInsets = NSEdgeInsets
+#else
 import UIKit
+public typealias CTEdgeInsets = UIEdgeInsets
+#endif
 
-public protocol ColorType: OptionSet where RawValue == Int {
-    static var white: Self { get }
+public protocol ContainerType: class {
 
-    var color: UIColor { get }
-
-    init(white: CGFloat, alpha: CGFloat)
 }
 
-public extension ColorType {
+public protocol ContainerRepresentable: ContainerType {
+    typealias ParentView = CBViewController
+    associatedtype View: AnyObject
 
-    init(white: CGFloat, alpha: CGFloat) {
-        self.init(rawValue: Self.white.color.components.darker(with: 1-white).alpha(constant: alpha).hash)
+    var view: View! { get set }
+    var parent: ParentView! { get set }
+
+    func prepareContainer(inside parentView: ParentView!, loadHandler: (() -> View?)?)
+
+    func removeContainer()
+
+    func insertContainer(view: View!)
+
+    func prepare(parentView: ParentView!)
+
+    func loadView<T: CBView>(_ view: T) -> CBView
+    var edgeInsets: CTEdgeInsets { get }
+
+    func containerDidLoad()
+
+    init(in parentView: ParentView!, loadHandler: (() -> View?)?)
+}
+
+public extension ContainerRepresentable {
+    func prepare(parentView: ParentView!) {
+        self.parent = parentView
     }
 
-    init(hex: String) {
-        self.init(rawValue: UIColor(hex: hex)!.components.hash)
-    }
-
-    var color: UIColor {
-        return ColorComponents.init(hash: self.rawValue).asColor
-    }
-
-    func darker(with constant: CGFloat) -> Self {
-        return .init(rawValue: self.color.components.darker(with: constant).hash)
-    }
-
-    func alpha(constant alpha: CGFloat) -> Self {
-        return .init(rawValue: self.color.components.alpha(constant: alpha).hash)
-    }
-
-    static var white: Self {
-        return self.init(hex: UIColor.white.components.hex)
+    var edgeInsets: CTEdgeInsets {
+        return .zero
     }
 }
+
+#if os(macOS)
+extension CTEdgeInsets {
+    static var zero: CTEdgeInsets {
+        .init(top: 0, left: 0, bottom: 0, right: 0)
+    }
+}
+#endif

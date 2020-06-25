@@ -21,17 +21,16 @@
 //
 
 import Foundation
-import UIKit
 import ConstraintBuilder
+
+#if !os(macOS)
+import UIKit
 
 public protocol ContainerCellRepresentable: ContainerRepresentable where ContainerCell.View == View {
     associatedtype ContainerCell: ContainerRepresentable
     var containerView: ContainerCell! { get set }
-    
+
     func addCell(_ containerCell: ContainerCell)
-    
-    //func containerDidLoad()
-    func spacer<T: UIView>(_ view: T) -> SpacerView
 }
 
 public extension ContainerCellRepresentable {
@@ -39,52 +38,42 @@ public extension ContainerCellRepresentable {
         get {
             return self.containerView.view
         }
-        
+
         set {
             self.containerView.view = newValue
         }
     }
-    
+
     func removeContainer() {
         fatalError("Don't try to remove ContainerCell")
     }
-    
+
     func insertContainer(view: View!) {
         fatalError("Don't try to insert in ContainerCell")
     }
-    
+
     weak var parent: ParentView! {
-        get {
-            return self.containerView.parent
-        }
-        
-        set {
-            fatalError("Setting parent for UIContainerCell should never happen")
-        }
+        return self.containerView.parent
     }
 }
 
 public extension ContainerCellRepresentable where Self: UICollectionViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
-        let spacer = self.spacer(containerCell)
-        AddSubview(self.contentView).addSubview(spacer)
+        let spacer = self.edgeInsets
+        let view = self.loadView(containerCell)
+        CBSubview(self.contentView).addSubview(view)
 
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
+        view.applyEdges(spacer)
     }
 }
 
 public extension ContainerCellRepresentable where Self: UITableViewCell, ContainerCell: UIView {
     func addCell(_ containerCell: ContainerCell) {
-        let spacer = self.spacer(containerCell)
-        AddSubview(self.contentView).addSubview(spacer)
+        let edgeInsets = self.edgeInsets
+        let view = self.loadView(containerCell)
+        CBSubview(self.contentView).addSubview(view)
 
-        Constraintable.activate(
-            spacer.cbuild
-                .edges
-        )
+        view.applyEdges(edgeInsets)
     }
 }
 
@@ -93,13 +82,34 @@ public extension ContainerCellRepresentable where View: ContainerCellDelegate {
         if self.containerView != nil {
             return
         }
-        
+
         let containerView = ContainerCell(in: parentView, loadHandler: loadHandler)
         containerView.view.cellDelegate = parentView as? ContainerCell.View.Delegate
-        
+
         self.containerView = containerView
         self.addCell(containerView)
-        
+
         self.containerDidLoad()
+    }
+}
+#endif
+
+extension CBView {
+    func applyEdges(_ edges: CTEdgeInsets) {
+
+        Constraintable.activate(
+            self.cbuild
+                .top
+                .equalTo(edges.top),
+            self.cbuild
+                .bottom
+                .equalTo(edges.top),
+            self.cbuild
+                .leading
+                .equalTo(edges.left),
+            self.cbuild
+                .trailing
+                .equalTo(edges.right)
+        )
     }
 }
