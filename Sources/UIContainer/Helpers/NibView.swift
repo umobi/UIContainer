@@ -46,9 +46,9 @@ open class NibView: View {
 
         CBSubview(self).addSubview(view)
 
-        Constraintable.activate(
+        Constraintable.activate {
             view.cbuild
                 .edges
-        )
+        }
     }
 }

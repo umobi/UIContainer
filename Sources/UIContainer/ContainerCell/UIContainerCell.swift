@@ -97,19 +97,22 @@ public extension ContainerCellRepresentable where View: ContainerCellDelegate {
 extension CBView {
     func applyEdges(_ edges: CTEdgeInsets) {
 
-        Constraintable.activate(
+        Constraintable.activate {
             self.cbuild
                 .top
-                .equalTo(edges.top),
+                .equalTo(edges.top)
+
             self.cbuild
                 .bottom
-                .equalTo(edges.top),
+                .equalTo(edges.top)
+
             self.cbuild
                 .leading
-                .equalTo(edges.left),
+                .equalTo(edges.left)
+
             self.cbuild
                 .trailing
                 .equalTo(edges.right)
-        )
+        }
     }
 }
