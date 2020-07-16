@@ -313,7 +313,7 @@ public extension UIWindow {
 
             if animated {
                 CBView.transition(
-                    with: self.view.window!,
+                    with: self.view.window ?? self.view,
                     duration: 0.4,
                     options: .transitionCrossDissolve,
                     animations: {
