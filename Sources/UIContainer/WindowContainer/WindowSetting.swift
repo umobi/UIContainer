@@ -26,7 +26,7 @@ import SwiftUI
 public class WindowSetting<Provider>: ObservableObject where Provider: RawWindowProvider {
     @Published var provider: Provider
 
-    public init(_ provider: Provider) {
+    init(_ provider: Provider) {
         self.provider = provider
     }
 

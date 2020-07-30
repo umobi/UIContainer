@@ -24,12 +24,12 @@ import Foundation
 import SwiftUI
 
 public struct WindowContainer<Provider>: SwiftUI.View where Provider: RawWindowProvider {
-    @ObservedObject var settings: WindowSetting<Provider>
+    @ObservedObject private var settings: WindowSetting<Provider>
 
     private let animation: RawWindowAnimation
 
-    public init(_ settings: WindowSetting<Provider>) {
-        self.settings = settings
+    public init(_ provider: Provider) {
+        self.settings = .init(provider)
         self.animation = CrossFadeWindowAnimation()
     }
 
@@ -47,6 +47,7 @@ public struct WindowContainer<Provider>: SwiftUI.View where Provider: RawWindowP
     public var body: some SwiftUI.View {
         self.animation
             .animate(self.settings.provider.view)
+            .environmentObject(self.settings)
     }
 }
 
