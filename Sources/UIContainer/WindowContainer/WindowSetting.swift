@@ -23,47 +23,32 @@
 import Foundation
 import SwiftUI
 
-public struct WindowContainer<Provider>: SwiftUI.View where Provider: RawWindowProvider {
-    @ObservedObject var settings: WindowSetting<Provider>
+public class WindowSetting<Provider>: ObservableObject where Provider: RawWindowProvider {
+    @Published var provider: Provider
 
-    private let animation: RawWindowAnimation
-
-    public init(_ settings: WindowSetting<Provider>) {
-        self.settings = settings
-        self.animation = CrossFadeWindowAnimation()
+    public init(_ provider: Provider) {
+        self.provider = provider
     }
 
-    private init(_ original: WindowContainer<Provider>, editable: Editable) {
-        self.settings = original.settings
-        self.animation = editable.animation
-    }
-
-    fileprivate func edit(_ edit: (Editable) -> Void) -> Self {
-        let editable = Editable(self)
-        edit(editable)
-        return .init(self, editable: editable)
-    }
-
-    public var body: some SwiftUI.View {
-        self.animation
-            .animate(self.settings.provider.view)
-    }
-}
-
-public extension WindowContainer {
-    func animation(_ animation: RawWindowAnimation) -> Self {
-        self.edit {
-            $0.animation = animation
+    public func transition(to newProvider: Provider) {
+        withAnimation {
+            self.provider = newProvider
         }
     }
 }
 
-fileprivate extension WindowContainer {
-    class Editable {
-        var animation: RawWindowAnimation
+public struct CrossFadeWindowAnimation: RawWindowAnimation {
+    public func animate(_ view: AnyView) -> AnyView {
+        AnyView(
+            view
+                .transition(.opacity)
+                .animation(.easeInOut)
+        )
+    }
+}
 
-        init(_ original: WindowContainer<Provider>) {
-            self.animation = original.animation
-        }
+public extension RawWindowAnimation {
+    static var easeInOut: CrossFadeWindowAnimation {
+        .init()
     }
 }

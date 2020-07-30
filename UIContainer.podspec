@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIContainer'
-  s.version          = '2.1.1'
+  s.version          = '2.2.0'
   s.summary          = 'Creating containers for UIViewController, UIView, UITableViewCell and UICollectionViewCell'
   s.homepage         = 'https://github.com/umobi/UIContainer'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -19,8 +19,8 @@ Pod::Spec.new do |s|
   UIContainer helps by allowing you to keep the code more specific. You can write code for view controllers like AddressesViewController and for view AddressView that can be used in ProfileViewController and in the AddressesViewController using the ContainerTableViewCell<AddressView> wrapper. This should decrease the excess of code for the same data but in different view controllers.
                          DESC
 
-  s.ios.deployment_target = '10.0'
-  s.tvos.deployment_target = '10.0'
+  s.ios.deployment_target = '13.0'
+  s.tvos.deployment_target = '13.0'
   # s.macos.deployment_target = "10.13"
   s.swift_version = '5.2'
 

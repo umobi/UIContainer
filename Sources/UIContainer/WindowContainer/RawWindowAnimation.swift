@@ -21,10 +21,8 @@
 //
 
 import Foundation
-import ConstraintBuilder
+import SwiftUI
 
-public protocol WindowContainerType {
-    var container: CBView! { get }
-
-    static func launcher(in windowContainer: WindowContainer<Self>) -> CBView!
+public protocol RawWindowAnimation {
+    func animate(_ view: AnyView) -> AnyView
 }

@@ -23,47 +23,40 @@
 import Foundation
 import SwiftUI
 
-public struct WindowContainer<Provider>: SwiftUI.View where Provider: RawWindowProvider {
-    @ObservedObject var settings: WindowSetting<Provider>
+#if os(iOS) || os(tvOS)
+import UIKit
 
-    private let animation: RawWindowAnimation
+public struct SUIContainer<UIViewControllerType>: UIViewControllerRepresentable where UIViewControllerType: UIViewController {
 
-    public init(_ settings: WindowSetting<Provider>) {
-        self.settings = settings
-        self.animation = CrossFadeWindowAnimation()
+    private let content: () -> UIViewControllerType
+
+    public init(_ content: @escaping () -> UIViewControllerType) {
+        self.content = content
     }
 
-    private init(_ original: WindowContainer<Provider>, editable: Editable) {
-        self.settings = original.settings
-        self.animation = editable.animation
+    public func makeUIViewController(context: Context) -> UIViewControllerType {
+        self.content()
     }
 
-    fileprivate func edit(_ edit: (Editable) -> Void) -> Self {
-        let editable = Editable(self)
-        edit(editable)
-        return .init(self, editable: editable)
-    }
-
-    public var body: some SwiftUI.View {
-        self.animation
-            .animate(self.settings.provider.view)
-    }
+    public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
 }
 
-public extension WindowContainer {
-    func animation(_ animation: RawWindowAnimation) -> Self {
-        self.edit {
-            $0.animation = animation
-        }
+#elseif os(macOS)
+import AppKit
+
+public struct SUIContainer<NSViewControllerType>: NSViewControllerRepresentable where NSViewControllerType: NSViewController {
+
+    private let content: () -> NSViewControllerType
+
+    public init(_ content: @escaping () -> NSViewControllerType) {
+        self.content = content
     }
+
+    public func makeNSViewController(context: Context) -> NSViewControllerType {
+        self.content()
+    }
+
+    public func updateNSViewController(_ nsViewController: NSViewControllerType, context: Context) {}
 }
 
-fileprivate extension WindowContainer {
-    class Editable {
-        var animation: RawWindowAnimation
-
-        init(_ original: WindowContainer<Provider>) {
-            self.animation = original.animation
-        }
-    }
-}
+#endif

@@ -23,17 +23,6 @@
 import Foundation
 import SwiftUI
 
-#if os(iOS) || os(tvOS)
-import UIKit
-
-@available(*, deprecated, message: "Use @main initialization provided by iOS 14 and SwiftUI")
-public extension UIWindow {
-    static func container<Provider: RawWindowProvider>(_ settings: WindowSetting<Provider>) -> UIWindow {
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = UIHostingController(rootView: WindowContainer(settings))
-        window.backgroundColor = .clear
-        window.clipsToBounds = true
-        return window
-    }
+public protocol RawWindowProvider {
+    var view: AnyView { get }
 }
-#endif
